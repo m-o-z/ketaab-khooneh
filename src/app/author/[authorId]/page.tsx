@@ -2,9 +2,9 @@
 import React from 'react';
 import {useParams} from "next/navigation";
 import {authors, books} from "@/mock";
-import BookPreview from "../../components/book/BookPreview";
+import BookPreview from "@/components/book/BookPreview";
 import {Avatar, Flex, Text} from "@mantine/core";
-import AuthorPreview from "@/app/components/author/AuthorPreview/AuthorPreview";
+import AuthorPreview from "@/components/author/AuthorPreview/AuthorPreview";
 // TODO: fix style
 const Page = () => {
     const {authorId} = useParams();
