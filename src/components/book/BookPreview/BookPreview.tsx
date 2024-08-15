@@ -2,7 +2,6 @@
 import React from 'react';
 import {Box, Image, Paper, Skeleton, Stack, Text} from "@mantine/core";
 import type {Book} from "@/types";
-import {useRouter} from "next/navigation";
 import BookStatus from "../BookStatus";
 
 type Props = {
