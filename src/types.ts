@@ -24,6 +24,8 @@ export type Book = {
     dislikes?: number;
     comments?: Comment[];
     reservedBy?: User;
+    borrowedBy?: User;
+    count: number;
 }
 
 export type User = {
