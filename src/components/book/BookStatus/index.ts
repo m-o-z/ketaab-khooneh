@@ -1,3 +1,3 @@
-import BookStatus from './BookStatus';
+import BookStatus from "./BookStatus";
 
 export default BookStatus;

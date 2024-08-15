@@ -1,46 +1,54 @@
 export type Author = {
-    id: string;
-    name: string;
-    bio: string;
-    image: string;
-}
+  id: string;
+  name: string;
+  bio: string;
+  image: string;
+};
 
 export type Comment = {
-    content: string;
-}
+  content: string;
+};
 
-export type BookStatus = "NOT_AVAILABLE" | "AVAILABLE" | "BORROWED" | "RESERVED_BY_OTHERS" | "RESERVED_BY_ME";
+export type BookStatus =
+  | "NOT_AVAILABLE"
+  | "AVAILABLE"
+  | "BORROWED"
+  | "RESERVED_BY_OTHERS"
+  | "RESERVED_BY_ME";
 
 export type Book = {
-    id: string;
-    title: string;
-    coverImage: string;
-    authors: Author[];
-    description: string;
-    status: BookStatus;
-    edition: string;
-    releaseYear: string;
-    likes?: number;
-    dislikes?: number;
-    comments?: Comment[];
-    reservedBy?: User;
-    borrowedBy?: User;
-    count: number;
-}
+  id: string;
+  title: string;
+  coverImage: string;
+  authors: Author[];
+  description: string;
+  status: BookStatus;
+  edition: string;
+  releaseYear: string;
+  likes?: number;
+  dislikes?: number;
+  comments?: Comment[];
+  reservedBy?: User;
+  borrowedBy?: User;
+  count: number;
+  history: Borrow[];
+  category: string;
+};
 
 export type User = {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    image: string;
-    comments?: Comment[];
-}
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  image: string;
+  comments?: Comment[];
+  history: Borrow[];
+};
 
 export type Borrow = {
-    id: string;
-    user: User['id'];
-    book: Book['id'];
-    startDate: string;
-    endDate: string;
-}
+  id: string;
+  user: User["id"];
+  book: Book["id"];
+  startDate: string;
+  endDate: string;
+};

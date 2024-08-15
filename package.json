@@ -6,13 +6,15 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "pnpm exec prettier . --write"
   },
   "dependencies": {
     "@mantine/core": "^7.12.1",
     "@mantine/dates": "^7.12.1",
     "@mantine/hooks": "^7.12.1",
     "@mantine/notifications": "^7.12.1",
+    "@tabler/icons-react": "^3.12.0",
     "dayjs": "^1.11.12",
     "next": "15.0.0-rc.0",
     "react": "19.0.0-rc-f994737d14-20240522",
@@ -27,6 +29,7 @@
     "postcss": "^8.4.41",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
+    "prettier": "3.3.3",
     "typescript": "^5"
   }
 }
