@@ -47,7 +47,7 @@ export const books: Book[] = [
     releaseYear: "2023",
     borrowedBy: users[0],
     count: 2,
-    category: '123',
+    category: "123",
     history: [],
   },
   {
@@ -61,7 +61,7 @@ export const books: Book[] = [
     edition: "1",
     releaseYear: "2023",
     count: 1,
-    category: '123',
+    category: "123",
     history: [],
   },
   {
@@ -75,7 +75,7 @@ export const books: Book[] = [
     edition: "1",
     releaseYear: "2023",
     count: 1,
-    category: '123',
+    category: "123",
     history: [],
   },
   {
@@ -89,7 +89,7 @@ export const books: Book[] = [
     edition: "1",
     releaseYear: "2023",
     count: 1,
-    category: '123',
+    category: "123",
     history: [],
   },
   {
@@ -104,7 +104,7 @@ export const books: Book[] = [
     releaseYear: "2023",
     reservedBy: users[1],
     count: 1,
-    category: '123',
+    category: "123",
     history: [],
   },
 ];
