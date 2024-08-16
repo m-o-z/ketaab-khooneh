@@ -25,7 +25,7 @@ type Props = {
 const BookSummary = ({ book }: Props) => {
   return (
     <>
-      <BookPreview book={book} hideBottomTexts />
+      <BookPreview book={book} hideBottomTexts width="14rem" height="auto" />
       <Flex direction="column" gap="md" align="flex-start" w="100%">
         <Flex gap="sm" align="end" my="lg">
           <Title order={2} m="0" lh={1}>
