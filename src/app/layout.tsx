@@ -6,13 +6,42 @@ import "./globals.css";
 import { Button, createTheme, MantineProvider, px } from "@mantine/core";
 import AppShell from "@/components/appShell/AppShell/AppShell";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+const mainFont = localFont({
+  display: "block",
+  preload: true,
+  adjustFontFallback: "Arial",
+  src: [
+    {
+      path: "../../public/fonts/Barlow/Barlow-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Barlow/Barlow-Italic.ttf",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/Barlow/Barlow-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Barlow/Barlow-BoldItalic.ttf",
+      weight: "700",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/Barlow/Barlow-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/Barlow/Barlow-MediumItalic.ttf",
+      weight: "500",
+      style: "italic",
+    },
+  ],
 });
 
 // export const metadata: Metadata = {
@@ -26,6 +55,38 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const theme = createTheme({
+    fontFamily: `${mainFont.style.fontFamily}, Tahoma, sans-serif`,
+    components: {
+      Text: {
+        styles: {
+          marginTop: "-1px",
+        },
+      },
+    },
+    headings: {
+      sizes: {
+        h1: {
+          fontWeight: "700",
+        },
+        h2: {
+          fontWeight: "700",
+          lineHeight: "38px",
+        },
+        h3: {
+          fontWeight: "700",
+        },
+        h4: {
+          fontWeight: "500",
+        },
+        h5: {
+          fontWeight: "500",
+        },
+        h6: {
+          fontWeight: "500",
+        },
+      },
+    },
+    fontFamilyMonospace: "Monaco, Courier, monospace",
     /** Put your mantine theme override here */
   });
 
