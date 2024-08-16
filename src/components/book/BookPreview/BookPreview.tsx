@@ -1,6 +1,15 @@
 "use client";
 import React from "react";
-import { Box, Image, Paper, Skeleton, Stack, Text } from "@mantine/core";
+import {
+  Box,
+  Image,
+  Paper,
+  rem,
+  Skeleton,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import type { Book } from "@/types";
 import BookStatus from "../BookStatus";
 
@@ -31,9 +40,9 @@ const BookPreview = ({ book, hideBottomTexts, onClick = () => {} }: Props) => {
           }}
         />
         {!hideBottomTexts && (
-          <Text truncate="end" size="sm">
+          <Title order={1} fz={"h5"} lh={1} my={".5rem"} fw={"500"}>
             {book.title}
-          </Text>
+          </Title>
         )}
         {!hideBottomTexts && (
           <Text truncate="end" size="xs">
