@@ -18,8 +18,14 @@ services:
     depends_on:
       - pocketbase
     volumes:
-      - ../.next:/app/.next
       - ../src:/app/src
+      - ../public:/app/public
+      - ../package.json:/app/package.json
+      - ../pnpm-lock.yaml:/app/pnpm-lock.yaml
+      - ../tsconfig.json:/app/tsconfig.json
+      - ../next-env-d.ts:/app/next-env-d.ts
+      - ../next.config.mjs:/app/next.config.mjs
+      - ../potscss.config.cjs:/app/potscss.config.cjs
     networks:
       - app-network
 

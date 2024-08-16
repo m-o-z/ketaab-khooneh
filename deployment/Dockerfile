@@ -23,7 +23,6 @@ COPY pnpm-lock.yaml .
 RUN pnpm i
 
 # Copy the rest of the application code
-COPY . .
 
 # Expose port 3000 to the outside world
 EXPOSE 3000
