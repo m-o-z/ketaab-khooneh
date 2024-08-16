@@ -1,6 +1,6 @@
 // TODO: fix this file based on pocket base API
 // TODO: refactor
-import {Book, User, Borrow, Author} from "@/types";
+import { Book, User, Borrow, Author } from "@/types";
 
 type ClientOptions = {
   baseUrl: string;
@@ -17,10 +17,10 @@ type RequestOptions = {
   body?: BodyInit;
 };
 
-type PaginationQuery = {
-    page: number;
-    limit: number;
-}
+export type PaginationQuery = {
+  page: number;
+  limit: number;
+};
 
 export class Client {
   private baseUrl: string;
@@ -32,14 +32,17 @@ export class Client {
     // TODO: handle errors
     const { path, method, query, body } = options;
     const queryString = query
-      ? '?' + Object.entries(query).map(([k, v]) => `${k}=${v.toString()}`).join('&')
+      ? "?" +
+        Object.entries(query)
+          .map(([k, v]) => `${k}=${v.toString()}`)
+          .join("&")
       : "";
     const fullUrl = `${this.baseUrl}${path}${queryString}`;
     const response = await fetch(fullUrl, {
-        method,
-        ...(body && { body }),
+      method,
+      ...(body && { body }),
     });
-      return await response.json();
+    return await response.json();
   }
 
   public readonly book = {
@@ -47,9 +50,9 @@ export class Client {
       this.request({
         path: "/books",
         method: "GET",
-        query
+        query,
       }),
-    get: (id: Book['id']) =>
+    details: (id: Book["id"]) =>
       this.request({
         path: `/books/${id}`,
         method: "GET",

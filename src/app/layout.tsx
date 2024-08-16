@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Button, createTheme, MantineProvider, px } from "@mantine/core";
 import AppShell from "@/components/appShell/AppShell/AppShell";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const mainFont = localFont({
   display: "block",
@@ -90,12 +91,16 @@ export default function RootLayout({
     /** Put your mantine theme override here */
   });
 
+  const client = new QueryClient();
+
   return (
     <html lang="en">
       <body>
-        <MantineProvider theme={theme} defaultColorScheme="auto">
-          <AppShell>{children}</AppShell>
-        </MantineProvider>
+        <QueryClientProvider client={client}>
+          <MantineProvider theme={theme} defaultColorScheme="auto">
+            <AppShell>{children}</AppShell>
+          </MantineProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
