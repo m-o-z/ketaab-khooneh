@@ -2,27 +2,18 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import { books } from "@/mock";
-import BookPreview from "@/components/book/BookPreview";
 import {
   Alert,
-  Badge,
   Box,
   Button,
-  Container,
   Flex,
   Stack,
   Text,
-  Title,
+  useMantineTheme,
 } from "@mantine/core";
-import AuthorPreview from "@/components/author/AuthorPreview/AuthorPreview";
 import UserPreview from "@/components/user/UserPreview/UserPreview";
 import {
-  IconBooks,
-  IconCalendarMonth,
-  IconError404,
-  IconFeather,
   IconMoodSad,
-  IconShoppingBagPlus,
   IconShoppingCart,
   IconShoppingCartExclamation,
   IconShoppingCartPlus,
@@ -32,6 +23,7 @@ import BookSummary from "@/components/book/BookSummary/BookSummary";
 
 // TODO: fix style
 const Page = () => {
+  const theme = useMantineTheme();
   const { bookId } = useParams();
   const book = books.find((book) => book.id === bookId);
 
@@ -40,9 +32,12 @@ const Page = () => {
       return (
         book.borrowedBy && (
           <Alert color="gray" icon={<IconShoppingCartExclamation />}>
-            <Flex gap="sm">
+            <Flex gap="sm" align="center">
               <Text>This book is currently borrowed by</Text>
-              <UserPreview user={book.borrowedBy} />
+              <UserPreview
+                user={book.borrowedBy}
+                color={theme.colors.gray[5]}
+              />
             </Flex>
           </Alert>
         )
@@ -65,10 +60,13 @@ const Page = () => {
     if (book?.status === "RESERVED_BY_OTHERS") {
       return (
         book.reservedBy && (
-          <Alert color="yellow">
+          <Alert color="yellow.8">
             <Flex gap="sm">
               <Text>This book is currently reserved by</Text>
-              <UserPreview user={book.reservedBy} />
+              <UserPreview
+                user={book.reservedBy}
+                color={theme.colors.yellow[9]}
+              />
             </Flex>
           </Alert>
         )
