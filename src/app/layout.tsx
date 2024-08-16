@@ -1,20 +1,10 @@
-"use client";
 import "@mantine/core/styles.css";
 
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import {
-  AppShell,
-  Badge,
-  Burger,
-  createTheme,
-  Group,
-  MantineProvider,
-  NavLink,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import Link from "next/link";
+import { Button, createTheme, MantineProvider, px } from "@mantine/core";
+import AppShell from "@/components/appShell/AppShell/AppShell";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -39,33 +29,11 @@ export default function RootLayout({
     /** Put your mantine theme override here */
   });
 
-  const [opened, { toggle }] = useDisclosure();
-
   return (
     <html lang="en">
       <body>
         <MantineProvider theme={theme} defaultColorScheme="auto">
-          <AppShell
-            header={{ height: 60 }}
-            navbar={{
-              width: 300,
-              breakpoint: "sm",
-              collapsed: { mobile: !opened, desktop: !opened },
-            }}
-            padding="md"
-          >
-            <AppShell.Header>
-              <Group h="100%" px="md">
-                <Burger opened={opened} onClick={toggle} size="sm" />
-                <Link href="/">Ketaab Khooneh</Link>
-              </Group>
-            </AppShell.Header>
-            <AppShell.Navbar p="md">
-              <NavLink href="#" label="Profile" />
-              <NavLink href="#" label="Borrowings" />
-            </AppShell.Navbar>
-            <AppShell.Main>{children}</AppShell.Main>
-          </AppShell>
+          <AppShell>{children}</AppShell>
         </MantineProvider>
       </body>
     </html>

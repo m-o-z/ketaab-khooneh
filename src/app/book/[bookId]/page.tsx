@@ -3,16 +3,30 @@ import React from "react";
 import { useParams } from "next/navigation";
 import { books } from "@/mock";
 import BookPreview from "@/components/book/BookPreview";
-import {Alert, Badge, Box, Button, Flex, Stack, Text, Title} from "@mantine/core";
+import {
+  Alert,
+  Badge,
+  Box,
+  Button,
+  Container,
+  Flex,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import AuthorPreview from "@/components/author/AuthorPreview/AuthorPreview";
 import UserPreview from "@/components/user/UserPreview/UserPreview";
 import {
-    IconBooks,
-    IconCalendarMonth,
-    IconError404,
-    IconFeather,
-    IconMoodSad, IconShoppingBagPlus,
-    IconShoppingCart, IconShoppingCartExclamation, IconShoppingCartPlus, IconX
+  IconBooks,
+  IconCalendarMonth,
+  IconError404,
+  IconFeather,
+  IconMoodSad,
+  IconShoppingBagPlus,
+  IconShoppingCart,
+  IconShoppingCartExclamation,
+  IconShoppingCartPlus,
+  IconX,
 } from "@tabler/icons-react";
 import BookSummary from "@/components/book/BookSummary/BookSummary";
 
@@ -25,10 +39,10 @@ const Page = () => {
     if (book?.status === "BORROWED") {
       return (
         book.borrowedBy && (
-          <Alert color="gray" icon={<IconShoppingCartExclamation/>}>
+          <Alert color="gray" icon={<IconShoppingCartExclamation />}>
             <Flex gap="sm">
-                <Text>This book is currently borrowed by</Text>
-                <UserPreview user={book.borrowedBy} />
+              <Text>This book is currently borrowed by</Text>
+              <UserPreview user={book.borrowedBy} />
             </Flex>
           </Alert>
         )
@@ -38,12 +52,12 @@ const Page = () => {
       return (
         <Alert color="blue" icon={<IconShoppingCart />}>
           <Stack gap="sm">
-              <Text>This book is currently reserved by you</Text>
-              <div>
-                  <Button color="red" leftSection={<IconX />}>
-                      Cancel Reservation
-                  </Button>
-              </div>
+            <Text>This book is currently reserved by you</Text>
+            <div>
+              <Button color="red" leftSection={<IconX />}>
+                Cancel Reservation
+              </Button>
+            </div>
           </Stack>
         </Alert>
       );
@@ -52,12 +66,10 @@ const Page = () => {
       return (
         book.reservedBy && (
           <Alert color="yellow">
-              <Flex gap="sm">
-                  <Text>
-                      This book is currently reserved by
-                  </Text>
-                  <UserPreview user={book.reservedBy} />
-              </Flex>
+            <Flex gap="sm">
+              <Text>This book is currently reserved by</Text>
+              <UserPreview user={book.reservedBy} />
+            </Flex>
           </Alert>
         )
       );
@@ -70,7 +82,11 @@ const Page = () => {
       );
     }
     if (book?.status === "NOT_AVAILABLE") {
-      return <Alert icon={<IconMoodSad/>}  color="red">This book is not available right now</Alert>;
+      return (
+        <Alert icon={<IconMoodSad />} color="red">
+          This book is not available right now
+        </Alert>
+      );
     }
   };
   return (
