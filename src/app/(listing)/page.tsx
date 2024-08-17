@@ -23,7 +23,8 @@ export default function Home() {
               span={{
                 base: 12,
                 md: 3,
-                lg: 2,
+                lg: 3,
+                xl: 3,
                 sm: 4,
                 xs: 6,
               }}
