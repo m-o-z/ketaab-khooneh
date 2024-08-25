@@ -13,6 +13,7 @@ import Breadcrumb from "@/common/components/Breadcrumb";
 
 export default function Home() {
   const router = useRouter();
+  // TODO: refactor
   const [searchString, setSearchString] = useState<string>("");
   const [filters, setFilters] = useState<string[]>([]);
   const [debouncedSearch] = useDebounce(searchString, 300);
