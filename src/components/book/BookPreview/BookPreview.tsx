@@ -31,7 +31,9 @@ const BookPreview = ({
           <BookStatus status={book.status} />
         </Box>
         <Image
-          src={/* book.coverImage */ pbClient.files.getUrl(book, book.cover_image)}
+          src={
+            /* book.coverImage */ pbClient.files.getUrl(book, book.cover_image)
+          }
           alt={`${book.title} cover`}
           width={width}
           height={height}

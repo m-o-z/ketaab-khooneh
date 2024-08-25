@@ -3,8 +3,8 @@ export type Author = {
   name: string;
   bio?: string;
   author_img?: string;
-  email?: string
-  nick_name?: string
+  email?: string;
+  nick_name?: string;
 };
 
 export type Comment = {
@@ -15,8 +15,8 @@ export type BookCategory = {
   id: string;
   label: string;
   slug: string;
-  category_icon:string;
-}
+  category_icon: string;
+};
 
 export type BookStatus =
   | "NOT_AVAILABLE"
@@ -28,13 +28,13 @@ export type BookStatus =
 export type Book = {
   id: string;
   title: string;
-  categories: string[]
+  categories: string[];
   expand: {
-    authors: Author[]
-    categories: BookCategory[],
-  }
+    authors: Author[];
+    categories: BookCategory[];
+  };
   cover_image: string;
-  status: BookStatus,
+  status: BookStatus;
   authors: string[];
   description: string;
   edition: string;
@@ -57,4 +57,11 @@ export type Borrow = {
   book: Book["id"];
   startDate: string;
   endDate: string;
+};
+
+export type ListFetchingParams = {
+  search?: string;
+  page?: number;
+  perPage?: number;
+  filters?: string[];
 };

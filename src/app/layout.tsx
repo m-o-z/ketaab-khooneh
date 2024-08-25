@@ -3,7 +3,7 @@ import "@mantine/core/styles.css";
 import localFont from "next/font/local";
 import "./globals.css";
 import { createTheme, MantineProvider } from "@mantine/core";
-import AppShell from "@/components/appShell/AppShell/AppShell";
+import AppShell from "@/components/appShell/AppShell";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@mantine/notifications/styles.css";
 import { Notifications } from "@mantine/notifications";

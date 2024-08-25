@@ -1,29 +1,35 @@
 "use client";
 import React from "react";
 import { useParams } from "next/navigation";
-import { authors, books } from "@/mock";
-import BookPreview from "@/components/book/BookPreview";
-import { Avatar, Flex, Text } from "@mantine/core";
-import AuthorPreview from "@/components/author/AuthorPreview/AuthorPreview";
-// TODO: fix style
+import { useAuthorGetApi } from "@/hooks/authors";
+import AuthorPreview from "@/components/author/AuthorPreview";
+import { Stack } from "@mantine/core";
+import Breadcrumb from "@/common/components/Breadcrumb";
+
 const Page = () => {
   const { authorId } = useParams();
-  const author = authors.find((author) => author.id === authorId);
+  const { data: author, isLoading } = useAuthorGetApi(authorId as string);
+
   return (
-    <div>
-      {author && (
-        <Flex direction="column" gap="xs">
-          <Avatar
-            size="xl"
-            src={author.image}
-            name={author.name}
-            color="initials"
-          />
-          <Text>{author.name}</Text>
-          <Text>{author.bio}</Text>
-        </Flex>
+    <Stack maw={768} mx="auto">
+      <Breadcrumb
+        items={[
+          {
+            title: "Authors",
+            href: "/author",
+          },
+          {
+            title: author?.name || "...",
+            href: `/author/${authorId}`,
+          },
+        ]}
+      />
+      {isLoading ? (
+        <AuthorPreview.Loading />
+      ) : (
+        <>{author && <AuthorPreview author={author} />}</>
       )}
-    </div>
+    </Stack>
   );
 };
 

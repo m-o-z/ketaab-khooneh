@@ -1,6 +1,6 @@
 "use client";
 import BookSummary from "@/components/book/BookSummary/BookSummary";
-import UserPreview from "@/components/user/UserPreview/UserPreview";
+import UserPreview from "@/components/user/UserPreview";
 import { useBooksGetApi } from "@/hooks/books";
 import {
   Alert,
@@ -19,15 +19,16 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
+import Breadcrumb from "@/common/components/Breadcrumb";
 
 // TODO: fix style
 const Page = () => {
   const theme = useMantineTheme();
   const { bookId } = useParams();
-  const {isLoading, data: book} = useBooksGetApi(bookId as string)
+  const { isLoading, data: book } = useBooksGetApi(bookId as string);
 
-  if(isLoading){
-    return 'is loading'
+  if (isLoading) {
+    return "is loading";
   }
 
   const renderActionArea = () => {
@@ -94,6 +95,18 @@ const Page = () => {
     <Box maw={768} mx="auto">
       {book && (
         <Stack gap="md" w="100%">
+          <Breadcrumb
+            items={[
+              {
+                title: "Books",
+                href: "/book",
+              },
+              {
+                title: book.title,
+                href: `/book/${bookId}`,
+              },
+            ]}
+          />
           <BookSummary book={book} />
           {renderActionArea()}
         </Stack>

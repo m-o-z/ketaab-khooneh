@@ -1,13 +1,7 @@
-import AuthorPreview from "@/components/author/AuthorPreview/AuthorPreview";
+import AuthorPreview from "@/components/author/AuthorPreview";
 import BookPreview from "@/components/book/BookPreview";
 import { Book } from "@/types";
-import {
-  Badge,
-  Box,
-  Flex,
-  Text,
-  Title
-} from "@mantine/core";
+import { Badge, Box, Flex, Text, Title } from "@mantine/core";
 import {
   IconBooks,
   IconCalendarMonth,
@@ -63,11 +57,10 @@ const BookSummary = ({ book }: Props) => {
           >
             <IconTag size={"24px"} />
           </Flex>
-          <Text flex={"0 0 auto"} lh={"24px"} c="gray.6">
-            Category
-          </Text>
           <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
-            {book.expand.categories.map(item => item.label).join(', ')}
+            {book.expand.categories.map((item) => (
+              <Badge key={item.label}>{item.label}</Badge>
+            ))}
           </Text>
         </Flex>
         <Flex columnGap="sm" align="center">
@@ -83,9 +76,6 @@ const BookSummary = ({ book }: Props) => {
               }}
             />
           </Flex>
-          <Text flex={"0 0 auto"} lh={"24px"} c="gray.6">
-            Release Year
-          </Text>
           <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
             {book.release_year}
           </Text>
@@ -99,9 +89,8 @@ const BookSummary = ({ book }: Props) => {
           >
             <IconFeather />
           </Flex>
-
           {book.expand.authors.map((author) => (
-            <AuthorPreview key={author.id} author={author} />
+            <AuthorPreview.Compact key={author.id} author={author} />
           ))}
         </Flex>
       </Flex>

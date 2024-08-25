@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "@/types";
 
-export const useGetProfile = (): {isFetched: boolean, profile : User | null} => {
+export const useGetProfile = (): {
+  isFetched: boolean;
+  profile: User | null;
+} => {
   const [isFetched, setIsFetched] = useState(false);
   const [profile, setProfile] = useState(null);
   const router = useRouter();
@@ -13,7 +16,7 @@ export const useGetProfile = (): {isFetched: boolean, profile : User | null} => 
     );
     if (storedProfile) {
       setProfile(storedProfile);
-      setIsFetched(true)
+      setIsFetched(true);
     } else {
       router.push("/login?next=/profile");
     }
@@ -21,6 +24,6 @@ export const useGetProfile = (): {isFetched: boolean, profile : User | null} => 
 
   return {
     isFetched,
-    profile
+    profile,
   };
 };
