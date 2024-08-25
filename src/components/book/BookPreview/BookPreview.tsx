@@ -3,7 +3,7 @@ import React from "react";
 import { Box, Image, Paper, Skeleton, Stack, Text, Title } from "@mantine/core";
 import type { Book } from "@/types";
 import BookStatus from "../BookStatus";
-import { capitalizeName } from "@/utils/name";
+import { capitalizeName } from "@/utils/string";
 
 type Props = {
   book: Book;

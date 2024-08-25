@@ -33,7 +33,7 @@ const AppShell = ({ children }: Props) => {
         </Group>
       </MantineAppShell.Header>
       <MantineAppShell.Navbar p="md">
-        <NavLink href="#" label="Profile" />
+        <NavLink href="/profile" label="Profile" />
         <NavLink href="#" label="Borrowings" />
       </MantineAppShell.Navbar>
       <MantineAppShell.Main>{children}</MantineAppShell.Main>

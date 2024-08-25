@@ -1,16 +1,21 @@
 "use client";
 import type { Book } from "@/types";
-import { Box, Container, Flex, Grid } from "@mantine/core";
+import { Container, Grid } from "@mantine/core";
 import { books } from "@/mock";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import BookPreview from "@/components/book/BookPreview";
+import { useBooksGetAllApi } from "@/hooks/books";
 
 export default function Home() {
   const router = useRouter();
+
+  const { isLoading, data } = useBooksGetAllApi();
+  console.log("🐕 sag data", data); // TODO: REMOVE ME ⚠️
+
   return (
     <Container>
-      {true ? (
+      {!isLoading ? (
         <Grid
           gutter={{
             base: 30,
@@ -40,15 +45,35 @@ export default function Home() {
           ))}
         </Grid>
       ) : (
-        <>
-          <BookPreview.Loading />
-          <BookPreview.Loading />
-          <BookPreview.Loading />
-          <BookPreview.Loading />
-          <BookPreview.Loading />
-          <BookPreview.Loading />
-          <BookPreview.Loading />
-        </>
+        <Grid
+          gutter={{
+            base: 30,
+            md: 50,
+            xl: 60,
+          }}
+        >
+          <Grid.Col>
+            <BookPreview.Loading />
+          </Grid.Col>
+          <Grid.Col>
+            <BookPreview.Loading />
+          </Grid.Col>
+          <Grid.Col>
+            <BookPreview.Loading />
+          </Grid.Col>
+          <Grid.Col>
+            <BookPreview.Loading />
+          </Grid.Col>
+          <Grid.Col>
+            <BookPreview.Loading />
+          </Grid.Col>
+          <Grid.Col>
+            <BookPreview.Loading />
+          </Grid.Col>
+          <Grid.Col>
+            <BookPreview.Loading />
+          </Grid.Col>
+        </Grid>
       )}
     </Container>
   );

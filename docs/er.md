@@ -1,3 +1,5 @@
+<!-- Install a "mermaid" plugin in your IDE to see this file correctly -->
+
 ```mermaid
 erDiagram
     BOOK {

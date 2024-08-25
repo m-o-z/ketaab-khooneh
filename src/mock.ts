@@ -1,19 +1,17 @@
-import type { Author, Book, User } from "@/types";
+import type {Author, Book, User} from "@/types";
 
 export const users: User[] = [
   {
     id: "1",
-    firstName: "behnam",
-    lastName: "banaei",
-    image: "https://picsum.photos/202",
+    name: "Behnam Banaei",
+    avatar: "https://picsum.photos/202",
     email: "example@test.com",
     history: [],
   },
   {
     id: "2",
-    firstName: "amin",
-    lastName: "saveh",
-    image: "https://picsum.photos/203",
+    name: "Amin Saveh",
+    avatar: "https://picsum.photos/203",
     email: "example@test.com",
     history: [],
   },
@@ -130,10 +128,9 @@ export const books: Book[] = [
     releaseYear: "2008",
     borrowedBy: {
       id: "user1",
-      firstName: "John",
-      lastName: "Doe",
+      name: "John Doe",
       email: "john.doe@example.com",
-      image: "https://example.com/john-doe.jpg",
+      avatar: "https://example.com/john-doe.jpg",
       history: [],
     },
     count: 2,
@@ -230,10 +227,9 @@ export const books: Book[] = [
     releaseYear: "1994",
     reservedBy: {
       id: "user2",
-      firstName: "Jane",
-      lastName: "Smith",
+      name: "Jane Smith",
       email: "jane.smith@example.com",
-      image: "https://example.com/jane-smith.jpg",
+      avatar: "https://example.com/jane-smith.jpg",
       history: [],
     },
     count: 1,
@@ -265,10 +261,9 @@ export const books: Book[] = [
     releaseYear: "2019",
     reservedBy: {
       id: "user3",
-      firstName: "Emily",
-      lastName: "Brown",
+      name: "Emily Brown",
       email: "emily.brown@example.com",
-      image: "https://example.com/emily-brown.jpg",
+      avatar: "https://example.com/emily-brown.jpg",
       history: [],
     },
     count: 1,

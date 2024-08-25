@@ -1,17 +1,15 @@
 import React from "react";
-import { User } from "@/types";
-import { Avatar, Button, Flex, Text, useMantineTheme } from "@mantine/core";
+import {User} from "@/types";
+import {Avatar, Button, Flex, Text, useMantineTheme} from "@mantine/core";
 import Link from "next/link";
-import { getUserFullName } from "@/app/utils/users";
-import { capitalizeName } from "@/utils/name";
 
 type Props = {
   user: User;
-  color: string;
+  color?: string;
 };
 const UserPreview = ({ user, color }: Props) => {
   const theme = useMantineTheme();
-  const fullName = capitalizeName(getUserFullName(user));
+
   return (
     <Link href={`/user/${user.id}`}>
       <Button
@@ -21,8 +19,13 @@ const UserPreview = ({ user, color }: Props) => {
         variant="transparent"
       >
         <Flex gap="xs" align={"center"}>
-          <Avatar src={user.image} size="sm" name={fullName} color="initials" />
-          <Text>{fullName}</Text>
+          <Avatar
+            src={user.avatar}
+            size="sm"
+            name={user.name}
+            color="initials"
+          />
+          <Text>{user.name}</Text>
         </Flex>
       </Button>
     </Link>
