@@ -1,4 +1,4 @@
-import type {Author, Book, User} from "@/types";
+import type { Author, Book, User } from "@/types";
 
 export const users: User[] = [
   {

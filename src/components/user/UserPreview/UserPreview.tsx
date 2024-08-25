@@ -1,6 +1,6 @@
 import React from "react";
-import {User} from "@/types";
-import {Avatar, Button, Flex, Text, useMantineTheme} from "@mantine/core";
+import { User } from "@/types";
+import { Avatar, Button, Flex, Text, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
 
 type Props = {

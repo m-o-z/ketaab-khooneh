@@ -8,7 +8,6 @@ import {
   Stack,
   TextInput,
 } from "@mantine/core";
-import login from "@/utils";
 import {
   IconAt,
   IconEye,
@@ -17,33 +16,22 @@ import {
   IconPassword,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { useLoginApi } from "@/hooks/auth";
 
 const Page = () => {
-  const router = useRouter();
   const [email, setEmail] = useState("amirhosseinalibakhshi@gmail.com");
   const [password, setPassword] = useState("faYjvKiLRhc_eE_");
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string>();
+
+  const { mutateAsync: login, isLoading } = useLoginApi();
 
   const handleSubmit = async () => {
-    const { isOk, error } = await login(email, password);
-    if (isOk) {
-      router.push(
-        new URLSearchParams(window.location.search).get("next") || "/",
-      );
-    } else {
-      setErrorMessage(error?.message || "Error in Authentication");
-    }
+    await login({ email, password });
   };
 
   return (
     <Container h="100vh" pos="fixed" top="0" right="0" left="0" bottom="0">
       <Stack justify="center" h="100%" maw={400} mx="auto">
-        {errorMessage && (
-          <Alert icon={<IconMoodSad />} color="red">
-            {errorMessage}
-          </Alert>
-        )}
         <TextInput
           leftSection={<IconAt size={20} />}
           label="email"
@@ -74,7 +62,9 @@ const Page = () => {
           value={password}
           onChange={(e) => setPassword(e.currentTarget.value)}
         />
-        <Button onClick={handleSubmit}>Login</Button>
+        <Button loading={isLoading} onClick={handleSubmit}>
+          Login
+        </Button>
       </Stack>
     </Container>
   );
