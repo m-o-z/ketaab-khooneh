@@ -25,7 +25,7 @@ type Props = {
 const AppShell = ({ children }: Props) => {
   const [opened, { toggle }] = useDisclosure();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const { mutate: logout, isLoading: logoutIsLoading } = useLogoutApi();
+  const { mutate: logout } = useLogoutApi();
   return (
     <>
       <PopUp
@@ -66,8 +66,8 @@ const AppShell = ({ children }: Props) => {
         </MantineAppShell.Header>
         <MantineAppShell.Navbar p="md">
           <Stack gap={0} flex={1}>
-            <NavLink href="/profile" label="Profile" />
-            <NavLink href="#" label="Borrowings" />
+            <NavLink href="/profile" label="Profile" component={Link } />
+            <NavLink href="" label="Borrowings" component={Link } />
           </Stack>
           <Button
             color="red"
