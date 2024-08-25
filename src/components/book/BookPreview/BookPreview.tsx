@@ -56,7 +56,7 @@ const BookPreview = ({
         )}
         {!hideBottomTexts && (
           <Text truncate="end" size="xs" c="dimmed">
-            {book.expand.author
+            {book.expand.authors
               .map((author) => capitalizeName(author.name))
               .join(", ")}
           </Text>

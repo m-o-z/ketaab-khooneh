@@ -1,6 +1,7 @@
 "use client";
 import BookPreview from "@/components/book/BookPreview";
 import { useBooksGetAllApi } from "@/hooks/books";
+import { useCategoriesQuery } from "@/hooks/categories";
 import type { Book } from "@/types";
 import { Container, Grid } from "@mantine/core";
 import Link from "next/link";
@@ -10,9 +11,16 @@ export default function Home() {
   const router = useRouter();
 
   const { isLoading, data: {items: books} = {}  } = useBooksGetAllApi();
+  const {isLoading: isCategoryLoading, data: categories} = useCategoriesQuery();
 
   return (
     <Container>
+      {
+        !isCategoryLoading && categories && (
+          categories.map(cat => cat.label).join(', ')
+        )
+      }
+
       {!isLoading ? (
         <Grid
           gutter={{

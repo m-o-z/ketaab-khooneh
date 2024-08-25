@@ -66,9 +66,9 @@ const BookSummary = ({ book }: Props) => {
           <Text flex={"0 0 auto"} lh={"24px"} c="gray.6">
             Category
           </Text>
-          {/* <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
-            {book.category}
-          </Text> */}
+          <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
+            {book.expand.categories.map(item => item.label).join(', ')}
+          </Text>
         </Flex>
         <Flex columnGap="sm" align="center">
           <Flex
@@ -100,7 +100,7 @@ const BookSummary = ({ book }: Props) => {
             <IconFeather />
           </Flex>
 
-          {book.expand.author.map((author) => (
+          {book.expand.authors.map((author) => (
             <AuthorPreview key={author.id} author={author} />
           ))}
         </Flex>

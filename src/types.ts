@@ -11,6 +11,13 @@ export type Comment = {
   content: string;
 };
 
+export type BookCategory = {
+  id: string;
+  label: string;
+  slug: string;
+  category_icon:string;
+}
+
 export type BookStatus =
   | "NOT_AVAILABLE"
   | "AVAILABLE"
@@ -21,12 +28,14 @@ export type BookStatus =
 export type Book = {
   id: string;
   title: string;
+  categories: string[]
   expand: {
-    author: Author[]
+    authors: Author[]
+    categories: BookCategory[],
   }
   cover_image: string;
   status: BookStatus,
-  author: Author[];
+  authors: string[];
   description: string;
   edition: string;
   release_year: string;
