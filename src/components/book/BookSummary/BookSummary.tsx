@@ -1,14 +1,12 @@
-import React from "react";
+import AuthorPreview from "@/components/author/AuthorPreview/AuthorPreview";
 import BookPreview from "@/components/book/BookPreview";
+import { Book } from "@/types";
 import {
   Badge,
   Box,
-  Container,
   Flex,
-  rem,
-  Stack,
   Text,
-  Title,
+  Title
 } from "@mantine/core";
 import {
   IconBooks,
@@ -16,8 +14,6 @@ import {
   IconFeather,
   IconTag,
 } from "@tabler/icons-react";
-import AuthorPreview from "@/components/author/AuthorPreview/AuthorPreview";
-import { Book } from "@/types";
 
 type Props = {
   book: Book;
@@ -55,7 +51,7 @@ const BookSummary = ({ book }: Props) => {
             Count
           </Text>
           <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
-            {book.count}
+            {book.available_count}
           </Text>
         </Flex>
         <Flex columnGap="sm" align="center">
@@ -70,9 +66,9 @@ const BookSummary = ({ book }: Props) => {
           <Text flex={"0 0 auto"} lh={"24px"} c="gray.6">
             Category
           </Text>
-          <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
+          {/* <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
             {book.category}
-          </Text>
+          </Text> */}
         </Flex>
         <Flex columnGap="sm" align="center">
           <Flex
@@ -91,7 +87,7 @@ const BookSummary = ({ book }: Props) => {
             Release Year
           </Text>
           <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
-            {book.releaseYear}
+            {book.release_year}
           </Text>
         </Flex>
         <Flex wrap="wrap" columnGap="sm">
@@ -104,7 +100,7 @@ const BookSummary = ({ book }: Props) => {
             <IconFeather />
           </Flex>
 
-          {book.authors.map((author) => (
+          {book.expand.author.map((author) => (
             <AuthorPreview key={author.id} author={author} />
           ))}
         </Flex>

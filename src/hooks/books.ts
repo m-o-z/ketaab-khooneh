@@ -1,9 +1,13 @@
 import pbClient from "@/client/pbClient";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Book } from "@/types";
 
 export const useBooksGetAllApi = () =>
-  useQuery(["book"], () => pbClient.collection("books").getFullList());
+  useQuery({ queryKey: ["book"], queryFn: () => pbClient.collection("books").getList(0, 30,{
+    expand: 'author'
+  })});
 
 export const useBooksGetApi = (bookId: Book["id"]) =>
-  useQuery(["book", bookId], () => pbClient.collection("books").getOne(bookId));
+  useQuery({ queryKey: ["book", bookId], queryFn: () => pbClient.collection("books").getOne(bookId, {
+    expand: 'author'
+  })});

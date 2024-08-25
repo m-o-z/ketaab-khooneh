@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect } from "react";
-import { useParams } from "next/navigation";
-import { books } from "@/mock";
+import BookSummary from "@/components/book/BookSummary/BookSummary";
+import UserPreview from "@/components/user/UserPreview/UserPreview";
+import { useBooksGetApi } from "@/hooks/books";
 import {
   Alert,
   Box,
@@ -11,7 +11,6 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
-import UserPreview from "@/components/user/UserPreview/UserPreview";
 import {
   IconMoodSad,
   IconShoppingCart,
@@ -19,26 +18,17 @@ import {
   IconShoppingCartPlus,
   IconX,
 } from "@tabler/icons-react";
-import BookSummary from "@/components/book/BookSummary/BookSummary";
-import PocketBase from "pocketbase";
+import { useParams } from "next/navigation";
 
 // TODO: fix style
 const Page = () => {
   const theme = useMantineTheme();
   const { bookId } = useParams();
-  const book = books.find((book) => book.id === bookId);
+  const {isLoading, data: book} = useBooksGetApi(bookId as string)
 
-  const pb = new PocketBase("http://127.0.0.1:8080");
-
-  useEffect(() => {
-    (async () => {
-      await pb.admins.authWithPassword("test@test.com", "@@Test+test");
-      const records = await pb.collection("books").getFullList({
-        sort: "-created",
-      });
-      console.log("🐕 sag records", records); // TODO: REMOVE ME ⚠️
-    })();
-  }, []);
+  if(isLoading){
+    return 'is loading'
+  }
 
   const renderActionArea = () => {
     if (book?.status === "BORROWED") {

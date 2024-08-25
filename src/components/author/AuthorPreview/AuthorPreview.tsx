@@ -3,6 +3,7 @@ import { Author } from "@/types";
 import { Avatar, Button, Flex, Text } from "@mantine/core";
 import Link from "next/link";
 import { capitalizeName } from "@/utils/string";
+import pbClient from "@/client/pbClient";
 type Props = {
   author: Author;
 };
@@ -19,7 +20,7 @@ const AuthorPreview = ({ author }: Props) => {
       <Link href={`/author/${author.id}`}>
         <Flex gap="xs">
           <Avatar
-            src={author.image}
+            src={ author.author_img ? pbClient.files.getUrl(author, author.author_img): ''}
             size="sm"
             name={author.name}
             color="initials"

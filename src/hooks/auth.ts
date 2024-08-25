@@ -1,16 +1,14 @@
-import { useMutation } from "react-query";
 import pbClient from "@/client/pbClient";
-import { useRouter } from "next/navigation";
 import { notifications } from "@mantine/notifications";
-import { IconLogin } from "@tabler/icons-react";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 export const useLoginApi = () => {
   const router = useRouter();
-  return useMutation(
-    ["auth", "login"],
-    ({ email, password }: { email: string; password: string }) =>
+  return useMutation({
+    mutationKey: ["auth", "login"],
+    mutationFn: ({ email, password }: { email: string; password: string }) =>
       pbClient.collection("users").authWithPassword(email, password),
-    {
       onError: (e: Error) => {
         notifications.show({
           message: e.message,
@@ -39,16 +37,15 @@ export const useLoginApi = () => {
           new URLSearchParams(window.location.search).get("next") || "/",
         );
       },
-    },
-  );
+    })
 };
 
 export const useLogoutApi = () => {
   const router = useRouter();
   return useMutation(
-    ["auth", "logout"],
-    async () => pbClient.authStore.clear(),
     {
+    mutationKey: ["auth", "logout"],
+    mutationFn: async () => pbClient.authStore.clear(),
       onError: (e: Error) => {
         notifications.show({
           message: e.message,

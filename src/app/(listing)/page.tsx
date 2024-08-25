@@ -1,17 +1,15 @@
 "use client";
-import type { Book } from "@/types";
-import { Container, Grid } from "@mantine/core";
-import { books } from "@/mock";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import BookPreview from "@/components/book/BookPreview";
 import { useBooksGetAllApi } from "@/hooks/books";
+import type { Book } from "@/types";
+import { Container, Grid } from "@mantine/core";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
 
-  const { isLoading, data } = useBooksGetAllApi();
-  console.log("🐕 sag data", data); // TODO: REMOVE ME ⚠️
+  const { isLoading, data: {items: books} = {}  } = useBooksGetAllApi();
 
   return (
     <Container>
@@ -23,7 +21,7 @@ export default function Home() {
             xl: 60,
           }}
         >
-          {books.map((book: Book) => (
+          {books?.map((book: Book) => (
             <Grid.Col
               span={{
                 base: 12,

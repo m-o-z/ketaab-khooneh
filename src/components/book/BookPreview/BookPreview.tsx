@@ -4,6 +4,7 @@ import { Box, Image, Paper, Skeleton, Stack, Text, Title } from "@mantine/core";
 import type { Book } from "@/types";
 import BookStatus from "../BookStatus";
 import { capitalizeName } from "@/utils/string";
+import pbClient from "@/client/pbClient";
 
 type Props = {
   book: Book;
@@ -30,13 +31,13 @@ const BookPreview = ({
           <BookStatus status={book.status} />
         </Box>
         <Image
-          src={book.coverImage}
+          src={/* book.coverImage */ pbClient.files.getUrl(book, book.cover_image)}
           alt={`${book.title} cover`}
           width={width}
           height={height}
           fit={"cover"}
           style={{
-            filter: `grayscale(${book.status === "AVAILABLE" ? 0 : 1})`,
+            // filter: `grayscale(${book.status === "AVAILABLE" ? 0 : 1})`,
             aspectRatio: 1 / 1.3636,
           }}
         />
@@ -55,7 +56,7 @@ const BookPreview = ({
         )}
         {!hideBottomTexts && (
           <Text truncate="end" size="xs" c="dimmed">
-            {book.authors
+            {book.expand.author
               .map((author) => capitalizeName(author.name))
               .join(", ")}
           </Text>

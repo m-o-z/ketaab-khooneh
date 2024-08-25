@@ -1,8 +1,10 @@
 export type Author = {
   id: string;
   name: string;
-  bio: string;
-  image: string;
+  bio?: string;
+  author_img?: string;
+  email?: string
+  nick_name?: string
 };
 
 export type Comment = {
@@ -19,20 +21,16 @@ export type BookStatus =
 export type Book = {
   id: string;
   title: string;
-  coverImage: string;
-  authors: Author[];
+  expand: {
+    author: Author[]
+  }
+  cover_image: string;
+  status: BookStatus,
+  author: Author[];
   description: string;
-  status: BookStatus;
   edition: string;
-  releaseYear: string;
-  likes?: number;
-  dislikes?: number;
-  comments?: Comment[];
-  reservedBy?: User;
-  borrowedBy?: User;
-  count: number;
-  history: Borrow[];
-  category: string;
+  release_year: string;
+  available_count: number;
 };
 
 export type User = {
