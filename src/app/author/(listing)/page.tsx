@@ -4,16 +4,16 @@ import { Grid, Stack } from "@mantine/core";
 import { useAuthorsGetAllApi } from "@/hooks/authors";
 import AuthorPreview from "@/components/author/AuthorPreview";
 import Breadcrumb from "@/common/components/Breadcrumb";
-import React, {useState} from "react";
-import {useDebounce} from "use-debounce";
+import React, { useState } from "react";
+import { useDebounce } from "use-debounce";
 import ListToolbar from "@/common/components/ListToolbar";
 
 export default function Home() {
-    // TODO: refactor
-    const [searchString, setSearchString] = useState<string>("");
-    const [debouncedSearch] = useDebounce(searchString, 300);
+  // TODO: refactor
+  const [searchString, setSearchString] = useState<string>("");
+  const [debouncedSearch] = useDebounce(searchString, 300);
   const { isLoading, data: isCategoryLoading } = useAuthorsGetAllApi({
-      search: debouncedSearch,
+    search: debouncedSearch,
   });
 
   return (
@@ -26,10 +26,10 @@ export default function Home() {
           },
         ]}
       />
-        <ListToolbar
-            searchString={searchString}
-            setSearchString={setSearchString}
-        />
+      <ListToolbar
+        searchString={searchString}
+        setSearchString={setSearchString}
+      />
       {!isLoading ? (
         <Grid
           gutter={{
