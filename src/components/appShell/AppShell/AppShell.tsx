@@ -1,17 +1,21 @@
 "use client";
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
-    Burger,
-    Group,
-    AppShell as MantineAppShell,
-    Text,
-    NavLink, Button, Stack, Modal, Flex,
+  Burger,
+  Group,
+  AppShell as MantineAppShell,
+  Text,
+  NavLink,
+  Button,
+  Stack,
+  Modal,
+  Flex,
 } from "@mantine/core";
 import Link from "next/link";
 import { useDisclosure } from "@mantine/hooks";
-import {useLogoutApi} from "@/hooks/auth";
-import {IconLogout} from "@tabler/icons-react";
+import { useLogoutApi } from "@/hooks/auth";
+import { IconLogout } from "@tabler/icons-react";
 import PopUp from "@/common/components/PopUp";
 
 type Props = {
@@ -24,23 +28,35 @@ const AppShell = ({ children }: Props) => {
   const { mutate: logout, isLoading: logoutIsLoading } = useLogoutApi();
   return (
     <>
-      <PopUp title="Logout" opened={showLogoutModal} onClose={() => setShowLogoutModal(false)}>
-          <Stack>
-              <Text>Are you sure you want to logout?</Text>
-              <Flex gap="xs">
-                  <Button color="red" onClick={() => logout()}>Logout!</Button>
-                  <Button c="red" color="transparent" onClick={() => setShowLogoutModal(false)}>Cancel</Button>
-              </Flex>
-          </Stack>
+      <PopUp
+        title="Logout"
+        opened={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+      >
+        <Stack>
+          <Text>Are you sure you want to logout?</Text>
+          <Flex gap="xs">
+            <Button color="red" onClick={() => logout()}>
+              Logout!
+            </Button>
+            <Button
+              c="red"
+              color="transparent"
+              onClick={() => setShowLogoutModal(false)}
+            >
+              Cancel
+            </Button>
+          </Flex>
+        </Stack>
       </PopUp>
       <MantineAppShell
-          header={{ height: 60 }}
-          navbar={{
-            width: 300,
-            breakpoint: "sm",
-            collapsed: { mobile: !opened, desktop: !opened },
-          }}
-          padding="md"
+        header={{ height: 60 }}
+        navbar={{
+          width: 300,
+          breakpoint: "sm",
+          collapsed: { mobile: !opened, desktop: !opened },
+        }}
+        padding="md"
       >
         <MantineAppShell.Header>
           <Group h="100%" px="md">
@@ -53,7 +69,13 @@ const AppShell = ({ children }: Props) => {
             <NavLink href="/profile" label="Profile" />
             <NavLink href="#" label="Borrowings" />
           </Stack>
-          <Button color="red" onClick={() => setShowLogoutModal(true)} rightSection={<IconLogout />}>logout</Button>
+          <Button
+            color="red"
+            onClick={() => setShowLogoutModal(true)}
+            rightSection={<IconLogout />}
+          >
+            logout
+          </Button>
         </MantineAppShell.Navbar>
         <MantineAppShell.Main>{children}</MantineAppShell.Main>
       </MantineAppShell>

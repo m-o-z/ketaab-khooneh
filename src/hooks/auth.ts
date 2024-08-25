@@ -45,21 +45,25 @@ export const useLoginApi = () => {
 
 export const useLogoutApi = () => {
   const router = useRouter();
-  return useMutation(["auth", "logout"], async () => pbClient.authStore.clear(), {
-    onError: (e: Error) => {
-      notifications.show({
-        message: e.message,
-        color: "red",
-      });
+  return useMutation(
+    ["auth", "logout"],
+    async () => pbClient.authStore.clear(),
+    {
+      onError: (e: Error) => {
+        notifications.show({
+          message: e.message,
+          color: "red",
+        });
+      },
+      onSuccess: () => {
+        localStorage.removeItem("_user_info");
+        localStorage.removeItem("_token");
+        notifications.show({
+          message: "Logged out Successfully",
+          color: "green",
+        });
+        router.push("/login");
+      },
     },
-    onSuccess: () => {
-      localStorage.removeItem("_user_info");
-      localStorage.removeItem("_token");
-      notifications.show({
-        message: "Logged out Successfully",
-        color: "green",
-      });
-      router.push('/login')
-    },
-  });
+  );
 };
