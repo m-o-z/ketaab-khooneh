@@ -27,6 +27,7 @@ const Page = () => {
   const { bookId } = useParams();
   const { isLoading, data: book } = useBooksGetApi(bookId as string);
 
+  // TODO: use skeleton
   if (isLoading) {
     return "is loading";
   }

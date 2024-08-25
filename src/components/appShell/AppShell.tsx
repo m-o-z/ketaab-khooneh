@@ -48,7 +48,7 @@ const AppShell = ({ children }: Props) => {
     },
     {
       title: "Borrows",
-      url: "",
+      url: "/borrow",
       icon: IconHandGrab,
     },
     {
