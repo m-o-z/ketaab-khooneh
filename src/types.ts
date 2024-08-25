@@ -37,10 +37,9 @@ export type Book = {
 
 export type User = {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
-  image: string;
+  avatar: string;
   comments?: Comment[];
   history: Borrow[];
 };

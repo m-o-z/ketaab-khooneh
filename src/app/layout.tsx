@@ -1,11 +1,12 @@
+"use client";
 import "@mantine/core/styles.css";
-import PocketBase from "pocketbase";
-
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Button, createTheme, MantineProvider, px } from "@mantine/core";
+import { createTheme, MantineProvider } from "@mantine/core";
 import AppShell from "@/components/appShell/AppShell/AppShell";
+import { QueryClient, QueryClientProvider } from "react-query";
+import "@mantine/notifications/styles.css";
+import { Notifications } from "@mantine/notifications";
 
 const mainFont = localFont({
   display: "block",
@@ -55,12 +56,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pb = new PocketBase("http://pocketbase:8080");
-
-  const res = await pb.collection("users").authWithPassword('hossein', 'one+one=one')
-
-  console.log({res})
-
   const theme = createTheme({
     fontFamily: `${mainFont.style.fontFamily}, Tahoma, sans-serif`,
     components: {
@@ -97,12 +92,17 @@ export default async function RootLayout({
     /** Put your mantine theme override here */
   });
 
+  const queryClient = new QueryClient();
+
   return (
     <html lang="en">
       <body>
-        <MantineProvider theme={theme} defaultColorScheme="auto">
-          <AppShell>{children}</AppShell>
-        </MantineProvider>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider theme={theme} defaultColorScheme="auto">
+            <Notifications />
+            <AppShell>{children}</AppShell>
+          </MantineProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );

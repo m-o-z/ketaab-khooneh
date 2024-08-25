@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "pnpm exec prettier . --write"
+    "format": "pnpm exec prettier . --write",
+    "pb": "docker compose -f ./deployment/docker-compose.yml up --build"
   },
   "dependencies": {
     "@mantine/core": "^7.12.1",
@@ -19,7 +20,8 @@
     "next": "15.0.0-rc.0",
     "pocketbase": "^0.21.4",
     "react": "19.0.0-rc-f994737d14-20240522",
-    "react-dom": "19.0.0-rc-f994737d14-20240522"
+    "react-dom": "19.0.0-rc-f994737d14-20240522",
+    "react-query": "^3.39.3"
   },
   "devDependencies": {
     "@types/node": "^20",

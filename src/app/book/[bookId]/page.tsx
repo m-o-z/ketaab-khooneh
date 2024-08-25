@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { books } from "@/mock";
 import {
@@ -20,12 +20,25 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import BookSummary from "@/components/book/BookSummary/BookSummary";
+import PocketBase from "pocketbase";
 
 // TODO: fix style
 const Page = () => {
   const theme = useMantineTheme();
   const { bookId } = useParams();
   const book = books.find((book) => book.id === bookId);
+
+  const pb = new PocketBase("http://127.0.0.1:8080");
+
+  useEffect(() => {
+    (async () => {
+      await pb.admins.authWithPassword("test@test.com", "@@Test+test");
+      const records = await pb.collection("books").getFullList({
+        sort: "-created",
+      });
+      console.log("🐕 sag records", records); // TODO: REMOVE ME ⚠️
+    })();
+  }, []);
 
   const renderActionArea = () => {
     if (book?.status === "BORROWED") {

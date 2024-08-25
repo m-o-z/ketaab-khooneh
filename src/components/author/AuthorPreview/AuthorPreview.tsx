@@ -2,7 +2,7 @@ import React from "react";
 import { Author } from "@/types";
 import { Avatar, Button, Flex, Text } from "@mantine/core";
 import Link from "next/link";
-import { capitalizeName } from "@/utils/name";
+import { capitalizeName } from "@/utils/string";
 type Props = {
   author: Author;
 };
