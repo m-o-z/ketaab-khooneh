@@ -1,12 +1,13 @@
 "use client";
 import "@mantine/core/styles.css";
 import localFont from "next/font/local";
-import "./globals.css";
+import "../app/globals.css";
 import { createTheme, MantineProvider } from "@mantine/core";
 import AppShell from "@/components/appShell/AppShell";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@mantine/notifications/styles.css";
 import { Notifications } from "@mantine/notifications";
+import AppLayout from "@/layouts/AppLayout";
 
 const mainFont = localFont({
   display: "block",
@@ -100,7 +101,9 @@ export default async function RootLayout({
         <QueryClientProvider client={queryClient}>
           <MantineProvider theme={theme} defaultColorScheme="auto">
             <Notifications />
-            <AppShell>{children}</AppShell>
+            <AppLayout>
+              {children}
+            </AppLayout>
           </MantineProvider>
         </QueryClientProvider>
       </body>

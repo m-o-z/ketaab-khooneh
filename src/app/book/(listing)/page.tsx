@@ -3,13 +3,15 @@ import BookPreview from "@/components/book/BookPreview";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
 import type { Book } from "@/types";
-import { Container, Grid, Stack } from "@mantine/core";
+import {Center, Container, Grid, Stack, Text} from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ListToolbar from "@/common/components/ListToolbar";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import Breadcrumb from "@/common/components/Breadcrumb";
+import {IconMoodEmpty} from "@tabler/icons-react";
+import NotFound from "@/components/NotFound";
 
 export default function Home() {
   const router = useRouter();
@@ -24,6 +26,73 @@ export default function Home() {
 
   const { isLoading: isCategoryLoading, data: categories } =
     useCategoriesQuery();
+
+  const renderBooksSection = () => {
+    if (isLoading) {
+      return (
+          <Grid
+              gutter={{
+                base: 30,
+                md: 50,
+                xl: 60,
+              }}
+          >
+            <Grid.Col>
+              <BookPreview.Loading />
+            </Grid.Col>
+            <Grid.Col>
+              <BookPreview.Loading />
+            </Grid.Col>
+            <Grid.Col>
+              <BookPreview.Loading />
+            </Grid.Col>
+            <Grid.Col>
+              <BookPreview.Loading />
+            </Grid.Col>
+            <Grid.Col>
+              <BookPreview.Loading />
+            </Grid.Col>
+            <Grid.Col>
+              <BookPreview.Loading />
+            </Grid.Col>
+            <Grid.Col>
+              <BookPreview.Loading />
+            </Grid.Col>
+          </Grid>
+      )
+    }
+    if (books?.length === 0) return <NotFound />
+    return (
+        <Grid
+            gutter={{
+              base: 30,
+              md: 50,
+              xl: 60,
+            }}
+        >
+          {books?.map((book: Book) => (
+              <Grid.Col
+                  span={{
+                    base: 12,
+                    md: 3,
+                    lg: 3,
+                    xl: 3,
+                    sm: 4,
+                    xs: 6,
+                  }}
+                  key={book.id}
+              >
+                <Link href={`book/${book.id}`}>
+                  <BookPreview
+                      onClick={() => router.push(`book/${book.id}`)}
+                      book={book}
+                  />
+                </Link>
+              </Grid.Col>
+          ))}
+        </Grid>
+    )
+  }
 
   return (
     <Container>
@@ -48,66 +117,7 @@ export default function Home() {
           />
         )}
 
-        {!isLoading ? (
-          <Grid
-            gutter={{
-              base: 30,
-              md: 50,
-              xl: 60,
-            }}
-          >
-            {books?.map((book: Book) => (
-              <Grid.Col
-                span={{
-                  base: 12,
-                  md: 3,
-                  lg: 3,
-                  xl: 3,
-                  sm: 4,
-                  xs: 6,
-                }}
-                key={book.id}
-              >
-                <Link href={`book/${book.id}`}>
-                  <BookPreview
-                    onClick={() => router.push(`book/${book.id}`)}
-                    book={book}
-                  />
-                </Link>
-              </Grid.Col>
-            ))}
-          </Grid>
-        ) : (
-          <Grid
-            gutter={{
-              base: 30,
-              md: 50,
-              xl: 60,
-            }}
-          >
-            <Grid.Col>
-              <BookPreview.Loading />
-            </Grid.Col>
-            <Grid.Col>
-              <BookPreview.Loading />
-            </Grid.Col>
-            <Grid.Col>
-              <BookPreview.Loading />
-            </Grid.Col>
-            <Grid.Col>
-              <BookPreview.Loading />
-            </Grid.Col>
-            <Grid.Col>
-              <BookPreview.Loading />
-            </Grid.Col>
-            <Grid.Col>
-              <BookPreview.Loading />
-            </Grid.Col>
-            <Grid.Col>
-              <BookPreview.Loading />
-            </Grid.Col>
-          </Grid>
-        )}
+        {renderBooksSection()}
       </Stack>
     </Container>
   );

@@ -8,6 +8,7 @@ import {
   IconFeather,
   IconTag,
 } from "@tabler/icons-react";
+import dayjs from "dayjs";
 
 type Props = {
   book: Book;
@@ -77,7 +78,7 @@ const BookSummary = ({ book }: Props) => {
             />
           </Flex>
           <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
-            {book.release_year}
+            {dayjs(book.release_year).format("YYYY")}
           </Text>
         </Flex>
         <Flex wrap="wrap" columnGap="sm">
