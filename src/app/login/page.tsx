@@ -1,29 +1,20 @@
 "use client";
-import React, { useState } from "react";
-import {
-  ActionIcon,
-  Alert,
-  Button,
-  Container,
-  Stack,
-  TextInput,
-} from "@mantine/core";
+import { useLoginApi } from "@/hooks/auth";
+import { ActionIcon, Button, Container, Stack, TextInput } from "@mantine/core";
 import {
   IconAt,
   IconEye,
   IconEyeClosed,
-  IconMoodSad,
   IconPassword,
 } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
-import { useLoginApi } from "@/hooks/auth";
+import { useState } from "react";
 
 const Page = () => {
   const [email, setEmail] = useState("amirhosseinalibakhshi@gmail.com");
   const [password, setPassword] = useState("faYjvKiLRhc_eE_");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { mutateAsync: login, isLoading } = useLoginApi();
+  const { mutateAsync: login, isPending } = useLoginApi();
 
   const handleSubmit = async () => {
     await login({ email, password });
@@ -62,7 +53,7 @@ const Page = () => {
           value={password}
           onChange={(e) => setPassword(e.currentTarget.value)}
         />
-        <Button loading={isLoading} onClick={handleSubmit}>
+        <Button loading={isPending} onClick={handleSubmit}>
           Login
         </Button>
       </Stack>

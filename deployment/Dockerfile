@@ -28,4 +28,4 @@ RUN pnpm i
 EXPOSE 3000
 
 # Default command (can be overridden by docker-compose)
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]
