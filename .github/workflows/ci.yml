@@ -1,6 +1,5 @@
 name: Build and Push Docker Image
 
-# Trigger the workflow on push to main branch
 on:
   push:
     branches:
@@ -11,25 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Check out the repository code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Build and push Docker image
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: . # Use root of project as build context
+          file: ./build/Dockerfile # Path to Dockerfile in ./build folder
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/my-app:latest
