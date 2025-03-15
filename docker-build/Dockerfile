@@ -24,6 +24,8 @@ RUN pnpm install --prod --frozen-lockfile
 # Copy the rest of your Next.js project files
 COPY . .
 
+RUN ls -lash
+
 # Build the Next.js app (generates optimized production build)
 RUN pnpm build
 
