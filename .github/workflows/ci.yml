@@ -29,4 +29,6 @@ jobs:
           context: . # Use root of project as build context
           file: ./docker-build/Dockerfile # Path to Dockerfile in ./build folder
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh:latest
+            ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh:${{ github.sha }}
