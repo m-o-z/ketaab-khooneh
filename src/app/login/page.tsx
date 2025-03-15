@@ -10,8 +10,8 @@ import {
 import { useState } from "react";
 
 const Page = () => {
-  const [email, setEmail] = useState("amirhosseinalibakhshi@gmail.com");
-  const [password, setPassword] = useState("faYjvKiLRhc_eE_");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutateAsync: login, isPending } = useLoginApi();
