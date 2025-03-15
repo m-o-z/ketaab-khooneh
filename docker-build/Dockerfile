@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY package.json pnpm-lock.yaml ./
 
 # Install production dependencies with pnpm
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of your Next.js project files
 COPY . .
