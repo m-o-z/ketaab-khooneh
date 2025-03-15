@@ -27,6 +27,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: . # Use root of project as build context
-          file: ./build/Dockerfile # Path to Dockerfile in ./build folder
+          file: ./docker-build/Dockerfile # Path to Dockerfile in ./build folder
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/my-app:latest
