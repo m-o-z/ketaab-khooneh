@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  Avatar,
-  Button,
-  Flex,
-  Skeleton,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Button, Flex, Skeleton, Stack, Text, Title } from "@mantine/core";
+import { Avatar } from "@tapsioss/react-components";
 import Link from "next/link";
 import pbClient from "@/client/pbClient";
 import { capitalizeName } from "@/utils/string";
@@ -24,7 +17,7 @@ const PreviewBase = ({ imageUrl, title, subtitle, url }: Props) => {
     <Link href={url || ""} passHref>
       <Stack align="center">
         {imageUrl && (
-          <Avatar size="xl" color="initials" src={imageUrl} alt={title} />
+          <Avatar size="xlg" color="initials" image={imageUrl} alt={title} />
         )}
         {title && (
           <Title ta="center" size="sm">
@@ -64,7 +57,7 @@ PreviewBase.Compact = function Compact({ imageUrl, title, url }: Props) {
     >
       <Link href={url || ""} passHref>
         <Flex gap="xs">
-          <Avatar src={imageUrl} size="sm" name={title} color="initials" />
+          <Avatar image={imageUrl} size="xs" />
           <Text fw={500} size="sm" lh="1.5rem">
             {title}
           </Text>

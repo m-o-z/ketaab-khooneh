@@ -1,93 +1,101 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import { Box, Container } from "@mantine/core";
 import {
-  Burger,
-  Group,
-  AppShell as MantineAppShell,
-  Text,
-  NavLink,
-  Button,
-  Stack,
-  Modal,
-  Flex,
-  rem,
-  Menu,
-} from "@mantine/core";
-import Link from "next/link";
-import { useDisclosure } from "@mantine/hooks";
-import { useLogoutApi } from "@/hooks/auth";
+  BottomNavigation,
+  BottomNavigationActiveChangeEvent,
+  BottomNavigationItem,
+  BottomNavigationItemSlots,
+} from "@tapsioss/react-components";
+import { usePathname, useRouter } from "next/navigation";
 import {
-  IconBooks,
-  IconFeather,
-  IconHandGrab,
-  IconLogout,
-  IconSettings,
-  IconUser,
-} from "@tabler/icons-react";
-import PopUp from "@/common/components/PopUp";
-import Logout from "@/components/appShell/Logout";
-import SidebarItem from "@/components/appShell/SidebarItem";
+  ArrowUpArrowDown,
+  ListBullet,
+  PencilLineFill,
+  PersonFill,
+} from "@tapsioss/react-icons";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const AppShell = ({ children }: Props) => {
-  const [opened, { toggle }] = useDisclosure();
+  const router = useRouter();
   const sidebarItems = [
     {
       title: "Books",
+      titleFa: "کتاب‌ها",
       url: "/book",
-      icon: IconBooks,
+      Icon: ListBullet,
     },
     {
       title: "Authors",
+      titleFa: "نویسندگان",
       url: "/author",
-      icon: IconFeather,
+      Icon: PencilLineFill,
     },
     {
       title: "Borrows",
+      titleFa: "امانت‌ها",
       url: "/borrow",
-      icon: IconHandGrab,
+      Icon: ArrowUpArrowDown,
     },
     {
       title: "Profile",
+      titleFa: "پروفایل",
       url: "/profile",
-      icon: IconUser,
+      Icon: PersonFill,
     },
   ];
+
+  const currentPath = usePathname();
+
+  const handleBottomNavigationClick = (
+    e: BottomNavigationActiveChangeEvent,
+  ) => {
+    router.push(e.details.value);
+  };
+
   return (
-    <MantineAppShell
-      header={{ height: 60 }}
-      navbar={{
-        width: 300,
-        breakpoint: "sm",
-        collapsed: { mobile: !opened, desktop: !opened },
-      }}
-      padding="md"
-    >
-      <MantineAppShell.Header>
-        <Group h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} size="sm" />
-          <Link href="/book">Ketaab Khooneh</Link>
-        </Group>
-      </MantineAppShell.Header>
-      <MantineAppShell.Navbar p="md">
-        <Stack gap={0} flex={1}>
-          {sidebarItems.map((item) => (
-            <SidebarItem
-              key={item.title}
-              title={item.title}
-              url={item.url}
-              icon={item.icon}
-            />
-          ))}
-        </Stack>
-        <Logout />
-      </MantineAppShell.Navbar>
-      <MantineAppShell.Main>{children}</MantineAppShell.Main>
-    </MantineAppShell>
+    <Box mx="auto" maw={500} pos="fixed" top={0} bottom={0} left={0} right={0}>
+      <Box
+        pb={100}
+        component="main"
+        pos="absolute"
+        top={0}
+        bottom={0}
+        left={0}
+        right={0}
+        style={{
+          overflow: "auto",
+        }}
+      >
+        <Container>{children}</Container>
+      </Box>
+      <BottomNavigation
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+        onActivechange={handleBottomNavigationClick}
+      >
+        {sidebarItems.map((item) => (
+          <BottomNavigationItem
+            key={item.title}
+            value={item.url}
+            active={currentPath === item.url}
+          >
+            <div slot={BottomNavigationItemSlots.ICON}>
+              <item.Icon />
+            </div>
+            {item.titleFa}
+          </BottomNavigationItem>
+        ))}
+      </BottomNavigation>
+    </Box>
   );
 };
 

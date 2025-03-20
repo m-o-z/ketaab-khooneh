@@ -7,6 +7,7 @@ import "@mantine/notifications/styles.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import localFont from "next/font/local";
 import "../app/globals.css";
+import "@tapsioss/theme/css-variables";
 
 const mainFont = localFont({
   display: "block",
@@ -57,7 +58,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const theme = createTheme({
-    fontFamily: `${mainFont.style.fontFamily}, Tahoma, sans-serif`,
+    fontFamily: `VazirMatn, ${mainFont.style.fontFamily}, Tahoma, sans-serif`,
     components: {
       Text: {
         styles: {
@@ -95,10 +96,10 @@ export default async function RootLayout({
   const queryClient = new QueryClient();
 
   return (
-    <html lang="en">
+    <html lang="fa" dir="rtl">
       <body>
         <QueryClientProvider client={queryClient}>
-          <MantineProvider theme={theme} defaultColorScheme="auto">
+          <MantineProvider theme={theme} defaultColorScheme="light">
             <Notifications />
             <AppLayout>{children}</AppLayout>
           </MantineProvider>

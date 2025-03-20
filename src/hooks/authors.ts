@@ -1,5 +1,5 @@
 import pbClient from "@/client/pbClient";
-import { Author, Book, BookCategory, ListFetchingParams } from "@/types";
+import { Author, ListFetchingParams } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 export const useAuthorsGetAllApi = ({
@@ -15,10 +15,11 @@ export const useAuthorsGetAllApi = ({
   return useQuery({
     queryKey: ["author", search, page, perPage],
     queryFn: () =>
-      pbClient.collection("authors").getFullList<Author>({
+      pbClient.collection("authors").getList<Author>(0, 30, {
         filter,
         page,
         perPage,
+        expand: "books,categories",
       }),
   });
 };

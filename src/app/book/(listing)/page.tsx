@@ -1,8 +1,13 @@
 "use client";
-import Breadcrumb from "@/common/components/Breadcrumb";
 import ListToolbar from "@/common/components/ListToolbar";
 import BookPreview from "@/components/book/BookPreview";
 import NotFound from "@/components/NotFound";
+import {
+  EmptyState,
+  EmptyStateSlots,
+  Button,
+  ButtonSlots,
+} from "@tapsioss/react-components";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
 import useAuthenticated from "@/hooks/useAuthenticated";
@@ -12,6 +17,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLayoutEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
+import {
+  ArrowTwoCirclepathVertical,
+  HeartBrokenFill,
+} from "@tapsioss/react-icons";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 export default function Home() {
   const navigate = useRouter();
@@ -28,7 +39,12 @@ export default function Home() {
   const [searchString, setSearchString] = useState<string>("");
   const [filters, setFilters] = useState<string[]>([]);
   const [debouncedSearch] = useDebounce(searchString, 300);
-  const { isLoading, data: { items: books } = {} } = useBooksGetAllApi({
+  const {
+    isLoading,
+    data: { items: books } = {},
+    isError,
+    refetch,
+  } = useBooksGetAllApi({
     search: debouncedSearch,
     filters,
   });
@@ -37,6 +53,9 @@ export default function Home() {
     useCategoriesQuery();
 
   const renderBooksSection = () => {
+    if (isError) {
+      return <NotFound />;
+    }
     if (isLoading) {
       return (
         <Grid
@@ -103,31 +122,25 @@ export default function Home() {
     );
   };
 
-  return (
-    <Container>
-      <Stack>
-        <Breadcrumb
-          items={[
-            {
-              title: "Books",
-              href: "/book",
-            },
-          ]}
-        />
-        {isCategoryLoading ? (
-          <ListToolbar.Loading />
-        ) : (
-          <ListToolbar
-            searchString={searchString}
-            setSearchString={setSearchString}
-            selectedFilters={filters}
-            setSelectedFilters={setFilters}
-            filters={categories?.map((cat) => cat.label)}
-          />
-        )}
+  const renderToolbar = () => {
+    if (isCategoryLoading || isLoading) return <ListToolbar.Loading />;
+    if (isError) return null;
+    return (
+      <ListToolbar
+        searchString={searchString}
+        setSearchString={setSearchString}
+        selectedFilters={filters}
+        setSelectedFilters={setFilters}
+        filters={categories?.map((cat) => cat.label)}
+      />
+    );
+  };
 
-        {renderBooksSection()}
-      </Stack>
-    </Container>
+  return (
+    <Stack>
+      <h1>کتاب‌ها</h1>
+      {renderToolbar()}
+      {renderBooksSection()}
+    </Stack>
   );
 }

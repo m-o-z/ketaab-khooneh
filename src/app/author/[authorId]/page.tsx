@@ -4,31 +4,43 @@ import { useParams } from "next/navigation";
 import { useAuthorGetApi } from "@/hooks/authors";
 import AuthorPreview from "@/components/author/AuthorPreview";
 import { Stack } from "@mantine/core";
-import Breadcrumb from "@/common/components/Breadcrumb";
+import NotFound from "@/components/NotFound";
+import {Avatar} from '@tapsioss/react-components'
+import {capitalizeName} from "@/utils/string";
+import pbClient from "@/client/pbClient";
 
 const Page = () => {
   const { authorId } = useParams();
-  const { data: author, isLoading } = useAuthorGetApi(authorId as string);
+  const { data: author, isLoading, isError } = useAuthorGetApi(authorId as string);
+
+  const renderAuthorPreview = () => {
+    if (isLoading) {
+      return (
+          <AuthorPreview.Loading />
+      )
+    }
+    if (isError) {
+      return <NotFound description="خطایی در نمایش اطلاعات نویسنده رخ داد!" />
+    }
+    if (author) {
+      return (
+          <>
+            {author.author_img && <Avatar image={pbClient.files.getUrl(
+                author,
+                author.author_img,
+            )} size="xxlg" alt={author.name}/>}
+            {capitalizeName(author.name) +
+                (author.nick_name ? ` (${author.nick_name})` : "")}
+            {author.bio && <p>{author.bio}</p>}
+          </>
+      )
+    }
+  }
 
   return (
-    <Stack maw={768} mx="auto">
-      <Breadcrumb
-        items={[
-          {
-            title: "Authors",
-            href: "/author",
-          },
-          {
-            title: author?.name || "...",
-            href: `/author/${authorId}`,
-          },
-        ]}
-      />
-      {isLoading ? (
-        <AuthorPreview.Loading />
-      ) : (
-        <>{author && <AuthorPreview author={author} />}</>
-      )}
+    <Stack>
+      <h1>اطلاعات {author?.name}</h1>
+      {renderAuthorPreview()}
     </Stack>
   );
 };

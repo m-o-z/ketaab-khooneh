@@ -1,18 +1,11 @@
 "use client";
-import {Stack} from "@mantine/core";
-import Breadcrumb from "@/common/components/Breadcrumb";
+import { Stack } from "@mantine/core";
+import React from "react";
 
 export default function Home() {
   return (
-      <Stack maw={768} mx="auto">
-        <Breadcrumb
-          items={[
-            {
-              title: "Borrows",
-              href: "/borrow",
-            },
-          ]}
-        />
-      </Stack>
+    <Stack maw={768} mx="auto">
+      <h1>امانت‌ها</h1>
+    </Stack>
   );
 }

@@ -8,15 +8,14 @@ import UserPreview from "@/components/user/UserPreview";
 const Page = () => {
   const { isFetched, profile } = useGetProfile();
   return (
-    <Container h="100vh">
-      <Stack justify="center" h="100%" maw={400} mx="auto" align={"center"}>
-        {isFetched && profile && (
-          <>
-            <UserPreview user={profile} />
-          </>
-        )}
-      </Stack>
-    </Container>
+    <Stack>
+      <h1>پروفایل</h1>
+      {isFetched && profile && (
+        <>
+          <UserPreview user={profile} />
+        </>
+      )}
+    </Stack>
   );
 };
 

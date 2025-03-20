@@ -4,8 +4,7 @@ import UserPreview from "@/components/user/UserPreview";
 import { useBooksGetApi } from "@/hooks/books";
 import {
   Alert,
-  Box,
-  Button,
+  Container,
   Flex,
   Stack,
   Text,
@@ -15,11 +14,16 @@ import {
   IconMoodSad,
   IconShoppingCart,
   IconShoppingCartExclamation,
-  IconShoppingCartPlus,
   IconX,
 } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
-import Breadcrumb from "@/common/components/Breadcrumb";
+import {
+  Button,
+  ButtonSlots,
+  Notice,
+  NoticeSlots,
+} from "@tapsioss/react-components";
+import { ShoppingCart } from "@tapsioss/react-icons";
 
 // TODO: fix style
 const Page = () => {
@@ -50,16 +54,27 @@ const Page = () => {
     }
     if (book?.status === "RESERVED_BY_ME") {
       return (
-        <Alert color="blue" icon={<IconShoppingCart />}>
-          <Stack gap="sm">
-            <Text>This book is currently reserved by you</Text>
-            <div>
-              <Button color="red" leftSection={<IconX />}>
-                Cancel Reservation
-              </Button>
+        <>
+          <Notice
+            priority="low"
+            visible
+            description="این کتاب توسط شما رزرو شده است."
+          >
+            <div slot={NoticeSlots.ACTION}>
+              <Button color="red">لغو رزرو</Button>
             </div>
-          </Stack>
-        </Alert>
+          </Notice>
+          <Alert color="blue" icon={<IconShoppingCart />}>
+            <Stack gap="sm">
+              <Text>This book is currently reserved by you</Text>
+              <div>
+                <Button color="red" leftSection={<IconX />}>
+                  Cancel Reservation
+                </Button>
+              </div>
+            </Stack>
+          </Alert>
+        </>
       );
     }
     if (book?.status === "RESERVED_BY_OTHERS") {
@@ -77,42 +92,35 @@ const Page = () => {
         )
       );
     }
-    if (book?.status === "AVAILABLE") {
+    if (true || book?.status === "NOT_AVAILABLE") {
       return (
-        <Button color="green" fullWidth leftSection={<IconShoppingCartPlus />}>
-          Borrow the Book!
-        </Button>
+        <Notice
+          visible
+          color="error"
+          priority="low"
+          description="این کتاب در حال حاضر در دسترس نیست."
+        />
       );
     }
-    if (book?.status === "NOT_AVAILABLE") {
+    if (book?.status === "AVAILABLE") {
       return (
-        <Alert icon={<IconMoodSad />} color="red">
-          This book is not available right now
-        </Alert>
+        <Flex justify={"end"}>
+          <Button>
+            <ShoppingCart slot={ButtonSlots.TRAILING_ICON} />
+            امانت بگیر
+          </Button>
+        </Flex>
       );
     }
   };
   return (
-    <Box maw={768} mx="auto">
-      {book && (
-        <Stack gap="md" w="100%">
-          <Breadcrumb
-            items={[
-              {
-                title: "Books",
-                href: "/book",
-              },
-              {
-                title: book.title,
-                href: `/book/${bookId}`,
-              },
-            ]}
-          />
-          <BookSummary book={book} />
-          {renderActionArea()}
-        </Stack>
-      )}
-    </Box>
+    book && (
+      <Stack gap="md" w="100%">
+        <h1>کتاب {book.title}</h1>
+        <BookSummary book={book} />
+        {renderActionArea()}
+      </Stack>
+    )
   );
 };
 

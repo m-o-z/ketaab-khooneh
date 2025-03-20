@@ -27,6 +27,114 @@
 /*  margin: 0;*/
 /*}*/
 
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Thin.woff2")
+      format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Thin.ttf")
+      format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-ExtraLight.woff2")
+      format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-ExtraLight.ttf")
+      format("truetype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Light.woff2")
+      format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Light.ttf")
+      format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Regular.woff2")
+      format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Regular.ttf")
+      format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Medium.woff2")
+      format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Medium.ttf")
+      format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-SemiBold.woff2")
+      format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-SemiBold.ttf")
+      format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Bold.woff2")
+      format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Bold.ttf")
+      format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-ExtraBold.woff2")
+      format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-ExtraBold.ttf")
+      format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Black.woff2")
+      format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Black.ttf")
+      format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -34,6 +142,52 @@ a {
 
 img {
   user-select: text;
+}
+
+html {
+  font-family: "Vazirmatn";
+}
+
+h1 {
+  font-family: var(--tapsi-typography-headline-lg-font);
+  font-size: var(--tapsi-typography-headline-lg-size);
+  line-height: var(--tapsi-typography-headline-lg-height);
+  font-weight: var(--tapsi-typography-headline-lg-weight);
+}
+
+h2 {
+  font-family: var(--tapsi-typography-headline-md-font);
+  font-size: var(--tapsi-typography-headline-md-size);
+  line-height: var(--tapsi-typography-headline-md-height);
+  font-weight: var(--tapsi-typography-headline-md-weight);
+}
+
+h3 {
+  font-family: var(--tapsi-typography-headline-sm-font);
+  font-size: var(--tapsi-typography-headline-sm-size);
+  line-height: var(--tapsi-typography-headline-sm-height);
+  font-weight: var(--tapsi-typography-headline-sm-weight);
+}
+
+p {
+  font-family: var(--tapsi-typography-body-md-font);
+  font-size: var(--tapsi-typography-body-md-size);
+  line-height: var(--tapsi-typography-body-md-height);
+  font-weight: var(--tapsi-typography-body-md-weight);
+  color: var(--tapsi-color-content-secondary);
+  margin: 0;
+}
+
+label {
+  font-family: var(--tapsi-typography-label-sm-font);
+  font-size: var(--tapsi-typography-label-sm-size);
+  line-height: var(--tapsi-typography-label-sm-height);
+  font-weight: var(--tapsi-typography-label-sm-weight);
+  color: var(--tapsi-color-content-secondary);
+}
+
+a, button {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /*@media (prefers-color-scheme: dark) {*/

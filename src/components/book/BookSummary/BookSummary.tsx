@@ -1,104 +1,111 @@
 import AuthorPreview from "@/components/author/AuthorPreview";
 import BookPreview from "@/components/book/BookPreview";
 import { Book } from "@/types";
-import { Badge, Box, Flex, Text, Title } from "@mantine/core";
-import {
-  IconBooks,
-  IconCalendarMonth,
-  IconFeather,
-  IconTag,
-} from "@tabler/icons-react";
+import { Box, Flex, Stack } from "@mantine/core";
+import { Badge } from "@tapsioss/react-components";
+import { IconBooks, IconTag } from "@tabler/icons-react";
 import dayjs from "dayjs";
+import { Calendar, PencilLine } from "@tapsioss/react-icons";
 
 type Props = {
   book: Book;
 };
 const BookSummary = ({ book }: Props) => {
+  const renderEdition = () => {
+    if (book.edition) {
+      return (
+        <Badge
+          color={"info"}
+          priority="low"
+          size="sm"
+          value={`ویرایش ${book.edition}`}
+        />
+      );
+    }
+  };
+  const renderCount = () => {
+    return (
+      <Flex columnGap="xs" align="center">
+        <Box
+          style={(theme) => ({
+            color: theme.colors.gray[6],
+          })}
+          h={24}
+          w={24}
+        >
+          <IconBooks />
+        </Box>
+        <label>تعداد</label>
+        <p>{book.available_count}</p>
+      </Flex>
+    );
+  };
+  const renderCategories = () => {
+    return (
+      <Flex columnGap="xs" align="center">
+        <Box
+          style={(theme) => ({
+            color: theme.colors.gray[6],
+          })}
+          h={24}
+          w={24}
+        >
+          <IconTag size={"24px"} />
+        </Box>
+        <label>دسته‌بندی</label>
+        {book.expand.categories.map((item) => (
+          <Badge key={item.label} value={item.label} color="info" />
+        ))}
+      </Flex>
+    );
+  };
+  const renderReleaseDate = () => {
+    return (
+      <Flex columnGap="xs" align="center">
+        <Box
+          style={(theme) => ({
+            color: theme.colors.gray[6],
+          })}
+          h={24}
+          w={24}
+        >
+          <Calendar />
+        </Box>
+        <label>تاریخ انتشار</label>
+        <p>{dayjs(book.release_year).format("YYYY")}</p>
+      </Flex>
+    );
+  };
+  const renderAuthors = () => {
+    return (
+      <Flex columnGap="xs" wrap="wrap">
+        <Box
+          style={(theme) => ({
+            color: theme.colors.gray[6],
+          })}
+          h={24}
+          w={24}
+        >
+          <PencilLine />
+        </Box>
+        {book.expand.authors.map((author) => (
+          <AuthorPreview.Compact key={author.id} author={author} />
+        ))}
+      </Flex>
+    );
+  };
   return (
-    <>
+    <Stack>
       <BookPreview book={book} hideBottomTexts width="14rem" height="auto" />
       <Flex direction="column" gap="md" align="flex-start" w="100%">
-        <Flex gap="sm" align="end" my="lg">
-          <Title order={2} m="0" lh={1}>
-            {book.title}
-          </Title>
-          {book.edition && (
-            <Badge
-              variant="light"
-              size="sm"
-              color={"cyan"}
-              style={{ transform: "translateY(-1px)" }}
-            >
-              Edition {book.edition}
-            </Badge>
-          )}
-        </Flex>
-        <Flex columnGap="sm" align="center">
-          <Flex
-            align={"center"}
-            style={(theme) => ({
-              color: theme.colors.gray[6],
-            })}
-          >
-            <IconBooks />
-          </Flex>
-          <Text flex={"0 0 auto"} lh={"24px"} c="gray.6">
-            Count
-          </Text>
-          <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
-            {book.available_count}
-          </Text>
-        </Flex>
-        <Flex columnGap="sm" align="center">
-          <Flex
-            align={"center"}
-            style={(theme) => ({
-              color: theme.colors.gray[6],
-            })}
-          >
-            <IconTag size={"24px"} />
-          </Flex>
-          <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
-            {book.expand.categories.map((item) => (
-              <Badge key={item.label}>{item.label}</Badge>
-            ))}
-          </Text>
-        </Flex>
-        <Flex columnGap="sm" align="center">
-          <Flex
-            align={"center"}
-            style={(theme) => ({
-              color: theme.colors.gray[6],
-            })}
-          >
-            <IconCalendarMonth
-              style={{
-                lineHeight: "24px",
-              }}
-            />
-          </Flex>
-          <Text flex={"1 0 auto"} fw={500} lh={"24px"}>
-            {dayjs(book.release_year).format("YYYY")}
-          </Text>
-        </Flex>
-        <Flex wrap="wrap" columnGap="sm">
-          <Flex
-            align={"center"}
-            style={(theme) => ({
-              color: theme.colors.gray[6],
-            })}
-          >
-            <IconFeather />
-          </Flex>
-          {book.expand.authors.map((author) => (
-            <AuthorPreview.Compact key={author.id} author={author} />
-          ))}
-        </Flex>
+        {renderEdition()}
+        {renderCount()}
+        {renderCategories()}
+        {renderReleaseDate()}
+        {renderAuthors()}
       </Flex>
-      <Box my="lg">
-        <Text>{book.description}</Text>
-      </Box>
-    </>
+      <p>{book.description}</p>
+    </Stack>
   );
 };
 

@@ -1,15 +1,23 @@
+"use client";
 import React from "react";
 import {
   ActionIcon,
   Flex,
   Popover,
-  Skeleton,
+  // Skeleton,
   Stack,
-  Switch,
+  Text,
+  // Switch,
   TextInput,
 } from "@mantine/core";
 import { IconFilter, IconSearch } from "@tabler/icons-react";
-
+import {
+  TextField,
+  IconButton,
+  Checkbox,
+  Skeleton,
+} from "@tapsioss/react-components";
+import { ListBullet, Magnifier } from "@tapsioss/react-icons";
 type Props = {
   searchString: string;
   setSearchString: (s: string) => void;
@@ -34,13 +42,21 @@ const ListToolbar = ({
     }
   };
   return (
-    <Flex gap="sm" align="flex-end">
-      <TextInput
-        flex={1}
-        leftSection={<IconSearch size={15} />}
+    <Flex gap="sm" align="center">
+      {/*<TextInput*/}
+      {/*  flex={1}*/}
+      {/*  leftSection={<IconSearch size={15} />}*/}
+      {/*  value={searchString}*/}
+      {/*  placeholder="Search..."*/}
+      {/*  size="xs"*/}
+      {/*  onChange={(e) => setSearchString(e.target.value)}*/}
+      {/*/>*/}
+      <TextField
+        placeholder="جستجو..."
+        style={{ flex: 1 }}
+        hideLabel
+        label="جستجو..."
         value={searchString}
-        placeholder="Search..."
-        size="xs"
         onChange={(e) => setSearchString(e.target.value)}
       />
       {filters && (
@@ -66,19 +82,24 @@ const ListToolbar = ({
 
         <Popover width={300} trapFocus position="bottom" withArrow shadow="md">
           <Popover.Target>
-            <ActionIcon color={selectedFilters ? "gray" : "transparent"}>
-              <IconFilter size={15} />
-            </ActionIcon>
+            <IconButton size="sm">
+              <ListBullet />
+            </IconButton>
           </Popover.Target>
           <Popover.Dropdown>
             <Stack>
               {filters?.map((filter) => (
-                <Switch
-                  key={filter}
-                  label={filter}
-                  checked={!!selectedFilters?.includes(filter)}
-                  onClick={() => handleSelectFilter(filter)}
-                />
+                <Flex key={filter} align={"center"}>
+                  <Text component="span" id={`${filter}-label`}>
+                    {filter}
+                  </Text>
+                  <Checkbox
+                    key={filter}
+                    label={filter}
+                    checked={!!selectedFilters?.includes(filter)}
+                    onClick={() => handleSelectFilter(filter)}
+                  />
+                </Flex>
               ))}
             </Stack>
           </Popover.Dropdown>
@@ -90,9 +111,13 @@ const ListToolbar = ({
 
 ListToolbar.Loading = function Loading() {
   return (
-    <Flex>
-      <Skeleton flex={1} height={36} />
-    </Flex>
+    <Skeleton height="36px" width="100" variant="rectangular">
+      <TextField
+        style={{ flex: 1 }}
+        hideLabel
+        label="جستجو"
+      />
+    </Skeleton>
   );
 };
 
