@@ -1,23 +1,14 @@
 "use client";
 import React from "react";
+import { Flex, Popover, Stack, Text } from "@mantine/core";
 import {
-  ActionIcon,
-  Flex,
-  Popover,
-  // Skeleton,
-  Stack,
-  Text,
-  // Switch,
-  TextInput,
-} from "@mantine/core";
-import { IconFilter, IconSearch } from "@tabler/icons-react";
-import {
-  TextField,
-  IconButton,
   Checkbox,
+  IconButton,
   Skeleton,
+  TextField,
 } from "@tapsioss/react-components";
-import { ListBullet, Magnifier } from "@tapsioss/react-icons";
+import { ListBullet } from "@tapsioss/react-icons";
+
 type Props = {
   searchString: string;
   setSearchString: (s: string) => void;
@@ -111,12 +102,8 @@ const ListToolbar = ({
 
 ListToolbar.Loading = function Loading() {
   return (
-    <Skeleton height="36px" width="100" variant="rectangular">
-      <TextField
-        style={{ flex: 1 }}
-        hideLabel
-        label="جستجو"
-      />
+    <Skeleton height="52px" width="100" variant="rectangular">
+      <TextField style={{ flex: 1 }} hideLabel label="جستجو" />
     </Skeleton>
   );
 };

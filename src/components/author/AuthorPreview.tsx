@@ -44,28 +44,14 @@ AuthorPreview.Compact = function Compact({ author }: Props) {
   );
 };
 
-AuthorPreview.List = function Compact({ author }: Props) {
-  return (
-    <Link href={`/author/${author.id}`} passHref>
-      <Flex align="center" gap="sm">
-          <Avatar image={pbClient.files.getUrl(
-              author,
-              author.author_img ?? '',
-          )}/>
-        <p>{getAuthorName(author)}</p>
-      </Flex>
-    </Link>
-  );
-};
-
 AuthorPreview.List = function List({ author }: Props) {
   return (
     <Link href={`/author/${author.id}`} passHref>
       <Flex align="center" gap="sm">
-          <Avatar image={pbClient.files.getUrl(
-              author,
-              author.author_img ?? '',
-          )} alt={author.name}/>
+        <Avatar
+          image={pbClient.files.getUrl(author, author.author_img ?? "")}
+          alt={author.name}
+        />
         <p>{getAuthorName(author)}</p>
       </Flex>
     </Link>

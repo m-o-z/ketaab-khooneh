@@ -24,17 +24,13 @@ import {
   NoticeSlots,
 } from "@tapsioss/react-components";
 import { ShoppingCart } from "@tapsioss/react-icons";
+import NotFound from "@/components/NotFound";
 
 // TODO: fix style
 const Page = () => {
   const theme = useMantineTheme();
   const { bookId } = useParams();
-  const { isLoading, data: book } = useBooksGetApi(bookId as string);
-
-  // TODO: use skeleton
-  if (isLoading) {
-    return "is loading";
-  }
+  const { isLoading, data: book, isError } = useBooksGetApi(bookId as string);
 
   const renderActionArea = () => {
     if (book?.status === "BORROWED") {
@@ -68,9 +64,7 @@ const Page = () => {
             <Stack gap="sm">
               <Text>This book is currently reserved by you</Text>
               <div>
-                <Button color="red" leftSection={<IconX />}>
-                  Cancel Reservation
-                </Button>
+                <Button variant="destructive">Cancel Reservation</Button>
               </div>
             </Stack>
           </Alert>
@@ -92,7 +86,7 @@ const Page = () => {
         )
       );
     }
-    if (true || book?.status === "NOT_AVAILABLE") {
+    if (book?.status === "NOT_AVAILABLE") {
       return (
         <Notice
           visible
@@ -113,14 +107,27 @@ const Page = () => {
       );
     }
   };
-  return (
-    book && (
-      <Stack gap="md" w="100%">
-        <h1>کتاب {book.title}</h1>
+
+  const renderBookDetail = () => {
+    if (isLoading) return "loading";
+    if (isError)
+      return <NotFound description="خطایی در نمایش این کتاب رخ داد" />;
+    if (!book) return <NotFound description="اطلاعات کتاب یافت نشد:(" />;
+    return (
+      <>
+        <h1>کتاب {book?.title || ""}</h1>
         <BookSummary book={book} />
         {renderActionArea()}
+      </>
+    );
+  };
+
+  return (
+    <Container>
+      <Stack gap="md" w="100%">
+        {renderBookDetail()}
       </Stack>
-    )
+    </Container>
   );
 };
 

@@ -149,20 +149,13 @@ html {
 }
 
 h1 {
-  font-family: var(--tapsi-typography-headline-lg-font);
-  font-size: var(--tapsi-typography-headline-lg-size);
-  line-height: var(--tapsi-typography-headline-lg-height);
-  font-weight: var(--tapsi-typography-headline-lg-weight);
-}
-
-h2 {
   font-family: var(--tapsi-typography-headline-md-font);
   font-size: var(--tapsi-typography-headline-md-size);
   line-height: var(--tapsi-typography-headline-md-height);
   font-weight: var(--tapsi-typography-headline-md-weight);
 }
 
-h3 {
+h2 {
   font-family: var(--tapsi-typography-headline-sm-font);
   font-size: var(--tapsi-typography-headline-sm-size);
   line-height: var(--tapsi-typography-headline-sm-height);
@@ -186,8 +179,13 @@ label {
   color: var(--tapsi-color-content-secondary);
 }
 
-a, button {
+a,
+button {
   -webkit-tap-highlight-color: transparent;
+}
+
+tapsi-modal {
+  z-index: 20000;
 }
 
 /*@media (prefers-color-scheme: dark) {*/

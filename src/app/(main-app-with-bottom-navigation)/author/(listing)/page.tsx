@@ -1,6 +1,6 @@
 "use client";
 import type { Author } from "@/types";
-import { Grid, Stack } from "@mantine/core";
+import { Container, Grid, Stack } from "@mantine/core";
 import { useAuthorsGetAllApi } from "@/hooks/authors";
 import AuthorPreview from "@/components/author/AuthorPreview";
 import React, { useState } from "react";
@@ -12,7 +12,11 @@ export default function Home() {
   // TODO: refactor
   const [searchString, setSearchString] = useState<string>("");
   const [debouncedSearch] = useDebounce(searchString, 300);
-  const { isLoading, data: { items: authors } = {} } = useAuthorsGetAllApi({
+  const {
+    isLoading,
+    isError,
+    data: { items: authors } = {},
+  } = useAuthorsGetAllApi({
     search: debouncedSearch,
   });
 
@@ -28,7 +32,7 @@ export default function Home() {
         </Stack>
       );
     }
-    if (authors?.length === 0) return <NotFound />;
+    if (authors?.length === 0 || isError) return <NotFound />;
     return (
       <Stack>
         {authors?.map((author: Author) => (
@@ -38,14 +42,24 @@ export default function Home() {
     );
   };
 
-  return (
-    <Stack maw={768} mx="auto">
-      <h1>نویسندگان</h1>
+  const renderToolbar = () => {
+    if (isLoading) return <ListToolbar.Loading />;
+    if (isError) return null;
+    return (
       <ListToolbar
         searchString={searchString}
         setSearchString={setSearchString}
       />
-      {renderAuthorsListSection()}
-    </Stack>
+    );
+  };
+
+  return (
+    <Container>
+      <Stack maw={768} mx="auto">
+        <h1>نویسندگان</h1>
+        {renderToolbar()}
+        {renderAuthorsListSection()}
+      </Stack>
+    </Container>
   );
 }

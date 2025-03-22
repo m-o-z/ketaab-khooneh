@@ -1,7 +1,12 @@
 import React from "react";
-import {Center} from "@mantine/core";
-import {ArrowTwoCirclepathVertical, FaceSad,} from "@tapsioss/react-icons";
-import {Button, ButtonSlots, EmptyState, EmptyStateSlots,} from "@tapsioss/react-components";
+import { Center } from "@mantine/core";
+import { ArrowTwoCirclepathVertical, FaceSad } from "@tapsioss/react-icons";
+import {
+  Button,
+  ButtonSlots,
+  EmptyState,
+  EmptyStateSlots,
+} from "@tapsioss/react-components";
 
 type Props = {
   refetch?: () => void;

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Box, Container } from "@mantine/core";
+import { Box } from "@mantine/core";
 import {
   BottomNavigation,
   BottomNavigationActiveChangeEvent,
@@ -71,7 +71,7 @@ const AppShell = ({ children }: Props) => {
           overflow: "auto",
         }}
       >
-        <Container>{children}</Container>
+        {children}
       </Box>
       <BottomNavigation
         style={{
@@ -85,8 +85,8 @@ const AppShell = ({ children }: Props) => {
         {sidebarItems.map((item) => (
           <BottomNavigationItem
             key={item.title}
-            value={item.url}
             active={currentPath === item.url}
+            value={item.url}
           >
             <div slot={BottomNavigationItemSlots.ICON}>
               <item.Icon />
