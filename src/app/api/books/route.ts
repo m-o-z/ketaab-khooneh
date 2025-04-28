@@ -1,4 +1,5 @@
 import pbClient from "@/client/pbClient";
+import { withAuth } from "@/middlewares/withAuth";
 import { booksListingSchema } from "@/schema/books";
 import { Book } from "@/types";
 import { cookies } from "next/headers";
@@ -8,20 +9,7 @@ type ResponseError = {
   message: string;
 };
 
-export async function GET(req: NextRequest) {
-  pbClient.authStore.save(cookies().get("pb_auth")?.value ?? "", { model: {} });
-
-  if (!pbClient.authStore.isValid) {
-    return Response.json(
-      {
-        message: "You are not allowed to use this fucking app.",
-      },
-      {
-        status: 401,
-      },
-    );
-  }
-
+export const GET = withAuth(async function (req: NextRequest) {
   try {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
     const { filter, page, perPage } = booksListingSchema.parse(searchParams);
@@ -53,4 +41,4 @@ export async function GET(req: NextRequest) {
       },
     );
   }
-}
+});
