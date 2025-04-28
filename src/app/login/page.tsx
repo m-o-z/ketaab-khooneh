@@ -1,28 +1,14 @@
 "use client";
 import { useLoginApi } from "@/hooks/auth";
-import { ActionIcon, Container, Stack, TextInput } from "@mantine/core";
+import { Container, Stack } from "@mantine/core";
 import {
-  TextField,
   Button,
-  TextFieldSlots,
   IconButton,
+  TextField,
+  TextFieldSlots,
 } from "@tapsioss/react-components";
-import {
-  IconAt,
-  IconEye,
-  IconEyeClosed,
-  IconPassword,
-} from "@tabler/icons-react";
+import { Envelope, Eye, EyeSlash, Lock } from "@tapsioss/react-icons";
 import { useState } from "react";
-import {
-  Envelope,
-  EnvelopeFill,
-  Eye,
-  EyeFill,
-  EyeSlash,
-  EyeSlashFill,
-  Lock,
-} from "@tapsioss/react-icons";
 
 const Page = () => {
   const [email, setEmail] = useState("");

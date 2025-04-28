@@ -7,8 +7,29 @@ export const useLoginApi = () => {
   const router = useRouter();
   return useMutation({
     mutationKey: ["auth", "login"],
-    mutationFn: ({ email, password }: { email: string; password: string }) =>
-      pbClient.collection("users").authWithPassword(email, password),
+    mutationFn: async ({
+      email,
+      password,
+    }: {
+      email: string;
+      password: string;
+    }) => {
+      const req = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          httpOnly: true,
+          username: email,
+          password,
+        }),
+      });
+
+      if (req.ok) {
+        return req.json();
+      }
+    },
     onError: (e: Error) => {
       notifications.show({
         message: e.message,
@@ -16,6 +37,7 @@ export const useLoginApi = () => {
       });
     },
     onSuccess: (authData) => {
+      console.log({ authData });
       notifications.show({
         message: "Logged in Successfully",
         color: "green",
