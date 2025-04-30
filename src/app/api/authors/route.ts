@@ -1,55 +1,34 @@
 import pbClient from "@/client/pbClient";
+import { withAuth } from "@/middlewares/withAuth";
 import { authorsListingSchema } from "@/schema/authors";
 import { Author } from "@/types";
-import { cookies } from "next/headers";
+import { errorBadRequest } from "@/utils/errors/errors";
+import { createResponsePayload } from "@/utils/response";
 import { NextRequest } from "next/server";
 
 type ResponseError = {
   message: string;
 };
 
-export async function GET(req: NextRequest) {
-  pbClient.authStore.save(cookies().get("pb_auth")?.value ?? "", { model: {} });
-
-  if (!pbClient.authStore.isValid) {
-    return Response.json(
-      {
-        message: "You are not allowed to use this fucking app.",
-      },
-      {
-        status: 401,
-      },
-    );
-  }
-
+const handler = async (req: NextRequest) => {
   try {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
     const { filter, page, perPage } = authorsListingSchema.parse(searchParams);
 
     const result = await pbClient
-      .collection("authos")
+      .collection("authors")
       .getList<Author>(page, perPage, {
         filter,
+        page,
+        perPage,
+        expand: "books,categories",
       });
 
-    return Response.json(
-      {
-        books: result,
-      },
-      {
-        status: 200,
-      },
-    );
+    return Response.json(createResponsePayload(result.items), {
+      status: 200,
+    });
   } catch (err) {
-    console.log({ err });
-    return Response.json(
-      {
-        err,
-        message: "Proper data is not provided",
-      },
-      {
-        status: 403,
-      },
-    );
+    return errorBadRequest();
   }
-}
+};
+export const GET = withAuth(handler);

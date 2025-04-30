@@ -5,8 +5,8 @@ import NotFound from "@/components/NotFound";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
 import type { Book } from "@/types";
-import { Divider } from "@tapsioss/react-components";
 import { Container, Grid, Stack } from "@mantine/core";
+import { Divider } from "@tapsioss/react-components";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
@@ -20,7 +20,7 @@ export default function Books() {
   const [debouncedSearch] = useDebounce(searchString, 300);
   const {
     isLoading,
-    data: { items: books } = {},
+    data: books,
     isError,
     refetch,
   } = useBooksGetAllApi({

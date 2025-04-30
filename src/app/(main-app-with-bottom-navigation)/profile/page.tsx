@@ -14,7 +14,7 @@ import { useLogoutApi } from "@/hooks/auth";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const { isFetched, profile } = useGetProfile();
+  const { isFetched, data: profile } = useGetProfile();
   const router = useRouter();
 
   const { mutateAsync: logout, isPending } = useLogoutApi();
@@ -28,7 +28,7 @@ const Page = () => {
           align="center"
           gap={10}
         >
-          <Avatar image={pbClient.files.getUrl(profile, profile.avatar)} />
+          <Avatar image={profile.avatar} />
           <Stack gap={0}>
             <h2 style={{ margin: 0 }}>{profile.name}</h2>
             <p>{profile.email}</p>
@@ -66,7 +66,7 @@ const Page = () => {
             denyButtonTitle="انصراف"
             acceptButtonTitle="خروج"
             acceptButtonVariant="destructive"
-            onConfirm={logout}
+            onConfirm={() => logout({})}
             isPending={isPending}
             renderImage={() => (
               <svg

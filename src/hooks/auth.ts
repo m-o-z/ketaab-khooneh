@@ -1,35 +1,17 @@
+import { api, auth } from "@/client";
 import pbClient from "@/client/pbClient";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
+type RequestPayload = {
+  email: string;
+  password: string;
+};
 export const useLoginApi = () => {
   const router = useRouter();
   return useMutation({
-    mutationKey: ["auth", "login"],
-    mutationFn: async ({
-      email,
-      password,
-    }: {
-      email: string;
-      password: string;
-    }) => {
-      const req = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          httpOnly: true,
-          username: email,
-          password,
-        }),
-      });
-
-      if (req.ok) {
-        return req.json();
-      }
-    },
+    ...auth.login,
     onError: (e: Error) => {
       notifications.show({
         message: e.message,
@@ -65,8 +47,7 @@ export const useLoginApi = () => {
 export const useLogoutApi = () => {
   const router = useRouter();
   return useMutation({
-    mutationKey: ["auth", "logout"],
-    mutationFn: async () => pbClient.authStore.clear(),
+    ...auth.logout,
     onError: (e: Error) => {
       notifications.show({
         message: e.message,

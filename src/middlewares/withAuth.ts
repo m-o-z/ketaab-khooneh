@@ -5,8 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookieParse } from "pocketbase";
 export const withAuth = (handler: ApiHandler) => {
   return async function (req: NextRequest, context: any) {
-    const cookies = req.headers.get("cookie");
-    const result = cookieParse(cookies ?? "");
+    const _cookies = await cookies();
+    const result = cookieParse(_cookies.toString() ?? "");
     if (!result["accessToken"]) {
       return NextResponse.json(
         {

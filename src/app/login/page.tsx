@@ -18,7 +18,7 @@ const Page = () => {
   const { mutateAsync: login, isPending } = useLoginApi();
 
   const handleSubmit = async () => {
-    await login({ email, password });
+    await login({ username: email, password, httpOnly: true });
   };
 
   return (

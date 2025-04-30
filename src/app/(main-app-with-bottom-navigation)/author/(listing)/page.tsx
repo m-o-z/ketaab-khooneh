@@ -15,10 +15,15 @@ export default function Home() {
   const {
     isLoading,
     isError,
-    data: { items: authors } = {},
+    data: authors,
   } = useAuthorsGetAllApi({
     search: debouncedSearch,
   });
+
+  if (!authors) {
+    return null;
+  }
+  console.log({ authors });
 
   const renderAuthorsListSection = () => {
     if (isLoading) {
