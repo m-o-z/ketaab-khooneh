@@ -1,7 +1,7 @@
 import { ApiHandler } from "@/@types/api";
 import pbClient from "@/client/pbClient";
 import { NextResponse } from "next/server";
-import { LoginRequestPayload } from "../schema/login";
+import { LoginRequestPayload } from "./login.schema";
 import { withLoginValidator } from "./validator";
 
 // pbClient.collection("users").authWithPassword(email, password)

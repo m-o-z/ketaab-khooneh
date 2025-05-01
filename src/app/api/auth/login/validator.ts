@@ -1,6 +1,6 @@
 import { ApiHandler } from "@/@types/api";
 import { NextRequest, NextResponse } from "next/server";
-import { LoginRequestSchema } from "../schema/login";
+import { LoginRequestSchema } from "./login.schema";
 
 const extractBodyJson = async (req: NextRequest) => {
   try {

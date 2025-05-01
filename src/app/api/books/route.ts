@@ -2,14 +2,13 @@ import pbClient from "@/client/pbClient";
 import { withAuth } from "@/middlewares/withAuth";
 import { booksListingSchema } from "@/schema/books";
 import { Book } from "@/types";
-import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 
 type ResponseError = {
   message: string;
 };
 
-export const GET = withAuth(async function (req: NextRequest) {
+const handler = async (req: NextRequest) => {
   try {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
     const { filter, page, perPage } = booksListingSchema.parse(searchParams);
@@ -41,4 +40,6 @@ export const GET = withAuth(async function (req: NextRequest) {
       },
     );
   }
-});
+};
+
+export const GET = withAuth(handler);
