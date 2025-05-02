@@ -16,6 +16,7 @@ const loginHandler: ApiHandler = async (req, context) => {
     token: res.token,
     record: res.record,
   });
+  const origin = new URL(req.headers.get("origin") ?? "http://localhost");
 
   if (httpOnly) {
     response.cookies.set("accessToken", res.token, {
@@ -23,7 +24,7 @@ const loginHandler: ApiHandler = async (req, context) => {
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24,
-      domain: req.headers.get("origin") || "localhost",
+      domain: origin.hostname,
       path: "/",
     });
   }

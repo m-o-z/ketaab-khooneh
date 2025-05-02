@@ -32,6 +32,10 @@ const Page = () => {
   const { bookId } = useParams();
   const { isLoading, data: book, isError } = useBooksGetApi(bookId as string);
 
+  if (!book) {
+    return "not found";
+  }
+
   const renderActionArea = () => {
     if (book?.status === "BORROWED") {
       return (

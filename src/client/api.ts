@@ -46,12 +46,14 @@ export function createApi(_config: ApiConfig = defaultConfig) {
       ...options.headers,
     };
 
+    const finalOptions = {
+      ...config,
+      ...options,
+      headers: mergedHeaders,
+    };
+    console.log({ finalOptions, url });
     try {
-      const response = await fetch(url, {
-        ...config,
-        ...options,
-        headers: mergedHeaders,
-      });
+      const response = await fetch(url, finalOptions);
 
       // Handle non-OK responses
       if (!response.ok) {
@@ -101,28 +103,20 @@ export function createApi(_config: ApiConfig = defaultConfig) {
       queryKey?: string | ((params: TParams) => unknown[]);
     } = {},
   ) {
-    // For endpoints without params
-    if (typeof endpoint === "string" && !options.queryKey) {
-      return {
-        queryKey: [endpoint.split("/")[0]] as const,
-        queryFn: () =>
-          fetchApi<TData>(endpoint, {
-            method: options.method || "GET",
-            headers: options.headers,
-          }),
-      };
-    }
+    // Always return a function
+    return (params?: TParams) => {
+      // Handle case where params might not be provided for no-param endpoints
+      const actualParams = params || ({} as TParams);
 
-    // For endpoints with params
-    return (params: TParams) => {
       const finalEndpoint =
-        typeof endpoint === "function" ? endpoint(params) : endpoint;
+        typeof endpoint === "function" ? endpoint(actualParams) : endpoint;
 
       // Build query string for GET requests
       let url = finalEndpoint;
-      if (params && Object.keys(params).length > 0) {
+      // Use actualParams here
+      if (actualParams && Object.keys(actualParams).length > 0) {
         const queryParams = new URLSearchParams();
-        Object.entries(params).forEach(([key, value]) => {
+        Object.entries(actualParams).forEach(([key, value]) => {
           if (value !== undefined && value !== null) {
             queryParams.append(key, String(value));
           }
@@ -138,10 +132,10 @@ export function createApi(_config: ApiConfig = defaultConfig) {
       const queryKeyBase = options.queryKey || finalEndpoint.split("/")[0];
       const queryKey =
         typeof queryKeyBase === "function"
-          ? queryKeyBase(params)
+          ? queryKeyBase(actualParams)
           : typeof queryKeyBase === "string"
-            ? ([queryKeyBase, params] as const)
-            : ([finalEndpoint, params] as const);
+            ? ([queryKeyBase, actualParams] as const)
+            : ([finalEndpoint, actualParams] as const);
 
       return {
         queryKey,
@@ -196,13 +190,13 @@ export function createApi(_config: ApiConfig = defaultConfig) {
 export const api = createApi();
 
 // Export types for better developer experience
-export type QueryDefinition<TData, TParams = void> =
-  TParams extends Record<string, never>
-    ? { queryKey: readonly unknown[]; queryFn: () => Promise<TData> }
-    : (params: TParams) => {
-        queryKey: readonly unknown[];
-        queryFn: () => Promise<TData>;
-      };
+// Updated QueryDefinition to always expect a function
+export type QueryDefinition<TData, TParams = Record<string, never>> = (
+  params?: TParams,
+) => {
+  queryKey: readonly unknown[];
+  queryFn: () => Promise<TData>;
+};
 
 export type MutationDefinition<TData, TVariables> = {
   mutationFn: (variables: TVariables) => Promise<TData>;

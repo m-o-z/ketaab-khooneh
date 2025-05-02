@@ -1,131 +1,135 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { books, users, Book, CreateBookInput } from '../client';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { books, CreateBookInput, users } from "../client/endpoints";
 
 export default function ApiExample() {
   const queryClient = useQueryClient();
   const [selectedGenre, setSelectedGenre] = useState<string | undefined>();
   const [selectedBookId, setSelectedBookId] = useState<number | undefined>();
-  
+
+  // Define query options based on selectedGenre
+  const booksQueryOptions = selectedGenre
+    ? books.getFiltered({ genre: selectedGenre }) // Call function with params
+    : books.getAll(); // Call function without params
+
   // Get all books or filtered books based on selected genre
-  const { data: booksList, isLoading } = useQuery(
-    selectedGenre 
-      ? books.getFiltered({ genre: selectedGenre })
-      : books.getAll
-  );
-  
+  const { data: booksList, isLoading } = useQuery(booksQueryOptions);
+
   // Get a specific book when selected
+  // Call the function returned by getById and spread its result along with the enabled option
   const { data: selectedBook } = useQuery({
     ...books.getById({ id: selectedBookId! }),
     enabled: selectedBookId !== undefined,
   });
-  
+
   // Get all users
-  const { data: usersList } = useQuery(users.getAll);
-  
+  const { data: usersList } = useQuery(users.getAll()); // Call function without params
+
   // Create book mutation
   const createBookMutation = useMutation({
     ...books.create,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['books'] });
+      queryClient.invalidateQueries({ queryKey: ["books"] });
     },
   });
-  
+
   // Update book mutation
   const updateBookMutation = useMutation({
     ...books.update,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['books'] });
+      queryClient.invalidateQueries({ queryKey: ["books"] });
     },
   });
-  
+
   // Delete book mutation
   const deleteBookMutation = useMutation({
     ...books.delete,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['books'] });
+      queryClient.invalidateQueries({ queryKey: ["books"] });
       if (selectedBookId) {
         setSelectedBookId(undefined);
       }
     },
   });
-  
+
   // Example form state for creating a new book
   const [newBook, setNewBook] = useState<CreateBookInput>({
-    title: '',
-    author: '',
-    isbn: '',
+    title: "",
+    author: "",
+    isbn: "",
     publishedYear: new Date().getFullYear(),
     genre: [],
-    description: '',
+    description: "",
   });
-  
+
   // Handle form input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setNewBook(prev => ({
+    setNewBook((prev) => ({
       ...prev,
-      [name]: name === 'publishedYear' ? parseInt(value) : value,
+      [name]: name === "publishedYear" ? parseInt(value) : value,
     }));
   };
-  
+
   // Handle genre selection (multiple genres)
   const handleGenreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
-    setNewBook(prev => ({
+    setNewBook((prev) => ({
       ...prev,
-      genre: checked 
+      genre: checked
         ? [...prev.genre, value]
-        : prev.genre.filter(g => g !== value),
+        : prev.genre.filter((g) => g !== value),
     }));
   };
-  
+
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     createBookMutation.mutate(newBook);
   };
-  
+
   // Handle book deletion
   const handleDeleteBook = (id: number) => {
-    if (confirm('Are you sure you want to delete this book?')) {
+    if (confirm("Are you sure you want to delete this book?")) {
       deleteBookMutation.mutate({ id });
     }
   };
-  
+
   if (isLoading) return <div>Loading books...</div>;
-  
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">API Example</h1>
-      
+
       {/* Filter by genre */}
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2">Filter by Genre</h2>
         <div className="flex gap-2">
-          <button 
-            className={`px-3 py-1 rounded ${!selectedGenre ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+          <button
+            className={`px-3 py-1 rounded ${!selectedGenre ? "bg-blue-500 text-white" : "bg-gray-200"}`}
             onClick={() => setSelectedGenre(undefined)}
           >
             All
           </button>
-          <button 
-            className={`px-3 py-1 rounded ${selectedGenre === 'fiction' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-            onClick={() => setSelectedGenre('fiction')}
+          <button
+            className={`px-3 py-1 rounded ${selectedGenre === "fiction" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+            onClick={() => setSelectedGenre("fiction")}
           >
             Fiction
           </button>
-          <button 
-            className={`px-3 py-1 rounded ${selectedGenre === 'non-fiction' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-            onClick={() => setSelectedGenre('non-fiction')}
+          <button
+            className={`px-3 py-1 rounded ${selectedGenre === "non-fiction" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+            onClick={() => setSelectedGenre("non-fiction")}
           >
             Non-Fiction
           </button>
         </div>
       </div>
-      
+
       {/* Books list */}
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2">Books List</h2>
@@ -133,22 +137,29 @@ export default function ApiExample() {
           <p>No books found</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {booksList?.map(book => (
-              <div 
-                key={book.id} 
-                className={`border rounded p-4 cursor-pointer ${selectedBookId === book.id ? 'border-blue-500 bg-blue-50' : ''}`}
+            {booksList?.map((book) => (
+              <div
+                key={book.id}
+                className={`border rounded p-4 cursor-pointer ${selectedBookId === book.id ? "border-blue-500 bg-blue-50" : ""}`}
                 onClick={() => setSelectedBookId(book.id)}
               >
                 <h3 className="font-bold">{book.title}</h3>
                 <p className="text-sm">By {book.author}</p>
-                <p className="text-xs text-gray-500">Published: {book.publishedYear}</p>
+                <p className="text-xs text-gray-500">
+                  Published: {book.publishedYear}
+                </p>
                 <div className="mt-2 flex flex-wrap gap-1">
-                  {book.genre.map(g => (
-                    <span key={g} className="text-xs bg-gray-200 px-2 py-1 rounded">{g}</span>
+                  {book.genre.map((g) => (
+                    <span
+                      key={g}
+                      className="text-xs bg-gray-200 px-2 py-1 rounded"
+                    >
+                      {g}
+                    </span>
                   ))}
                 </div>
                 <div className="mt-3 flex justify-end">
-                  <button 
+                  <button
                     className="text-red-500 text-sm"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -163,19 +174,29 @@ export default function ApiExample() {
           </div>
         )}
       </div>
-      
+
       {/* Selected book details */}
       {selectedBook && (
         <div className="mb-6 p-4 border rounded">
           <h2 className="text-xl font-semibold mb-2">Book Details</h2>
           <h3 className="text-lg font-bold">{selectedBook.title}</h3>
-          <p><strong>Author:</strong> {selectedBook.author}</p>
-          <p><strong>ISBN:</strong> {selectedBook.isbn}</p>
-          <p><strong>Published:</strong> {selectedBook.publishedYear}</p>
-          <p><strong>Genres:</strong> {selectedBook.genre.join(', ')}</p>
-          <p className="mt-2"><strong>Description:</strong></p>
+          <p>
+            <strong>Author:</strong> {selectedBook.author}
+          </p>
+          <p>
+            <strong>ISBN:</strong> {selectedBook.isbn}
+          </p>
+          <p>
+            <strong>Published:</strong> {selectedBook.publishedYear}
+          </p>
+          <p>
+            <strong>Genres:</strong> {selectedBook.genre.join(", ")}
+          </p>
+          <p className="mt-2">
+            <strong>Description:</strong>
+          </p>
           <p>{selectedBook.description}</p>
-          <button 
+          <button
             className="mt-4 px-4 py-2 bg-gray-200 rounded"
             onClick={() => setSelectedBookId(undefined)}
           >
@@ -183,17 +204,19 @@ export default function ApiExample() {
           </button>
         </div>
       )}
-      
+
       {/* Users list (simple example) */}
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2">Users</h2>
         <ul className="list-disc pl-5">
-          {usersList?.map(user => (
-            <li key={user.id}>{user.name} ({user.email})</li>
+          {usersList?.map((user) => (
+            <li key={user.id}>
+              {user.name} ({user.email})
+            </li>
           ))}
         </ul>
       </div>
-      
+
       {/* Create new book form */}
       <div className="mt-8 border-t pt-4">
         <h2 className="text-xl font-semibold mb-4">Add New Book</h2>
@@ -209,7 +232,7 @@ export default function ApiExample() {
               required
             />
           </div>
-          
+
           <div>
             <label className="block mb-1">Author</label>
             <input
@@ -221,7 +244,7 @@ export default function ApiExample() {
               required
             />
           </div>
-          
+
           <div>
             <label className="block mb-1">ISBN</label>
             <input
@@ -233,7 +256,7 @@ export default function ApiExample() {
               required
             />
           </div>
-          
+
           <div>
             <label className="block mb-1">Published Year</label>
             <input
@@ -245,26 +268,28 @@ export default function ApiExample() {
               required
             />
           </div>
-          
+
           <div>
             <label className="block mb-1">Genres</label>
             <div className="flex flex-wrap gap-4">
-              {['fiction', 'non-fiction', 'classic', 'fantasy', 'sci-fi'].map(genre => (
-                <label key={genre} className="inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    name="genre"
-                    value={genre}
-                    checked={newBook.genre.includes(genre)}
-                    onChange={handleGenreChange}
-                    className="mr-2"
-                  />
-                  {genre}
-                </label>
-              ))}
+              {["fiction", "non-fiction", "classic", "fantasy", "sci-fi"].map(
+                (genre) => (
+                  <label key={genre} className="inline-flex items-center">
+                    <input
+                      type="checkbox"
+                      name="genre"
+                      value={genre}
+                      checked={newBook.genre.includes(genre)}
+                      onChange={handleGenreChange}
+                      className="mr-2"
+                    />
+                    {genre}
+                  </label>
+                ),
+              )}
             </div>
           </div>
-          
+
           <div>
             <label className="block mb-1">Description</label>
             <textarea
@@ -276,13 +301,13 @@ export default function ApiExample() {
               required
             />
           </div>
-          
+
           <button
             type="submit"
             className="px-4 py-2 bg-blue-500 text-white rounded"
             disabled={createBookMutation.isPending}
           >
-            {createBookMutation.isPending ? 'Creating...' : 'Create Book'}
+            {createBookMutation.isPending ? "Creating..." : "Create Book"}
           </button>
         </form>
       </div>
