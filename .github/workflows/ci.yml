@@ -31,7 +31,7 @@ jobs:
           push: true
           no-cache: true
           build-args: |
-            NEXT_PUBLIC_POCKETBASE_URL=${{ secrets.ENV_POCKETBASE_URL }}
+            NEXT_PUBLIC_POCKETBASE_URL=${{ vars.ENV_POCKETBASE_URL }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh:latest
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh:${{ github.sha }}

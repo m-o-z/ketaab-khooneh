@@ -2,7 +2,7 @@
 FROM docker.arvancloud.ir/node:20-slim AS base
 
 # Set working directory inside the container
-ARG NEXT_PUBLIC_POCKETBASE_URL
+ARG NEXT_PUBLIC_POCKETBASE_URL https://pb.echa.ir
 RUN echo $NEXT_PUBLIC_POCKETBASE_URL
 WORKDIR /app
 
