@@ -1,25 +1,5 @@
-import PocketBase, { AsyncAuthStore } from "pocketbase";
+import PocketBase from "pocketbase";
 
-const pbClient = new PocketBase("https://pb.echa.ir");
+const pbClient = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
 
 export default pbClient;
-
-export const initPBClient = (
-  setCookie: (_: string) => Promise<void>,
-  getCookie: () => string,
-) => {
-  const store = new AsyncAuthStore({
-    save: setCookie,
-    initial: getCookie(),
-  });
-
-  const pb = new PocketBase("http://localhost:8080", store);
-
-  console.log({
-    pb,
-    isValid: pb.authStore.isValid,
-    model: pb.authStore.model,
-  });
-
-  return pb;
-};
