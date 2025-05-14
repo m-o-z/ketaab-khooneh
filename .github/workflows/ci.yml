@@ -29,7 +29,6 @@ jobs:
           context: . # Use root of project as build context
           file: ./docker-build/Dockerfile # Path to Dockerfile in ./docker-build folder
           push: true
-          no-cache: true
           build-args: |
             NEXT_PUBLIC_POCKETBASE_URL=${{ vars.ENV_POCKETBASE_URL }}
           tags: |
