@@ -2,6 +2,8 @@
 FROM node:20-slim AS base
 
 # Set working directory inside the container
+ARG NEXT_PUBLIC_POCKETBASE_URL
+RUN echo $NEXT_PUBLIC_POCKETBASE_URL
 WORKDIR /app
 
 # Set environment variables
