@@ -1,5 +1,6 @@
 "use client";
 import BookSummary from "@/components/book/BookSummary/BookSummary";
+import NotFound from "@/components/NotFound";
 import UserPreview from "@/components/user/UserPreview";
 import { useBooksGetApi } from "@/hooks/books";
 import {
@@ -11,12 +12,9 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import {
-  IconMoodSad,
   IconShoppingCart,
   IconShoppingCartExclamation,
-  IconX,
 } from "@tabler/icons-react";
-import { useParams } from "next/navigation";
 import {
   Button,
   ButtonSlots,
@@ -24,7 +22,7 @@ import {
   NoticeSlots,
 } from "@tapsioss/react-components";
 import { ShoppingCart } from "@tapsioss/react-icons";
-import NotFound from "@/components/NotFound";
+import { useParams } from "next/navigation";
 
 // TODO: fix style
 const Page = () => {

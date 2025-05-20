@@ -16,6 +16,7 @@ export const withAuth = (handler: ApiHandler) => {
         { status: 401 },
       );
     }
+
     pbClient.authStore.save(result["accessToken"]);
     await pbClient.collection("users").authRefresh();
     context["user"] = pbClient.authStore.model;

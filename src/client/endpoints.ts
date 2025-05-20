@@ -1,5 +1,5 @@
 import { LoginRequestPayload } from "@/app/api/auth/login/login.schema";
-import { Author, Book, ResponseWrap, UserInfo } from "./../types";
+import { Author, Book, BookCategory, ResponseWrap, UserInfo } from "./../types";
 /**
  * API endpoints definition
  * Define all your API endpoints here with proper typing
@@ -74,4 +74,8 @@ export const auth = {
   logout: api.mutation<null, {}>("auth/logout", {
     method: "POST",
   }),
+};
+// ===== Categories API =====
+export const categories = {
+  getAll: api.query<ResponseWrap<BookCategory[]>>("categories"),
 };
