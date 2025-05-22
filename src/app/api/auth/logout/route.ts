@@ -11,7 +11,6 @@ const loginHandler: ApiHandler = async (req, context) => {
   );
   const requestOrigin = req.headers.get("origin") || "http://localhost:3000";
   const originHost = new URL(requestOrigin).hostname;
-  console.log({ requestOrigin, originHost });
 
   response.cookies.set("accessToken", "", {
     httpOnly: true,

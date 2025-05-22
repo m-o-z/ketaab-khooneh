@@ -2,17 +2,21 @@ import pbClient from "@/client/pbClient";
 import { books } from "../client";
 import { useQuery } from "@tanstack/react-query";
 import { Book, ListFetchingParams } from "@/types";
+import { useMemo } from "react";
 
 export const useBooksGetAllApi = ({
   search,
   page = 1,
   perPage = 5,
-  filters,
 }: ListFetchingParams) => {
-  const filter = [
-    ...(search ? [`title~'${search}'`] : []),
-    // TODO: add category filter
-  ].join(" & ");
+  const filter = useMemo(
+    () =>
+      [
+        ...(search ? [`title~'${search}'`] : []),
+        // TODO: add category filter
+      ].join(" & "),
+    [search],
+  );
   return useQuery({
     ...books.getAll({
       page,

@@ -51,7 +51,6 @@ export function createApi(_config: ApiConfig = defaultConfig) {
       ...options,
       headers: mergedHeaders,
     };
-    console.log({ finalOptions, url });
     try {
       const response = await fetch(url, finalOptions);
 
@@ -137,6 +136,7 @@ export function createApi(_config: ApiConfig = defaultConfig) {
             ? ([queryKeyBase, actualParams] as const)
             : ([finalEndpoint, actualParams] as const);
 
+      console.log({ queryKey });
       return {
         queryKey,
         queryFn: () =>

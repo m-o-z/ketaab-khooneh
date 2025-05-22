@@ -25,11 +25,14 @@ export const useAuthorsGetAllApi = ({
   });
 };
 
-export const useAuthorGetApi = (authorId: Author["id"]) =>
-  useQuery({
-    queryKey: ["author", authorId],
-    queryFn: () =>
-      pbClient.collection("authors").getOne<Author>(authorId, {
-        expand: "books,categories",
-      }),
+export const useAuthorGetApi = (authorId: Author["id"]) => {
+  return useQuery({
+    ...authors.getById(authorId)(),
+    select(result) {
+      if ("data" in result) {
+        return result.data;
+      }
+      return result;
+    },
   });
+};

@@ -23,7 +23,6 @@ export default function Home() {
   if (!authors) {
     return null;
   }
-  console.log({ authors });
 
   const renderAuthorsListSection = () => {
     if (isLoading) {

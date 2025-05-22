@@ -15,7 +15,6 @@ export function middleware(request: NextRequest) {
   const cookies = request.cookies.getAll();
   const path = request.nextUrl.pathname;
   const hasAccessToken = request.cookies.has("accessToken");
-  console.log({ path, cookies, hasAccessToken });
   if (path === "/login" && hasAccessToken) {
     return NextResponse.redirect(new URL("/books", request.url));
   } else if (!hasAccessToken && path != "/login") {

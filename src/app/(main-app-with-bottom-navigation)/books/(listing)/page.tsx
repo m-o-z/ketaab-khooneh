@@ -9,24 +9,34 @@ import { Container, Grid, Stack } from "@mantine/core";
 import { Divider } from "@tapsioss/react-components";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 export default function Books() {
   const router = useRouter();
-  // TODO: refactor
+  const [page, setPage] = useState(1);
   const [searchString, setSearchString] = useState<string>("");
   const [filters, setFilters] = useState<string[]>([]);
-  const [debouncedSearch] = useDebounce(searchString, 300);
+  const [debouncedSearch] = useDebounce(searchString, 1000, {
+    leading: false,
+    trailing: true,
+  });
+
+  const payload = useMemo(
+    () => ({
+      search: debouncedSearch,
+      page,
+      perPage: 10,
+    }),
+    [page, debouncedSearch],
+  );
+
   const {
     isLoading,
     data: books,
     isError,
     refetch,
-  } = useBooksGetAllApi({
-    search: debouncedSearch,
-    filters,
-  });
+  } = useBooksGetAllApi(payload);
 
   const { isLoading: isCategoryLoading, data: categories } =
     useCategoriesQuery();
