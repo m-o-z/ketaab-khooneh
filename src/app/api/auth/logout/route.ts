@@ -9,13 +9,16 @@ const loginHandler: ApiHandler = async (req, context) => {
     createResponsePayload("You have logged out."),
     { status: 201 },
   );
+  const requestOrigin = req.headers.get("origin") || "http://localhost:3000";
+  const originHost = new URL(requestOrigin).hostname;
+  console.log({ requestOrigin, originHost });
 
   response.cookies.set("accessToken", "", {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     maxAge: -1,
-    domain: req.headers.get("origin") || "localhost",
+    domain: originHost,
     path: "/",
   });
 

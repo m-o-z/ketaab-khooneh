@@ -26,19 +26,19 @@ const AppShell = ({ children }: Props) => {
     {
       title: "Books",
       titleFa: "کتاب‌ها",
-      url: "/book",
+      url: "/books",
       Icon: ListBullet,
     },
     {
       title: "Authors",
       titleFa: "نویسندگان",
-      url: "/author",
+      url: "/authors",
       Icon: PencilLineFill,
     },
     {
       title: "Borrows",
       titleFa: "امانت‌ها",
-      url: "/borrow",
+      url: "/borrows",
       Icon: ArrowUpArrowDown,
     },
     {

@@ -74,7 +74,7 @@ export default function Books() {
         {books?.map((book: Book, index) => (
           <Fragment key={book.id}>
             {index !== 0 && <Divider />}
-            <Link href={`book/${book.id}`}>
+            <Link href={`books/${book.id}`}>
               <BookPreview.List book={book} />
             </Link>
           </Fragment>

@@ -4,8 +4,6 @@ import React from "react";
 import useCheckAuthentication from "@/hooks/useCheckAuthentication";
 
 export default function Home() {
-  useCheckAuthentication();
-
   return (
     <Container>
       <Stack>

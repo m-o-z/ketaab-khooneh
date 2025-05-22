@@ -38,7 +38,7 @@ export const useLoginApi = () => {
       localStorage.setItem("_user_info", JSON.stringify(userData));
       localStorage.setItem("_token", authData.token);
       router.push(
-        new URLSearchParams(window.location.search).get("next") || "/book",
+        new URLSearchParams(window.location.search).get("next") || "/books",
       );
     },
   });

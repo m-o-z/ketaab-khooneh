@@ -24,7 +24,7 @@ const Page = () => {
       return (
         <Flex
           style={{ cursor: "pointer" }}
-          onClick={() => router.push("/edit-profile")}
+          onClick={() => router.push("/profile/edit")}
           align="center"
           gap={10}
         >
