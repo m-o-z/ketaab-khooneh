@@ -11,6 +11,7 @@
     "pb": "docker compose -f ./deployment/docker-compose.yml up --build"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^10.2.9",
     "@mantine/core": "^7.17.2",
     "@mantine/dates": "^7.17.2",
     "@mantine/hooks": "^7.17.2",
