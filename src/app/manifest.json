@@ -4,7 +4,6 @@
     "description": "A PWA that facilitate borrowing books in Tapsi",
     "start_url": "/",
     "display": "standalone",
-    "form_factor": "",
     "background_color": "#ffffff",
     "theme_color": "#000000",
     "icons": [

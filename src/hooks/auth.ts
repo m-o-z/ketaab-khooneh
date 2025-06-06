@@ -19,7 +19,6 @@ export const useLoginApi = () => {
       });
     },
     onSuccess: (authData) => {
-      console.log({ authData });
       notifications.show({
         message: "Logged in Successfully",
         color: "green",

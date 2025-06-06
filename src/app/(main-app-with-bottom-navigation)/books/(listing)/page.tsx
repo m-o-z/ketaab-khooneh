@@ -1,6 +1,7 @@
 "use client";
 import ListToolbar from "@/common/components/ListToolbar";
 import BookPreview from "@/components/book/BookPreview";
+import ErrorSection from "@/components/ErrorSection";
 import NotFound from "@/components/NotFound";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
@@ -41,43 +42,44 @@ export default function Books() {
   const { isLoading: isCategoryLoading, data: categories } =
     useCategoriesQuery();
 
+  if (isError) {
+    return <ErrorSection />;
+  }
+
+  if (isLoading) {
+    return (
+      <Grid
+        gutter={{
+          base: 30,
+          md: 50,
+          xl: 60,
+        }}
+      >
+        <Grid.Col>
+          <BookPreview.Loading />
+        </Grid.Col>
+        <Grid.Col>
+          <BookPreview.Loading />
+        </Grid.Col>
+        <Grid.Col>
+          <BookPreview.Loading />
+        </Grid.Col>
+        <Grid.Col>
+          <BookPreview.Loading />
+        </Grid.Col>
+        <Grid.Col>
+          <BookPreview.Loading />
+        </Grid.Col>
+        <Grid.Col>
+          <BookPreview.Loading />
+        </Grid.Col>
+        <Grid.Col>
+          <BookPreview.Loading />
+        </Grid.Col>
+      </Grid>
+    );
+  }
   const renderBooksSection = () => {
-    if (isError) {
-      return <NotFound />;
-    }
-    if (isLoading) {
-      return (
-        <Grid
-          gutter={{
-            base: 30,
-            md: 50,
-            xl: 60,
-          }}
-        >
-          <Grid.Col>
-            <BookPreview.Loading />
-          </Grid.Col>
-          <Grid.Col>
-            <BookPreview.Loading />
-          </Grid.Col>
-          <Grid.Col>
-            <BookPreview.Loading />
-          </Grid.Col>
-          <Grid.Col>
-            <BookPreview.Loading />
-          </Grid.Col>
-          <Grid.Col>
-            <BookPreview.Loading />
-          </Grid.Col>
-          <Grid.Col>
-            <BookPreview.Loading />
-          </Grid.Col>
-          <Grid.Col>
-            <BookPreview.Loading />
-          </Grid.Col>
-        </Grid>
-      );
-    }
     if (books?.length === 0) return <NotFound />;
     return (
       <Stack>

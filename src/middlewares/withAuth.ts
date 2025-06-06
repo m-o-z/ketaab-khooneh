@@ -6,7 +6,6 @@ export const withAuth = (handler: ApiHandler) => {
   return async function (req: NextRequest, context: any) {
     try {
       const accessToken = (await cookies()).get("accessToken");
-      console.log({ accessToken });
       if (!accessToken) {
         return NextResponse.json(
           {

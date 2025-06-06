@@ -6,7 +6,7 @@ import AuthorPreview from "@/components/author/AuthorPreview";
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
 import ListToolbar from "@/common/components/ListToolbar";
-import NotFound from "@/components/NotFound";
+import ErrorSection from "@/components/ErrorSection";
 
 export default function Home() {
   // TODO: refactor
@@ -36,7 +36,7 @@ export default function Home() {
         </Stack>
       );
     }
-    if (authors?.length === 0 || isError) return <NotFound />;
+    if (authors?.length === 0 || isError) return <ErrorSection />;
     return (
       <Stack>
         {authors?.map((author: Author) => (

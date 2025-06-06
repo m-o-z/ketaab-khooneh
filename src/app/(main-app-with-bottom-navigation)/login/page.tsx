@@ -56,7 +56,7 @@ const Page = () => {
           )}
           <Lock slot={TextFieldSlots.LEADING_ICON} />
         </TextField>
-        <Button loading={isPending} onClick={handleSubmit}>
+        <Button loading={isPending} onClick={handleSubmit} size="lg">
           ورود
         </Button>
       </Stack>

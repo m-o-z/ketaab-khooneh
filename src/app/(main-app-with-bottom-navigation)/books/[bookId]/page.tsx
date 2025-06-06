@@ -24,7 +24,7 @@ import {
   NoticeSlots,
 } from "@tapsioss/react-components";
 import { ShoppingCart } from "@tapsioss/react-icons";
-import NotFound from "@/components/NotFound";
+import ErrorSection from "@/components/ErrorSection";
 
 // TODO: fix style
 const Page = () => {
@@ -115,8 +115,8 @@ const Page = () => {
   const renderBookDetail = () => {
     if (isLoading) return "loading";
     if (isError)
-      return <NotFound description="خطایی در نمایش این کتاب رخ داد" />;
-    if (!book) return <NotFound description="اطلاعات کتاب یافت نشد:(" />;
+      return <ErrorSection description="خطایی در نمایش این کتاب رخ داد" />;
+    if (!book) return <ErrorSection description="اطلاعات کتاب یافت نشد:(" />;
     return (
       <>
         <h1>کتاب {book?.title || ""}</h1>

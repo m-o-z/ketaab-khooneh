@@ -8,7 +8,6 @@ import { NextRequest } from "next/server";
 const handler = async (req: NextRequest, context: any) => {
   try {
     const user = context.user as UserInfo;
-    user.avatar = pbClient.getFileUrl(user, user.avatar);
     return Response.json(createResponsePayload(user), {
       status: 200,
     });

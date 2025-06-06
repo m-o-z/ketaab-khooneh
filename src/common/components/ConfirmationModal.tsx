@@ -134,12 +134,13 @@ const ConfirmationModal = ({
       >
         {renderImageSlot()}
         <ButtonGroup slot={ModalSlots.ACTION_BAR} fluidItems>
-          <Button variant={denyButtonVariant} onClick={hide}>
+          <Button variant={denyButtonVariant} onClick={hide} size="lg">
             {denyButtonTitle}
           </Button>
           <Button
             variant={acceptButtonVariant}
             loading={isPending}
+            size="lg"
             onClick={handleConfirm}
           >
             {acceptButtonTitle}

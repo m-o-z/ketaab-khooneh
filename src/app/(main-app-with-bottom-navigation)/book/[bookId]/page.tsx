@@ -1,6 +1,6 @@
 "use client";
 import BookSummary from "@/components/book/BookSummary/BookSummary";
-import NotFound from "@/components/NotFound";
+import ErrorSection from "@/components/ErrorSection";
 import UserPreview from "@/components/user/UserPreview";
 import { useBooksGetApi } from "@/hooks/books";
 import {
@@ -113,8 +113,8 @@ const Page = () => {
   const renderBookDetail = () => {
     if (isLoading) return "loading";
     if (isError)
-      return <NotFound description="خطایی در نمایش این کتاب رخ داد" />;
-    if (!book) return <NotFound description="اطلاعات کتاب یافت نشد:(" />;
+      return <ErrorSection description="خطایی در نمایش این کتاب رخ داد" />;
+    if (!book) return <ErrorSection description="اطلاعات کتاب یافت نشد:(" />;
     return (
       <>
         <h1>کتاب {book?.title || ""}</h1>

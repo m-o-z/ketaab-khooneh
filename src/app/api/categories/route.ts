@@ -11,7 +11,6 @@ const handler = async (req: NextRequest) => {
   try {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
     let { page, perPage, skipTotal } = categoriesSchema.parse(searchParams);
-    console.log({ page, perPage, skipTotal });
     if (perPage === -1) {
       page = 0;
       perPage = Infinity;

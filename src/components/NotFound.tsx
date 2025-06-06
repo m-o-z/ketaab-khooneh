@@ -1,12 +1,5 @@
-import React from "react";
-import { Center } from "@mantine/core";
-import { ArrowTwoCirclepathVertical, FaceSad } from "@tapsioss/react-icons";
-import {
-  Button,
-  ButtonSlots,
-  EmptyState,
-  EmptyStateSlots,
-} from "@tapsioss/react-components";
+import { FaceSad } from "@tapsioss/react-icons";
+import ErrorSection from "./ErrorSection";
 
 type Props = {
   refetch?: () => void;
@@ -21,27 +14,13 @@ const NotFound = ({
   title = "اوپسسس",
   description = "موردی یافت نشد!",
 }: Props) => {
-  return (
-    <Center flex={1} w="100%" mt={60}>
-      <EmptyState
-        contentAlignment="center"
-        title={title}
-        description={description}
-      >
-        <Icon slot={EmptyStateSlots.ICON} />
-        {refetch && (
-          <Button
-            variant="ghost"
-            slot={EmptyStateSlots.ACTION}
-            onClick={() => refetch()}
-          >
-            <ArrowTwoCirclepathVertical slot={ButtonSlots.LEADING_ICON} />
-            تلاش مجدد
-          </Button>
-        )}
-      </EmptyState>
-    </Center>
-  );
+  const props = {
+    refetch,
+    Icon,
+    title,
+    description,
+  };
+  return <ErrorSection {...props} />;
 };
 
 export default NotFound;

@@ -136,7 +136,6 @@ export function createApi(_config: ApiConfig = defaultConfig) {
             ? ([queryKeyBase, actualParams] as const)
             : ([finalEndpoint, actualParams] as const);
 
-      console.log({ queryKey });
       return {
         queryKey,
         queryFn: () =>

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { CSSProperties } from "react";
 import { Box } from "@mantine/core";
 import {
   BottomNavigation,
@@ -15,12 +15,15 @@ import {
   PencilLineFill,
   PersonFill,
 } from "@tapsioss/react-icons";
+import styles from "./AppShell.module.scss";
+import { usePWA } from "@/providers/PWAProvider";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const AppShell = ({ children }: Props) => {
+  const { safeAreaInsets } = usePWA();
   const router = useRouter();
   const sidebarItems = [
     {
@@ -57,6 +60,20 @@ const AppShell = ({ children }: Props) => {
     router.push(e.details.value);
   };
 
+  const generateCSSVars = () => {
+    if (safeAreaInsets.bottom > 0) {
+      return {
+        "--height": "5.5rem",
+        "--padding-bottom": "1.25rem",
+      };
+    } else {
+      return {
+        "--height": "4.5rem",
+        "--padding-bottom": "0px",
+      };
+    }
+  };
+
   return (
     <Box mx="auto" maw={500} pos="fixed" top={0} bottom={0} left={0} right={0}>
       <Box
@@ -74,12 +91,16 @@ const AppShell = ({ children }: Props) => {
         {children}
       </Box>
       <BottomNavigation
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
+        className={styles.bottomNavigation}
+        style={
+          {
+            ...generateCSSVars(),
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+          } as CSSProperties
+        }
         onActivechange={handleBottomNavigationClick}
       >
         {sidebarItems.map((item) => (

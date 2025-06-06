@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useAuthorGetApi } from "@/hooks/authors";
 import AuthorPreview from "@/components/author/AuthorPreview";
 import { Container, Stack } from "@mantine/core";
-import NotFound from "@/components/NotFound";
+import ErrorSection from "@/components/ErrorSection";
 import { Avatar } from "@tapsioss/react-components";
 import { capitalizeName } from "@/utils/string";
 import pbClient from "@/client/pbClient";
@@ -22,7 +22,9 @@ const Page = () => {
       return <AuthorPreview.Loading />;
     }
     if (isError) {
-      return <NotFound description="خطایی در نمایش اطلاعات نویسنده رخ داد!" />;
+      return (
+        <ErrorSection description="خطایی در نمایش اطلاعات نویسنده رخ داد!" />
+      );
     }
     if (author) {
       return (

@@ -1,4 +1,5 @@
 import pbClient from "@/client/pbClient";
+import utils from "util";
 import { withAuth } from "@/middlewares/withAuth";
 import { booksListingSchema } from "@/schema/books";
 import { Book } from "@/types";
@@ -15,14 +16,14 @@ const handler = async (req: NextRequest) => {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
     const { filter, page, perPage } = booksListingSchema.parse(searchParams);
 
-    const result = await pbClient
+    let { items } = await pbClient
       .collection("books")
       .getList<Book>(page, perPage, {
         filter,
         expand: "authors,categories",
       });
 
-    return Response.json(createResponsePayload(result.items), {
+    return Response.json(createResponsePayload(items), {
       status: 200,
     });
   } catch (err) {
