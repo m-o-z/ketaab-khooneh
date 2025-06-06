@@ -36,6 +36,7 @@ export default function Books() {
     isLoading,
     data: books,
     isError,
+    isSuccess,
     refetch,
   } = useBooksGetAllApi(payload);
 
@@ -43,7 +44,7 @@ export default function Books() {
     useCategoriesQuery();
 
   if (isError) {
-    return <ErrorSection />;
+    return <ErrorSection refetch={refetch} />;
   }
 
   if (isLoading) {
@@ -80,7 +81,7 @@ export default function Books() {
     );
   }
   const renderBooksSection = () => {
-    if (books?.length === 0) return <NotFound />;
+    if (books?.length === 0 && isSuccess) return <NotFound />;
     return (
       <Stack>
         {books?.map((book: Book, index) => (
