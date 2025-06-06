@@ -1,20 +1,24 @@
-import React, {
+import {
   createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
   PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
 
 // Create the context with default values
 const PWAContext = createContext({
   isStandalone: false,
+  hasBottomNavigation: false,
+  setHasBottomNavigation: () => {},
+  setHasNotBottomNavigation: () => {},
   safeAreaInsets: { top: 0, right: 0, bottom: 0, left: 0 },
 });
 
 type Props = PropsWithChildren;
 export const PWAProvider = ({ children }: Props) => {
+  const [hasBottomNavigation, _setHasBottomNavigation] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
   const [safeAreaInsets, setSafeAreaInsets] = useState({
     top: 0,
@@ -98,10 +102,26 @@ export const PWAProvider = ({ children }: Props) => {
     };
   }, [checkStandaloneMode, updateSafeAreaInsets]); // Dependencies for useEffect
 
-  console.log({ isStandalone, safeAreaInsets });
-  // Provide the context values to children
+  const setHasBottomNavigation = () => {
+    if (!hasBottomNavigation) {
+      _setHasBottomNavigation(true);
+    }
+  };
+
+  const setHasNotBottomNavigation = () => {
+    _setHasBottomNavigation(false);
+  };
+
   return (
-    <PWAContext.Provider value={{ isStandalone, safeAreaInsets }}>
+    <PWAContext.Provider
+      value={{
+        isStandalone,
+        safeAreaInsets,
+        setHasBottomNavigation,
+        setHasNotBottomNavigation,
+        hasBottomNavigation,
+      }}
+    >
       {children}
     </PWAContext.Provider>
   );

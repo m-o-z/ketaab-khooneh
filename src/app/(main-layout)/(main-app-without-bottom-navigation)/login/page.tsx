@@ -1,6 +1,6 @@
 "use client";
 import { useLoginApi } from "@/hooks/auth";
-import { Container, Stack } from "@mantine/core";
+import { Box, Container, Stack } from "@mantine/core";
 import {
   Button,
   IconButton,
@@ -56,9 +56,11 @@ const Page = () => {
           )}
           <Lock slot={TextFieldSlots.LEADING_ICON} />
         </TextField>
-        <Button loading={isPending} onClick={handleSubmit} size="lg">
-          ورود
-        </Button>
+        <Stack mt={8} w={"100%"}>
+          <Button loading={isPending} onClick={handleSubmit} size="lg">
+            ورود
+          </Button>
+        </Stack>
       </Stack>
     </Container>
   );

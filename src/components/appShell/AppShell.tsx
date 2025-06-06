@@ -1,6 +1,6 @@
 "use client";
 
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, useEffect } from "react";
 import { Box } from "@mantine/core";
 import {
   BottomNavigation,
@@ -23,7 +23,7 @@ type Props = {
 };
 
 const AppShell = ({ children }: Props) => {
-  const { safeAreaInsets } = usePWA();
+  const { safeAreaInsets, setHasBottomNavigation } = usePWA();
   const router = useRouter();
   const sidebarItems = [
     {
@@ -73,6 +73,10 @@ const AppShell = ({ children }: Props) => {
       };
     }
   };
+
+  useEffect(() => {
+    setHasBottomNavigation();
+  }, []);
 
   return (
     <Box mx="auto" maw={500} pos="fixed" top={0} bottom={0} left={0} right={0}>
