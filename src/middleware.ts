@@ -7,7 +7,7 @@ export const config = {
         - /_next (and all subpaths)
         - /favicon.ico
     */
-    "/((?!_next/|favicon\\.ico|favicon|manifest.json|sw.js|api/).*)",
+    "/((?!_next/|favicon\\.ico|favicon|icons|manifest.json|splash_screens|sw.js|api/).*)",
   ],
 };
 
