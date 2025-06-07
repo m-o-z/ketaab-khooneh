@@ -1,5 +1,6 @@
 import { ApiHandler } from "@/@types/api";
 import { Context } from "@/@types/pocketbase";
+import { withAuth } from "@/middlewares/withAuth";
 import { createResponsePayload } from "@/utils/response";
 import { NextResponse } from "next/server";
 
@@ -25,4 +26,4 @@ const loginHandler: ApiHandler = async (req, context: Context) => {
   return response;
 };
 
-export const POST = loginHandler;
+export const POST = withAuth(loginHandler);

@@ -8,7 +8,7 @@ import { Context } from "@/@types/pocketbase";
 const loginHandler: ApiHandler = async (req, context: Context) => {
   const body = await req.json();
   const { password, username, httpOnly } = body as LoginRequestPayload;
-  const res = await context.pb
+  const res = await pbClient()
     .collection("users")
     .authWithPassword(username, password);
 

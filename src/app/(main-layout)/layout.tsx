@@ -18,6 +18,8 @@ export default function RootLayout({
         styles: {
           root: {
             "--mantine-spacing-md": "var(--mantine-notification-bottom, 16px)",
+            minWidth: "380px",
+            maxWidth: "calc(100%-2rem)",
             transition: "all .3s ease-out",
           },
         },
