@@ -43,8 +43,9 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22 # Default SSH port, adjust if different
           script: |
+            netplan apply
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             cd ./docker
             docker compose pull
             docker compose down
             docker compose up -d --build
-            netplan apply
