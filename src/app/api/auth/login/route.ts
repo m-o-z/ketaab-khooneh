@@ -3,12 +3,12 @@ import pbClient from "@/client/pbClient";
 import { NextResponse } from "next/server";
 import { LoginRequestPayload } from "./login.schema";
 import { withLoginValidator } from "./validator";
+import { Context } from "@/@types/pocketbase";
 
-// pbClient.collection("users").authWithPassword(email, password)
-const loginHandler: ApiHandler = async (req, context) => {
+const loginHandler: ApiHandler = async (req, context: Context) => {
   const body = await req.json();
   const { password, username, httpOnly } = body as LoginRequestPayload;
-  const res = await pbClient
+  const res = await context.pb
     .collection("users")
     .authWithPassword(username, password);
 

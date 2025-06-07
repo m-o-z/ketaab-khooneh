@@ -1,20 +1,21 @@
 import pbClient from "@/client/pbClient";
-import { useCallback, useEffect, useLayoutEffect } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 const useCheckAuthentication = (onChange?: () => void) => {
+  const pb = useRef(pbClient());
   const navigate = useRouter();
 
   const handleAuthChanged = useCallback(() => {
     const cb = onChange || (() => {});
-    pbClient.authStore.onChange(cb, true);
+    pb.current.authStore.onChange(cb, true);
   }, []);
 
   useEffect(() => {
     handleAuthChanged();
   }, []);
 
-  const isAuthenticated = pbClient.authStore.isValid;
+  const isAuthenticated = pb.current.authStore.isValid;
 
   useLayoutEffect(() => {
     if (!isAuthenticated) {

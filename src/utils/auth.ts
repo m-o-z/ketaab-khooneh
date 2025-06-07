@@ -1,5 +1,5 @@
-import { RecordAuthResponse } from "pocketbase";
 import pbClient from "@/client/pbClient";
+import { RecordAuthResponse } from "pocketbase";
 
 // TODO: refactor
 const login = async (
@@ -10,7 +10,7 @@ const login = async (
   error?: Error;
 }> => {
   try {
-    const authData: RecordAuthResponse = await pbClient
+    const authData: RecordAuthResponse = await pbClient()
       .collection("users")
       .authWithPassword(inputEmail, inputPassword);
     const { avatar, created, email, id, name, username, verified } =
@@ -40,7 +40,7 @@ const login = async (
 };
 
 const logout = () => {
-  pbClient.authStore.clear();
+  pbClient().authStore.clear();
   localStorage.removeItem("_user_info");
   localStorage.removeItem("_token");
 };

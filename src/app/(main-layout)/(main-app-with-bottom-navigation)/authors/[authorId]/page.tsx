@@ -31,7 +31,7 @@ const Page = () => {
         <>
           {author.author_img && (
             <Avatar
-              image={pbClient.files.getUrl(author, author.author_img)}
+              image={pbClient().files.getUrl(author, author.author_img)}
               size="xxlg"
               alt={author.name}
             />

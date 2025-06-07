@@ -48,7 +48,7 @@ const BookPreview = ({
           </Box>
           <Box pos="relative">
             <Image
-              src={pbClient.files.getUrl(book, book.cover_image)}
+              src={pbClient().files.getUrl(book, book.cover_image)}
               alt={`${book.title} cover`}
               width={width}
               height={height}
@@ -119,7 +119,7 @@ BookPreview.List = function List({ book }: Partial<Props>) {
           </Box>
           <Box pos="relative">
             <Image
-              src={pbClient.files.getUrl(book, book.cover_image)}
+              src={pbClient().files.getUrl(book, book.cover_image)}
               alt={`${book.title} cover`}
               fit="cover"
               style={{ borderRadius: "0.5rem" }}

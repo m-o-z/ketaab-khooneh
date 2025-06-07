@@ -1,4 +1,4 @@
-import pbClient from "@/client/pbClient";
+import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
 import { authorsListingSchema } from "@/schema/authors";
 import { Author } from "@/types";
@@ -10,12 +10,12 @@ type ResponseError = {
   message: string;
 };
 
-const handler = async (req: NextRequest) => {
+const handler = async (req: NextRequest, context: Context) => {
   try {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
     const { filter, page, perPage } = authorsListingSchema.parse(searchParams);
 
-    const result = await pbClient
+    const result = await context.pb
       .collection("authors")
       .getList<Author>(page, perPage, {
         filter,

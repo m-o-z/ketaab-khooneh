@@ -1,4 +1,4 @@
-import pbClient from "@/client/pbClient";
+import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
 import { categoriesSchema } from "@/schema/categories";
 import { BookCategory } from "@/types";
@@ -7,7 +7,7 @@ import { createResponsePayload } from "@/utils/response";
 import { withTimeout } from "@/utils/withTimeout";
 import { NextRequest } from "next/server";
 
-const handler = async (req: NextRequest) => {
+const handler = async (req: NextRequest, context: Context) => {
   try {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
     let { page, perPage, skipTotal } = categoriesSchema.parse(searchParams);
@@ -17,7 +17,7 @@ const handler = async (req: NextRequest) => {
     }
 
     const query = withTimeout(() => {
-      const result = pbClient
+      const result = context.pb
         .collection("categories")
         .getFullList<BookCategory>({
           page,

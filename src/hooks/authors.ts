@@ -1,5 +1,4 @@
 import { authors } from "@/client";
-import pbClient from "@/client/pbClient";
 import { Author, ListFetchingParams } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 

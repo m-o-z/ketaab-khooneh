@@ -22,7 +22,7 @@ const AuthorPreview = ({ author }: Props) => {
       title={getAuthorName(author)}
       imageUrl={
         author.author_img
-          ? pbClient.files.getUrl(author, author.author_img)
+          ? pbClient().files.getUrl(author, author.author_img)
           : ""
       }
       url={`/author/${author.id}`}
@@ -36,7 +36,7 @@ AuthorPreview.Compact = function Compact({ author }: Props) {
       title={getAuthorName(author)}
       imageUrl={
         author.author_img
-          ? pbClient.files.getUrl(author, author.author_img)
+          ? pbClient().files.getUrl(author, author.author_img)
           : ""
       }
       url={`/authors/${author.id}`}
@@ -49,7 +49,7 @@ AuthorPreview.List = function List({ author }: Props) {
     <Link href={`/authors/${author.id}`} passHref>
       <Flex align="center" gap="sm">
         <Avatar
-          image={pbClient.files.getUrl(author, author.author_img ?? "")}
+          image={pbClient().files.getUrl(author, author.author_img ?? "")}
           alt={author.name}
         />
         <p>{getAuthorName(author)}</p>

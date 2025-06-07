@@ -1,5 +1,4 @@
-import { api, auth } from "@/client";
-import pbClient from "@/client/pbClient";
+import { auth } from "@/client";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";

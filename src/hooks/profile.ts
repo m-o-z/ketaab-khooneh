@@ -1,9 +1,5 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { User } from "@/types";
-import { useQuery } from "@tanstack/react-query";
 import { users } from "@/client";
-import pbClient from "@/client/pbClient";
+import { useQuery } from "@tanstack/react-query";
 
 export const useGetProfile = () => {
   return useQuery({

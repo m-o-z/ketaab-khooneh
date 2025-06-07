@@ -1,3 +1,4 @@
+import { Context } from "@/@types/pocketbase";
 import pbClient from "@/client/pbClient";
 import { withAuth } from "@/middlewares/withAuth";
 import { Book } from "@/types";
@@ -6,14 +7,14 @@ import { createResponsePayload } from "@/utils/response";
 import { NextRequest, NextResponse } from "next/server";
 import { ClientResponseError } from "pocketbase";
 
-const handler = async (req: NextRequest, context: any, params: any) => {
+const handler = async (req: NextRequest, context: Context, params: any) => {
   const { id: idParam } = await context.params;
   if (!idParam && typeof idParam != "string") {
     return errorInvalidParams();
   }
 
   try {
-    const book = await pbClient.collection("books").getOne<Book>(idParam, {
+    const book = await context.pb.collection("books").getOne<Book>(idParam, {
       expand: "authors,categories",
     });
     return NextResponse.json(createResponsePayload(book), { status: 200 });

@@ -51,7 +51,16 @@ export default function RootLayout({
     /** Put your mantine theme override here */
   });
 
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnMount: true,
+        gcTime: 1000 * 60 * 15,
+        staleTime: 1000 * 60 * 10,
+        retry: 3,
+      },
+    },
+  });
   return (
     <PWAProvider>
       <QueryClientProvider client={queryClient}>

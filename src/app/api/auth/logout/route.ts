@@ -1,10 +1,9 @@
 import { ApiHandler } from "@/@types/api";
-import { withAuth } from "@/middlewares/withAuth";
+import { Context } from "@/@types/pocketbase";
 import { createResponsePayload } from "@/utils/response";
 import { NextResponse } from "next/server";
 
-// pbClient.collection("users").authWithPassword(email, password)
-const loginHandler: ApiHandler = async (req, context) => {
+const loginHandler: ApiHandler = async (req, context: Context) => {
   const response = NextResponse.json(
     createResponsePayload("You have logged out."),
     { status: 201 },
@@ -20,6 +19,8 @@ const loginHandler: ApiHandler = async (req, context) => {
     domain: originHost,
     path: "/",
   });
+
+  context.pb.authStore.clear();
 
   return response;
 };

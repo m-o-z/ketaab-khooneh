@@ -1,9 +1,6 @@
-import React from "react";
 import { Button, Flex, Skeleton, Stack, Text, Title } from "@mantine/core";
 import { Avatar } from "@tapsioss/react-components";
 import Link from "next/link";
-import pbClient from "@/client/pbClient";
-import { capitalizeName } from "@/utils/string";
 
 type Props = {
   imageUrl?: string;

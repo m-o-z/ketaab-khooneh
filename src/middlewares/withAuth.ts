@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 export const withAuth = (handler: ApiHandler) => {
   return async function (req: NextRequest, context: any) {
+    const pb = pbClient();
     try {
       const accessToken = (await cookies()).get("accessToken");
       if (!accessToken) {
@@ -16,11 +17,11 @@ export const withAuth = (handler: ApiHandler) => {
         );
       }
 
-      pbClient.authStore.save(accessToken.value);
-      await pbClient.collection("users").authRefresh();
-      context["user"] = pbClient.authStore.model;
+      pb.authStore.save(accessToken.value);
+      await pb.collection("users").authRefresh();
+      context["user"] = pb.authStore.model;
 
-      if (!pbClient.authStore.isValid) {
+      if (!pb.authStore.isValid) {
         return NextResponse.json(
           {
             status: "ERROR",
@@ -29,6 +30,8 @@ export const withAuth = (handler: ApiHandler) => {
           { status: 401 },
         );
       }
+
+      context.pb = pb;
       return handler(req, context);
     } catch (e) {
       console.log({ e });

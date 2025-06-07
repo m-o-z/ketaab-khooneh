@@ -28,7 +28,7 @@ const Page = () => {
           align="center"
           gap={10}
         >
-          <Avatar image={pbClient.files.getUrl(profile, profile.avatar)} />
+          <Avatar image={pbClient().files.getUrl(profile, profile.avatar)} />
           <Stack gap={0}>
             <h2 style={{ margin: 0 }}>{profile.name}</h2>
             <p>{profile.email}</p>

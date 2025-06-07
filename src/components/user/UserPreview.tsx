@@ -12,7 +12,7 @@ const UserPreview = ({ user }: Props) => {
   return (
     <PreviewBase
       title={capitalizeName(user.name)}
-      imageUrl={user.avatar ? pbClient.files.getUrl(user, user.avatar) : ""}
+      imageUrl={user.avatar ? pbClient().files.getUrl(user, user.avatar) : ""}
       url={`/user/${user.id}`}
     />
   );
@@ -22,7 +22,7 @@ UserPreview.Compact = function Compact({ user }: Props) {
   return (
     <PreviewBase.Compact
       title={capitalizeName(user.name)}
-      imageUrl={user.avatar ? pbClient.files.getUrl(user, user.avatar) : ""}
+      imageUrl={user.avatar ? pbClient().files.getUrl(user, user.avatar) : ""}
       url={`/user/${user.id}`}
     />
   );

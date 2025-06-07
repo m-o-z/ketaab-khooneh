@@ -1,6 +1,5 @@
-import pbClient from "@/client/pbClient";
+import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
-import { authorsListingSchema } from "@/schema/authors";
 import { Author } from "@/types";
 import { errorBadRequest, errorInvalidParams } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
@@ -10,13 +9,13 @@ type ResponseError = {
   message: string;
 };
 
-const handler = async (req: NextRequest, context: any) => {
+const handler = async (req: NextRequest, context: Context) => {
   try {
     const { authorId } = await context.params;
     if (!authorId && typeof authorId != "string") {
       return errorInvalidParams();
     }
-    const result = await pbClient
+    const result = await context.pb
       .collection("authors")
       .getOne<Author>(authorId, {
         expand: "books,categories",
