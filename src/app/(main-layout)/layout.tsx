@@ -6,6 +6,7 @@ import "@mantine/core/styles.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@tapsioss/theme/css-variables";
 import "@/app/globals.css";
+import "@/app/fonts.scss";
 
 export default function RootLayout({
   children,
@@ -25,7 +26,7 @@ export default function RootLayout({
         },
       },
     },
-    fontFamily: `VazirMatn, Tahoma, sans-serif`,
+    fontFamily: `Vazirmatn,  'SF Pro Rounded', Tahoma, sans-serif`,
     headings: {
       sizes: {
         h1: {

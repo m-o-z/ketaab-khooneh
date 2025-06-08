@@ -30,9 +30,9 @@
 @font-face {
   font-family: Vazirmatn;
   src:
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Thin.woff2")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Thin.woff2")
       format("woff2"),
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Thin.ttf")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Thin.ttf")
       format("truetype");
   font-weight: 100;
   font-style: normal;
@@ -42,9 +42,9 @@
 @font-face {
   font-family: Vazirmatn;
   src:
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-ExtraLight.woff2")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-ExtraLight.woff2")
       format("woff2"),
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-ExtraLight.ttf")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-ExtraLight.ttf")
       format("truetype");
   font-weight: 200;
   font-style: normal;
@@ -54,9 +54,9 @@
 @font-face {
   font-family: Vazirmatn;
   src:
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Light.woff2")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Light.woff2")
       format("woff2"),
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Light.ttf")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Light.ttf")
       format("truetype");
   font-weight: 300;
   font-style: normal;
@@ -66,9 +66,9 @@
 @font-face {
   font-family: Vazirmatn;
   src:
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Regular.woff2")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Regular.woff2")
       format("woff2"),
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Regular.ttf")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Regular.ttf")
       format("truetype");
   font-weight: 400;
   font-style: normal;
@@ -78,9 +78,9 @@
 @font-face {
   font-family: Vazirmatn;
   src:
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Medium.woff2")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Medium.woff2")
       format("woff2"),
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Medium.ttf")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Medium.ttf")
       format("truetype");
   font-weight: 500;
   font-style: normal;
@@ -90,9 +90,9 @@
 @font-face {
   font-family: Vazirmatn;
   src:
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-SemiBold.woff2")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-SemiBold.woff2")
       format("woff2"),
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-SemiBold.ttf")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-SemiBold.ttf")
       format("truetype");
   font-weight: 600;
   font-style: normal;
@@ -102,9 +102,9 @@
 @font-face {
   font-family: Vazirmatn;
   src:
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Bold.woff2")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Bold.woff2")
       format("woff2"),
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Bold.ttf")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Bold.ttf")
       format("truetype");
   font-weight: 700;
   font-style: normal;
@@ -114,9 +114,9 @@
 @font-face {
   font-family: Vazirmatn;
   src:
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-ExtraBold.woff2")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-ExtraBold.woff2")
       format("woff2"),
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-ExtraBold.ttf")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-ExtraBold.ttf")
       format("truetype");
   font-weight: 800;
   font-style: normal;
@@ -126,9 +126,9 @@
 @font-face {
   font-family: Vazirmatn;
   src:
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/webfonts/Vazirmatn-Black.woff2")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Black.woff2")
       format("woff2"),
-    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/web/farsi-digits/ttf/Vazirmatn-Black.ttf")
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Black.ttf")
       format("truetype");
   font-weight: 900;
   font-style: normal;
@@ -144,8 +144,11 @@ img {
   user-select: text;
 }
 
+:root,
 html {
-  font-family: "Vazirmatn";
+  --font-family: Vazirmatn, "SF Pro Rounded";
+  font-family: var(--font-family);
+  --tapsi-typography-font-family: var(--font-family);
 }
 
 h1 {
