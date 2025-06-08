@@ -11,4 +11,6 @@ const nextConfig = {
 export default withPWA({
   dest: "public",
   register: true,
+  cacheOnFrontEndNav: true,
+  cacheStartUrl: true,
 })(nextConfig);

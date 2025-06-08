@@ -71,10 +71,6 @@ export default function RootLayout({
         <meta name="full-screen" content="yes" />
         <meta name="browsermode" content="application" />
         <meta name="screen-orientation" content="portrait" />
-        <meta
-          viewport="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-          mobileappios="true"
-        />
         <link
           rel="apple-touch-startup-image"
           media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
@@ -291,25 +287,31 @@ export default function RootLayout({
           rel="icon"
           type="image/png"
           sizes="192x192"
-          href="/favicon/android-icon-192x192.png"
+          href="/icons/icon-192x192.png"
         />
         <link
           rel="icon"
           type="image/png"
-          sizes="32x32"
-          href="/favicon/favicon-32x32.png"
+          sizes="48x48"
+          href="/icons/icon-48x48.png"
         />
         <link
           rel="icon"
           type="image/png"
-          sizes="96x96"
-          href="/favicon/favicon-96x96.png"
+          sizes="128x128"
+          href="/icons/icon-128x128.png"
         />
         <link
           rel="icon"
           type="image/png"
-          sizes="16x16"
-          href="/favicon/favicon-16x16.png"
+          sizes="256"
+          href="/icons/icon-256.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="512x512"
+          href="/icons/icon-512x512.png"
         />
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="theme-color" content="#ffffff" />
