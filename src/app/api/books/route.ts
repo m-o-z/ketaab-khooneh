@@ -17,7 +17,6 @@ const handler = async (req: NextRequest, context: Context) => {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
     const { filter, page, perPage } = booksListingSchema.parse(searchParams);
 
-    console.log({ filter, page, perPage, context });
     let { items } = await context.pb
       .collection("books")
       .getList<Book>(page, perPage, {
