@@ -52,10 +52,12 @@ export interface UserInfo {
   email: string;
   emailVisibility: boolean;
   id: string;
-  name: string;
   updated: Date;
-  username: string;
   verified: boolean;
+  firstName: string;
+  lastName: string;
+  isPunished: boolean;
+  punishmentEndAt: Date;
 }
 
 export type User = {

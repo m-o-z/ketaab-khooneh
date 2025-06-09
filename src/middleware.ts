@@ -15,10 +15,10 @@ export function middleware(request: NextRequest) {
   const cookies = request.cookies.getAll();
   const path = request.nextUrl.pathname;
   const hasAccessToken = request.cookies.has("accessToken");
-  if (path === "/login" && hasAccessToken) {
+  if (path === "/auth/login" && hasAccessToken) {
     return NextResponse.redirect(new URL("/books", request.url));
-  } else if (!hasAccessToken && path != "/login") {
-    return NextResponse.redirect(new URL("/login", request.url));
+  } else if (!hasAccessToken && !path.startsWith("/auth/")) {
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   } else {
     if (path.startsWith("/books")) {
       return NextResponse.next();

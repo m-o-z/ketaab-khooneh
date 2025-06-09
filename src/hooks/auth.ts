@@ -7,6 +7,7 @@ type RequestPayload = {
   email: string;
   password: string;
 };
+
 export const useLoginApi = () => {
   const router = useRouter();
   return useMutation({
@@ -17,24 +18,50 @@ export const useLoginApi = () => {
         color: "red",
       });
     },
-    onSuccess: (authData) => {
+    onSuccess: (response) => {
+      if (response.otpId) {
+        console.log({ id: response.otpId });
+        router.push("/auth/verify/" + response.otpId);
+      } else {
+        alert("error");
+      }
+    },
+  });
+};
+
+export const useVerifyApi = () => {
+  const router = useRouter();
+  console.log("here");
+  return useMutation({
+    ...auth.verify,
+    onError: (e: Error) => {
       notifications.show({
-        message: "Logged in Successfully",
-        color: "green",
+        message: e.message,
+        color: "red",
       });
-      const { avatar, created, email, id, name, username, verified } =
-        authData.record;
+    },
+    onSuccess: (response) => {
+      const {
+        avatar,
+        created,
+        email,
+        id,
+        verified,
+        firstName,
+        lastName,
+        isPunished,
+      } = response.record;
       const userData = {
         avatar,
         created,
         email,
         id,
-        name,
-        username,
+        firstName,
+        lastName,
+        isPunished,
         verified,
       };
       localStorage.setItem("_user_info", JSON.stringify(userData));
-      localStorage.setItem("_token", authData.token);
       router.push(
         new URLSearchParams(window.location.search).get("next") || "/books",
       );

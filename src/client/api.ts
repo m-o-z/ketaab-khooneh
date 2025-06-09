@@ -71,6 +71,9 @@ export function createApi(_config: ApiConfig = defaultConfig) {
         (error as any).status = response.status;
         (error as any).statusText = response.statusText;
         (error as any).data = errorData;
+        if ("message" in errorData) {
+          error.message = errorData.message;
+        }
         throw error;
       }
 

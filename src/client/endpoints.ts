@@ -1,4 +1,5 @@
-import { LoginRequestPayload } from "@/app/api/auth/login/login.schema";
+import { RequestOTPRequestPayload } from "@/app/api/auth/login/login.schema";
+import { VerifyOTPRequestPayload } from "@/app/api/auth/verify/verify.schema";
 import { Author, Book, BookCategory, ResponseWrap, UserInfo } from "./../types";
 /**
  * API endpoints definition
@@ -68,12 +69,19 @@ export const authors = {
 };
 
 export const auth = {
-  login: api.mutation<{ token: string; record: UserInfo }, LoginRequestPayload>(
+  login: api.mutation<{ otpId: string }, RequestOTPRequestPayload>(
     "auth/login",
     {
       method: "POST",
     },
   ),
+
+  verify: api.mutation<
+    { token: string; record: UserInfo },
+    VerifyOTPRequestPayload
+  >("auth/verify", {
+    method: "POST",
+  }),
 
   logout: api.mutation<null, {}>("auth/logout", {
     method: "POST",

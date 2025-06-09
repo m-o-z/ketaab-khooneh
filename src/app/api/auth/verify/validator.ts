@@ -1,6 +1,6 @@
 import { ApiHandler } from "@/@types/api";
 import { NextRequest, NextResponse } from "next/server";
-import { RequestOTPRequestSchema } from "./login.schema";
+import { VerifyOTPRequestSchema } from "./verify.schema";
 
 const extractBodyJson = async (req: NextRequest) => {
   try {
@@ -17,7 +17,7 @@ const extractBodyJson = async (req: NextRequest) => {
 };
 
 const validateBody = (body: any) => {
-  const result = RequestOTPRequestSchema.safeParse(body);
+  const result = VerifyOTPRequestSchema.safeParse(body);
   if (result.success) {
     return result.data;
   } else {
