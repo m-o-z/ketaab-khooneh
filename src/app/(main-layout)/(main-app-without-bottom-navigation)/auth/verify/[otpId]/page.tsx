@@ -22,6 +22,8 @@ const Page = () => {
         <TextField
           label="کد OTP"
           autoFocus
+          inputMode="numeric"
+          autocomplete="one-time-code"
           type="number"
           value={password}
           onChange={(e) => setPassword(e.currentTarget.value)}
