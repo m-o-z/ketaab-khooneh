@@ -36,7 +36,7 @@ const BookSummary = ({ book }: Props) => {
           <IconBooks />
         </Box>
         <label>تعداد</label>
-        <p>{book.available_count}</p>
+        <p>{book.availableCount}</p>
       </Flex>
     );
   };
@@ -53,7 +53,7 @@ const BookSummary = ({ book }: Props) => {
           <IconTag size={"24px"} />
         </Box>
         <label>دسته‌بندی</label>
-        {book.expand.categories.map((item) => (
+        {book.expand.bookWork.expand.categories.map((item) => (
           <Badge key={item.label} value={item.label} color="info" />
         ))}
       </Flex>
@@ -72,7 +72,7 @@ const BookSummary = ({ book }: Props) => {
           <Calendar />
         </Box>
         <label>تاریخ انتشار</label>
-        <p>{dayjs(book.release_year).format("YYYY")}</p>
+        <p>{dayjs(book.releaseYear).format("YYYY")}</p>
       </Flex>
     );
   };
@@ -88,7 +88,7 @@ const BookSummary = ({ book }: Props) => {
         >
           <PencilLine />
         </Box>
-        {book.expand.authors.map((author) => (
+        {book.expand.bookWork.expand.authors.map((author) => (
           <AuthorPreview.Compact key={author.id} author={author} />
         ))}
       </Flex>

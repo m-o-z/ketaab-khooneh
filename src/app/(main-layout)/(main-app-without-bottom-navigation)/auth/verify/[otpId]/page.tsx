@@ -21,6 +21,8 @@ const Page = () => {
       <Stack justify="center" h="100%" maw={400} mx="auto">
         <TextField
           label="کد OTP"
+          autoFocus
+          type="number"
           value={password}
           onChange={(e) => setPassword(e.currentTarget.value)}
         >

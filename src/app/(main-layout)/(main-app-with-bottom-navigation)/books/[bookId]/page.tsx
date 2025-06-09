@@ -1,5 +1,8 @@
 "use client";
+import Spinner from "@/common/Spinner/Spinner";
 import BookSummary from "@/components/book/BookSummary/BookSummary";
+import ErrorSection from "@/components/ErrorSection";
+import NotFound from "@/components/NotFound";
 import UserPreview from "@/components/user/UserPreview";
 import { useBooksGetApi } from "@/hooks/books";
 import {
@@ -11,12 +14,9 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import {
-  IconMoodSad,
   IconShoppingCart,
   IconShoppingCartExclamation,
-  IconX,
 } from "@tabler/icons-react";
-import { useParams } from "next/navigation";
 import {
   Button,
   ButtonSlots,
@@ -24,16 +24,29 @@ import {
   NoticeSlots,
 } from "@tapsioss/react-components";
 import { ShoppingCart } from "@tapsioss/react-icons";
-import ErrorSection from "@/components/ErrorSection";
+import { useParams } from "next/navigation";
 
 // TODO: fix style
 const Page = () => {
   const theme = useMantineTheme();
   const { bookId } = useParams();
-  const { isLoading, data: book, isError } = useBooksGetApi(bookId as string);
+  const {
+    isLoading,
+    data: book,
+    isSuccess,
+    isError,
+    refetch,
+  } = useBooksGetApi(bookId as string);
 
-  if (!book) {
-    return "not found";
+  if (isLoading) {
+    return <Spinner />;
+  }
+  if (isError) {
+    return <ErrorSection refetch={refetch} />;
+  }
+
+  if (!book && isSuccess) {
+    <NotFound />;
   }
 
   const renderActionArea = () => {

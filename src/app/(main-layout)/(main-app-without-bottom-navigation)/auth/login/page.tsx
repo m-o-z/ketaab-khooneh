@@ -19,6 +19,8 @@ const Page = () => {
       <Stack justify="center" h="100%" maw={400} mx="auto">
         <TextField
           label="آدرس ایمیل"
+          autoFocus
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.currentTarget.value)}
         >

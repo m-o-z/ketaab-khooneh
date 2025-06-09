@@ -15,7 +15,7 @@ const handler = async (req: NextRequest, context: Context, params: any) => {
 
   try {
     const book = await context.pb.collection("books").getOne<Book>(idParam, {
-      expand: "authors,categories",
+      expand: "bookWork.authors,bookWork.categories",
     });
     return NextResponse.json(createResponsePayload(book), { status: 200 });
   } catch (e: unknown) {

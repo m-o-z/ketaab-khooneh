@@ -1,20 +1,44 @@
 import { ApiHandler } from "@/@types/api";
-import pbClient from "@/client/pbClient";
+import { Context } from "@/@types/pocketbase";
+import { pbAdminClient } from "@/client/pbClient";
+import { errorBadRequest } from "@/utils/errors/errors";
 import { NextResponse } from "next/server";
 import { RequestOTPRequestPayload } from "./login.schema";
 import { withLoginValidator } from "./validator";
-import { Context } from "@/@types/pocketbase";
 
+const pb = await pbAdminClient();
 const loginHandler: ApiHandler = async (req, context: Context) => {
   const body = await req.json();
   const { email } = body as RequestOTPRequestPayload;
-  const res = await pbClient().collection("users").requestOTP(email);
+  let hasFirstItem = false;
+  try {
+    await pb.collection("users").getFirstListItem(`email="${email}"`);
+    hasFirstItem = true;
+  } catch (e) {
+    console.log({ e1: e });
+  }
+  try {
+    if (!hasFirstItem) {
+      const data = {
+        email,
+        emailVisibility: true,
+        password: "random@12345",
+        passwordConfirm: "random@12345",
+      };
+      await pb.collection("users").create(data);
+    }
+    console.log({ email });
+    const res = await pb.collection("users").requestOTP(email);
 
-  const response = NextResponse.json({
-    otpId: res.otpId,
-  });
+    const response = NextResponse.json({
+      otpId: res.otpId,
+    });
 
-  return response;
+    return response;
+  } catch (e) {
+    console.log({ e });
+    return errorBadRequest();
+  }
 };
 
 export const POST = withLoginValidator(loginHandler);

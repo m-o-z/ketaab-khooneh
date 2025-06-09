@@ -108,7 +108,6 @@ BookPreview.Loading = function Loading() {
 };
 
 BookPreview.List = function List({ book }: Partial<Props>) {
-  console.log({ book });
   if (!book) return null;
   return (
     <Flex gap={30}>

@@ -1,12 +1,13 @@
 "use client";
 import ListToolbar from "@/common/components/ListToolbar";
+import Spinner from "@/common/Spinner/Spinner";
 import BookPreview from "@/components/book/BookPreview";
 import ErrorSection from "@/components/ErrorSection";
 import NotFound from "@/components/NotFound";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
-import type { Book } from "@/types";
-import { Container, Grid, Stack } from "@mantine/core";
+import type { Book, BookWork } from "@/types";
+import { Box, Container, Grid, Stack } from "@mantine/core";
 import { Divider } from "@tapsioss/react-components";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -34,7 +35,7 @@ export default function Books() {
 
   const {
     isLoading,
-    data: books,
+    data: bookWorks,
     isError,
     isSuccess,
     refetch,
@@ -48,43 +49,13 @@ export default function Books() {
   }
 
   if (isLoading) {
-    return (
-      <Grid
-        gutter={{
-          base: 30,
-          md: 50,
-          xl: 60,
-        }}
-      >
-        <Grid.Col>
-          <BookPreview.Loading />
-        </Grid.Col>
-        <Grid.Col>
-          <BookPreview.Loading />
-        </Grid.Col>
-        <Grid.Col>
-          <BookPreview.Loading />
-        </Grid.Col>
-        <Grid.Col>
-          <BookPreview.Loading />
-        </Grid.Col>
-        <Grid.Col>
-          <BookPreview.Loading />
-        </Grid.Col>
-        <Grid.Col>
-          <BookPreview.Loading />
-        </Grid.Col>
-        <Grid.Col>
-          <BookPreview.Loading />
-        </Grid.Col>
-      </Grid>
-    );
+    return <Spinner />;
   }
   const renderBooksSection = () => {
-    if (books?.length === 0 && isSuccess) return <NotFound />;
+    if (bookWorks?.length === 0 && isSuccess) return <NotFound />;
     return (
       <Stack>
-        {books?.map((book: Book, index) => (
+        {bookWorks?.map((book: Book, index) => (
           <Fragment key={book.id}>
             {index !== 0 && <Divider />}
             <Link href={`books/${book.id}`}>
