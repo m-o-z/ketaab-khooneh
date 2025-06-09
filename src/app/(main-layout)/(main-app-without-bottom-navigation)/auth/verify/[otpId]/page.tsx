@@ -13,7 +13,7 @@ const Page = () => {
   const { mutateAsync: verify, isPending } = useVerifyApi();
 
   const handleSubmit = async () => {
-    await verify({ otpId, password });
+    await verify({ otpId, password, httpOnly: true });
   };
 
   return (

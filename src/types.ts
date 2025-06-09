@@ -27,21 +27,33 @@ export type BookStatus =
   | "RESERVED_BY_OTHERS"
   | "RESERVED_BY_ME";
 
-export type Book = {
+export type BookWork = {
   id: string;
   title: string;
   categories: string[];
   expand: {
     authors: Author[];
     categories: BookCategory[];
+    books_via_bookWork: Book[];
   };
-  cover_image: string;
-  status: BookStatus;
   authors: string[];
+};
+
+export type Book = {
+  expand: {
+    bookWork: BookWork;
+  };
+  bookWork: BookWork;
+  id: string;
+  subTitle: string;
+  coverImage: string;
+  status: BookStatus;
   description: string;
   edition: string;
-  release_year: string;
-  available_count: number;
+  language: string;
+  releaseYear: string;
+  availableCount: number;
+  totalCount: number;
 };
 
 export interface UserInfo {

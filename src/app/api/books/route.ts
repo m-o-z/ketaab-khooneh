@@ -1,12 +1,10 @@
-import pbClient from "@/client/pbClient";
-import utils from "util";
+import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
 import { booksListingSchema } from "@/schema/books";
-import { Book } from "@/types";
+import { Book, BookWork } from "@/types";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
 import { NextRequest } from "next/server";
-import { Context } from "@/@types/pocketbase";
 
 type ResponseError = {
   message: string;
@@ -21,13 +19,14 @@ const handler = async (req: NextRequest, context: Context) => {
       .collection("books")
       .getList<Book>(page, perPage, {
         filter,
-        expand: "authors,categories",
+        expand: "bookWork.authors,bookWork.categories",
       });
 
     return Response.json(createResponsePayload(items), {
       status: 200,
     });
   } catch (err) {
+    console.log({ err });
     return errorBadRequest();
   }
 };

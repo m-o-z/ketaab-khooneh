@@ -1,5 +1,8 @@
 "use client";
-import React from "react";
+import pbClient from "@/client/pbClient";
+import AuthorPreview from "@/components/author/AuthorPreview";
+import type { Book } from "@/types";
+import { capitalizeName } from "@/utils/string";
 import {
   Box,
   Container,
@@ -10,16 +13,12 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import type { Book } from "@/types";
-import BookStatus from "../BookStatus";
-import { capitalizeName } from "@/utils/string";
 import {
-  Skeleton,
   BadgeWrapper,
   BadgeWrapperSlots,
+  Skeleton,
 } from "@tapsioss/react-components";
-import pbClient from "@/client/pbClient";
-import AuthorPreview from "@/components/author/AuthorPreview";
+import BookStatus from "../BookStatus";
 
 type Props = {
   book: Book;
@@ -48,8 +47,8 @@ const BookPreview = ({
           </Box>
           <Box pos="relative">
             <Image
-              src={pbClient().files.getUrl(book, book.cover_image)}
-              alt={`${book.title} cover`}
+              src={pbClient().files.getUrl(book, book.coverImage)}
+              alt={`${book.bookWork.title} cover`}
               width={width}
               height={height}
               fit={"cover"}
@@ -71,12 +70,12 @@ const BookPreview = ({
           c="gray.4"
           lineClamp={2}
         >
-          {book.title}
+          {book.bookWork.title}
         </Title>
       )}
       {!hideBottomTexts && (
         <Text truncate="end" size="xs" c="dimmed">
-          {book.expand.authors
+          {book.expand.bookWork.expand.authors
             .map((author) => capitalizeName(author.name))
             .join(", ")}
         </Text>
@@ -109,6 +108,7 @@ BookPreview.Loading = function Loading() {
 };
 
 BookPreview.List = function List({ book }: Partial<Props>) {
+  console.log({ book });
   if (!book) return null;
   return (
     <Flex gap={30}>
@@ -119,8 +119,8 @@ BookPreview.List = function List({ book }: Partial<Props>) {
           </Box>
           <Box pos="relative">
             <Image
-              src={pbClient().files.getUrl(book, book.cover_image)}
-              alt={`${book.title} cover`}
+              src={pbClient().files.getUrl(book, book.coverImage)}
+              alt={`${book.expand.bookWork.title} cover`}
               fit="cover"
               style={{ borderRadius: "0.5rem" }}
               width="100%"
@@ -137,10 +137,10 @@ BookPreview.List = function List({ book }: Partial<Props>) {
             width: `calc(100%-${listWidth}px)`,
           }}
         >
-          کتاب {book.title}
+          کتاب {book.expand.bookWork.title}
         </b>
         <Flex>
-          {book.expand.authors.map((author) => (
+          {book.expand.bookWork.expand.authors.map((author) => (
             <AuthorPreview.Compact key={author.id} author={author} />
           ))}
         </Flex>

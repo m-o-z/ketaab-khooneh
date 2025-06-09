@@ -1,6 +1,13 @@
 import { RequestOTPRequestPayload } from "@/app/api/auth/login/login.schema";
 import { VerifyOTPRequestPayload } from "@/app/api/auth/verify/verify.schema";
-import { Author, Book, BookCategory, ResponseWrap, UserInfo } from "./../types";
+import {
+  Author,
+  Book,
+  BookCategory,
+  BookWork,
+  ResponseWrap,
+  UserInfo,
+} from "./../types";
 /**
  * API endpoints definition
  * Define all your API endpoints here with proper typing
