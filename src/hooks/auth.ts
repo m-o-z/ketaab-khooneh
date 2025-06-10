@@ -86,7 +86,7 @@ export const useLogoutApi = () => {
         message: "Logged out Successfully",
         color: "green",
       });
-      router.push("/login");
+      router.push("/auth/login");
     },
   });
 };

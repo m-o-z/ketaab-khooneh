@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@tapsioss/theme/css-variables";
 import "@/app/globals.css";
 import "@/app/fonts.scss";
+import { queryClient } from "@/queryClient";
 
 export default function RootLayout({
   children,
@@ -54,16 +55,6 @@ export default function RootLayout({
     /** Put your mantine theme override here */
   });
 
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnMount: true,
-        gcTime: 1000 * 60 * 15,
-        staleTime: 1000 * 60 * 10,
-        retry: 3,
-      },
-    },
-  });
   return (
     <PWAProvider>
       <QueryClientProvider client={queryClient}>

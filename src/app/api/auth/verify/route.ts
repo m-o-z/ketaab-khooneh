@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { VerifyOTPRequestPayload } from "./verify.schema";
 import { withLoginValidator } from "./validator";
 import { Context } from "@/@types/pocketbase";
+import setAccessToken from "@/utils/setAcessToken";
 
 const loginHandler: ApiHandler = async (req, context: Context) => {
   const body = await req.json();
@@ -15,16 +16,14 @@ const loginHandler: ApiHandler = async (req, context: Context) => {
     record: res.record,
   });
 
-  const origin = new URL(req.headers.get("origin") ?? "http://localhost");
+  const origin = new URL(req.headers.get("origin") ?? "http://localhost")
+    .hostname;
 
   if (httpOnly) {
-    response.cookies.set("accessToken", res.token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24,
-      domain: origin.hostname,
-      path: "/",
+    setAccessToken({
+      origin: origin,
+      token: res.token,
+      response,
     });
   }
 

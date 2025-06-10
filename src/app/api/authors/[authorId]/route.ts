@@ -3,7 +3,7 @@ import { withAuth } from "@/middlewares/withAuth";
 import { Author } from "@/types";
 import { errorBadRequest, errorInvalidParams } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 type ResponseError = {
   message: string;
@@ -21,7 +21,7 @@ const handler = async (req: NextRequest, context: Context) => {
         expand: "books,categories",
       });
 
-    return Response.json(createResponsePayload(result), {
+    return NextResponse.json(createResponsePayload(result), {
       status: 200,
     });
   } catch (err) {

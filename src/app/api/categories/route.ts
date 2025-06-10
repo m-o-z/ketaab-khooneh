@@ -5,7 +5,7 @@ import { BookCategory } from "@/types";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
 import { withTimeout } from "@/utils/withTimeout";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const handler = async (req: NextRequest, context: Context) => {
   try {
@@ -29,7 +29,7 @@ const handler = async (req: NextRequest, context: Context) => {
 
     const result = await query;
 
-    return Response.json(createResponsePayload(result), {
+    return NextResponse.json(createResponsePayload(result), {
       status: 200,
     });
   } catch (err) {

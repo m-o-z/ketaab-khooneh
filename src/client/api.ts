@@ -63,6 +63,9 @@ export function createApi(_config: ApiConfig = defaultConfig) {
           errorData = await response.text();
         }
 
+        if (response.status === 401) {
+          window.location.href = "/auth/login";
+        }
         const error = new Error(
           typeof errorData === "object"
             ? JSON.stringify(errorData)
