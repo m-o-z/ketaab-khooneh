@@ -27,7 +27,6 @@ const loginHandler: ApiHandler = async (req, context: Context) => {
       };
       await pb.collection("users").create(data);
     }
-    console.log({ email });
     const res = await pb.collection("users").requestOTP(email);
 
     const response = NextResponse.json({
