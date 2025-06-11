@@ -30,8 +30,8 @@ importers:
         specifier: ^5.68.0
         version: 5.68.0(react@19.1.0)
       '@tapsioss/react-components':
-        specifier: ^0.2.0
-        version: 0.2.0(@types/react@18.3.18)(react@19.1.0)
+        specifier: ^0.17.2
+        version: 0.17.2(@types/react@18.3.18)(react@19.1.0)
       '@tapsioss/react-icons':
         specifier: ^0.3.1
         version: 0.3.1(react@19.1.0)
@@ -1081,8 +1081,8 @@ packages:
   '@tapsioss/icons@0.2.1':
     resolution: {integrity: sha512-cp321pQadZ4VVQCDeSbo9QoYp+Ya+8DKeivOmWViKd0yXDUM4KPCsaKKiUVEC+RMb9E6t3+BTn3JzTh3gBtM7g==}
 
-  '@tapsioss/react-components@0.2.0':
-    resolution: {integrity: sha512-KyCXifcFyi9TsEH4dxkpilMz3cHFjp6J+sWZDuHM7T54tCBVvZcgKA8+NNOM7arIE9GHL30geK0TSS9kujaKhg==}
+  '@tapsioss/react-components@0.17.2':
+    resolution: {integrity: sha512-cvA0Uuvho2VZNU33czBM3bztlcXC3UXTuOUYwQABZaZUvjHXLQfRV0e2j/XtBjtyPIRkC95vhY34gNwt+yOe0Q==}
     peerDependencies:
       react: '>=16.8'
 
@@ -1094,8 +1094,8 @@ packages:
   '@tapsioss/theme@0.5.2':
     resolution: {integrity: sha512-TU9BcKiXYXY6nK3PORLpUOZva0FS5Av1CoBsclB0ehLmJ7MnRA4H5zIIKj7BUYFJJrmXCQsUfmFbKxOnq099BA==}
 
-  '@tapsioss/web-components@0.10.0':
-    resolution: {integrity: sha512-I0N8ANHtnDA01Twfxa4JtWeKe7uoVw8Qes0VG32iY8YVHq/BwaHLoWGk/pPAVjtvBeRmrYZR04xluLabeE2HOA==}
+  '@tapsioss/web-components@0.17.2':
+    resolution: {integrity: sha512-tpin1ZY3nhvkJSQ8ZRlhh+WyPEUqtLSsRwWgAVZAMrocAp/rrhZwbHV3rGAjzLx1oN2VA275di4IOQeo/TSwow==}
 
   '@tybys/wasm-util@0.9.0':
     resolution: {integrity: sha512-6+7nlbMVX/PVDCwaIQ8nTOPveOcFLSt8GcXdx8hD0bt39uWxYT88uXzqTd4fTvqta7oeUJqudepapKNt2DYJFw==}
@@ -4315,11 +4315,12 @@ snapshots:
 
   '@tapsioss/icons@0.2.1': {}
 
-  '@tapsioss/react-components@0.2.0(@types/react@18.3.18)(react@19.1.0)':
+  '@tapsioss/react-components@0.17.2(@types/react@18.3.18)(react@19.1.0)':
     dependencies:
       '@lit/react': 1.0.7(@types/react@18.3.18)
-      '@tapsioss/web-components': 0.10.0
+      '@tapsioss/web-components': 0.17.2
       react: 19.1.0
+      tslib: 2.8.1
     transitivePeerDependencies:
       - '@types/react'
 
@@ -4330,7 +4331,7 @@ snapshots:
 
   '@tapsioss/theme@0.5.2': {}
 
-  '@tapsioss/web-components@0.10.0':
+  '@tapsioss/web-components@0.17.2':
     dependencies:
       '@floating-ui/dom': 1.6.13
       '@use-gesture/vanilla': 10.3.1
