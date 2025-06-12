@@ -11,7 +11,7 @@ import {
 } from "@tapsioss/react-components";
 import { Envelope } from "@tapsioss/react-icons";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { KeyboardEventHandler, useEffect, useMemo, useState } from "react";
 import s from "./styles.module.scss";
 
 const LoginPage = () => {
@@ -47,6 +47,12 @@ const LoginPage = () => {
     console.log({ isPending });
   }, [isPending]);
 
+  const handleKeyDown: KeyboardEventHandler = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit()
+    }
+  }
+
   return (
     <Container h="100vh" pos="fixed" top="0" right="0" left="0" bottom="0">
       <Stack component="main" justify="center" h="100%" maw={400} mx="auto">
@@ -60,6 +66,7 @@ const LoginPage = () => {
           type="email"
           value={username}
           onChange={handleEmailChange}
+          onKeyDown={handleKeyDown}
         >
           <Envelope slot={TextFieldSlots.LEADING_ICON} />
           <div className={s.postfix} slot={TextFieldSlots.TRAILING}>
