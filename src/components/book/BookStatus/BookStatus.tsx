@@ -13,7 +13,7 @@ const BookStatus = ({ status }: Props) => {
       titleFa: "موجود",
       color: "success",
     },
-    NOT_AVAILABLE: {
+    UNAVAILABLE: {
       title: "Not Available",
       titleFa: "ناموجود",
       color: "error",
@@ -33,15 +33,15 @@ const BookStatus = ({ status }: Props) => {
       titleFa: "رزرو شده توسط دیگران",
       color: "warning",
     },
-  };
+  } as const;
   const statusInfo: BookStatusInfo = statusInfos[status];
 
   return (
     <Badge
       radius={0}
       size="sm"
-      color={statusInfo?.color}
-      value={statusInfo?.titleFa}
+      color={statusInfo.color}
+      value={statusInfo.titleFa}
     />
   );
 };

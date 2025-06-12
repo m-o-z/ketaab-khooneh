@@ -21,7 +21,7 @@ export type BookCategory = {
 };
 
 export type BookStatus =
-  | "NOT_AVAILABLE"
+  | "UNAVAILABLE"
   | "AVAILABLE"
   | "BORROWED"
   | "RESERVED_BY_OTHERS"

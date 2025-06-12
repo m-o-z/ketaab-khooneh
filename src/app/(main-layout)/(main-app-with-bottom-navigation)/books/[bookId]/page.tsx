@@ -103,7 +103,7 @@ const Page = () => {
         )
       );
     }
-    if (book?.status === "NOT_AVAILABLE") {
+    if (book?.status === "UNAVAILABLE") {
       return (
         <Notice
           visible
