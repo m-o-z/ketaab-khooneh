@@ -57,6 +57,7 @@ const AppShell = ({ children }: Props) => {
   const handleBottomNavigationClick = (
     e: BottomNavigationActiveChangeEvent,
   ) => {
+    console.log({ e });
     router.push(e.details.value);
   };
 
@@ -105,7 +106,7 @@ const AppShell = ({ children }: Props) => {
             bottom: 0,
           } as CSSProperties
         }
-        onActivechange={handleBottomNavigationClick}
+        onActiveChange={handleBottomNavigationClick}
       >
         {sidebarItems.map((item) => (
           <BottomNavigationItem

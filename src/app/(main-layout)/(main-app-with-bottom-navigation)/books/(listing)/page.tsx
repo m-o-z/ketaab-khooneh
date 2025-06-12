@@ -51,6 +51,9 @@ export default function Books() {
   if (isLoading) {
     return <Spinner />;
   }
+  const handleClick = (bookId: string) => {
+    router.push(`books/${bookId}`);
+  };
   const renderBooksSection = () => {
     if (bookWorks?.length === 0 && isSuccess) return <NotFound />;
     return (
@@ -58,9 +61,9 @@ export default function Books() {
         {bookWorks?.map((book: Book, index) => (
           <Fragment key={book.id}>
             {index !== 0 && <Divider />}
-            <Link href={`books/${book.id}`}>
+            <div onClick={() => handleClick(book.id)}>
               <BookPreview.List book={book} />
-            </Link>
+            </div>
           </Fragment>
         ))}
       </Stack>

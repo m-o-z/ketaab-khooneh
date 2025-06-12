@@ -13,13 +13,6 @@ const loginHandler: ApiHandler = async (req, context: Context) => {
   const { email } = body as RequestOTPRequestPayload;
   let hasFirstItem = false;
 
-  if (await isTestUser(pb, email)) {
-    return NextResponse.json({
-      otpId: email,
-      email: email,
-    });
-  }
-
   try {
     await pb.collection("users").getFirstListItem(`email="${email}"`);
     hasFirstItem = true;

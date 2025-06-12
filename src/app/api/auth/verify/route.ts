@@ -6,6 +6,8 @@ import { withVerifyValidator } from "./validator";
 import { Context } from "@/@types/pocketbase";
 import setAccessToken from "@/utils/setAcessToken";
 import { isValidOtpForTestEmail } from "@/helpers/getTestUsers";
+import { RecordAuthResponse, RecordModel } from "pocketbase";
+import { UserInfo } from "@/types";
 
 const verifyHandler: ApiHandler = async (req, context: Context) => {
   const pbAdmin = await pbAdminClient();
@@ -17,10 +19,18 @@ const verifyHandler: ApiHandler = async (req, context: Context) => {
     email,
     otp: password,
   });
+  let res: RecordAuthResponse<RecordModel> = null!;
   if (result) {
-    console.log("ok");
+    const testUser = await pbAdmin
+      .collection<UserInfo>("users")
+      .getFirstListItem(`email="${email}"`);
+    res = await pbAdmin
+      .collection("users")
+      .authWithPassword(testUser.email, "random@12345");
+    console.log({ res });
+  } else {
+    res = await pb.collection("users").authWithOTP(otpId, password);
   }
-  const res = await pb.collection("users").authWithOTP(otpId, password);
 
   const response = NextResponse.json({
     token: res.token,
