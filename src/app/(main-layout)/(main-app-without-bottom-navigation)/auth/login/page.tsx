@@ -1,12 +1,24 @@
 "use client";
 import { useLoginApi } from "@/hooks/auth";
+import { emailSchema } from "@/schema/email";
+import validateEmail from "@/utils/validateEmail";
 import { Container, Stack } from "@mantine/core";
-import { Button, TextField, TextFieldElement, TextFieldSlots } from "@tapsioss/react-components";
+import {
+  Button,
+  TextField,
+  TextFieldElement,
+  TextFieldSlots,
+} from "@tapsioss/react-components";
 import { Envelope } from "@tapsioss/react-icons";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
 
 const Page = () => {
-  const [email, setEmail] = useState("");
+  const searchParams = useSearchParams();
+  const initialEmail = (() => {
+    return validateEmail(searchParams.get("email"));
+  })();
+  const [email, setEmail] = useState(initialEmail ?? "");
 
   const { mutateAsync: login, isPending, error } = useLoginApi();
 
@@ -16,10 +28,13 @@ const Page = () => {
 
   const handleEmailChange = (e: Event) => {
     const textField = e.currentTarget as TextFieldElement;
-    setEmail(textField.value)
-  }
+    setEmail(textField.value);
+  };
 
-  const isEmailValid = !/^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(email)
+  const isEmailValid = useMemo(() => {
+    const result = emailSchema.safeParse(email);
+    return !result.success;
+  }, [email]);
 
   return (
     <Container h="100vh" pos="fixed" top="0" right="0" left="0" bottom="0">
@@ -36,7 +51,12 @@ const Page = () => {
           <Envelope slot={TextFieldSlots.LEADING_ICON} />
         </TextField>
         <Stack mt={8} w={"100%"}>
-          <Button disabled={isEmailValid} loading={isPending} onClick={handleSubmit} size="lg">
+          <Button
+            disabled={isEmailValid}
+            loading={isPending}
+            onClick={handleSubmit}
+            size="lg"
+          >
             ارسال
           </Button>
         </Stack>

@@ -4,12 +4,13 @@ import { Container, Stack } from "@mantine/core";
 import {
   IconButton,
   PinInput,
+  PinInputCompleteEvent,
   PinInputElement,
 } from "@tapsioss/react-components";
 import { ArrowRight } from "@tapsioss/react-icons";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import s from "./styles.module.css";
+import s from "./style.module.scss";
 
 const Page = () => {
   const router = useRouter();
@@ -24,11 +25,13 @@ const Page = () => {
 
   const { mutateAsync: verify, isPending, isError, error } = useVerifyApi();
 
-  const handleSubmit = async (evt: SubmitEvent) => {
-    if (evt.target?.value) {
+  const handleSubmit = async (evt: PinInputCompleteEvent) => {
+    const target = evt.target as PinInputElement;
+    const value = target.value;
+    if (value) {
       await verify({
         otpId,
-        password: evt.target.value,
+        password: value,
         email: email,
         httpOnly: true,
       });
@@ -36,7 +39,11 @@ const Page = () => {
   };
 
   const handleGoBack = () => {
-    router.push("/auth/login");
+    const url = new URL("/auth/login", window.origin);
+    if (email) {
+      url.searchParams.set("email", email);
+    }
+    router.push(url.toString());
   };
 
   const handlePasswordChange = (e: Event) => {
@@ -65,6 +72,8 @@ const Page = () => {
             label="کد OTP"
             error={!!error}
             errorText={error?.message}
+            type="numeric"
+            inputMode="numeric"
             autoFocus
             hideLabel
             autocomplete="one-time-code"

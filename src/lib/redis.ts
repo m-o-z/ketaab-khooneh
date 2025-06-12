@@ -3,9 +3,6 @@ declare global {
   var redis: Redis | undefined;
 }
 
-const redisHost = process.env.REDIS_HOST;
-console.log({ redisHost, env: process.env });
-
 let redis: Redis; // Changed from `let redis;` to `let redis: Redis;` for type safety
 
 if (process.env.NODE_ENV === "production") {
