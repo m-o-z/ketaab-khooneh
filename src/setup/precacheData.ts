@@ -14,7 +14,6 @@ export const handler = async () => {
 
 const handleAddingTestUsers = async (client: Client, redis: TRedis) => {
   const testUsers = await retrieveTestUsers(client);
-  console.log({ testUsers });
   redis.set("test-users", JSON.stringify(testUsers));
 };
 

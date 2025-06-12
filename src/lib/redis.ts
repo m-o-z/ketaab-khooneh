@@ -1,6 +1,9 @@
 import Redis from "ioredis";
+declare global {
+  var redis: Redis | undefined;
+}
 
-let redis;
+let redis: Redis; // Changed from `let redis;` to `let redis: Redis;` for type safety
 
 if (process.env.NODE_ENV === "production") {
   redis = new Redis({
@@ -27,4 +30,4 @@ redis.on("connect", () => {
   console.log("Connected to Redis!");
 });
 
-export default redis as Redis;
+export default redis; // Removed `as Redis` as it's already typed as Redis
