@@ -40,8 +40,8 @@ const BookStatus = ({ status }: Props) => {
     <Badge
       radius={0}
       size="sm"
-      color={statusInfo.color}
-      value={statusInfo.titleFa}
+      color={statusInfo?.color}
+      value={statusInfo?.titleFa}
     />
   );
 };

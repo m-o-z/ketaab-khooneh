@@ -34,7 +34,7 @@ const WIDTH = "100%";
 const BookPreview = ({
   book,
   hideBottomTexts,
-  onClick = () => {},
+  onClick = () => { },
   width = WIDTH,
   height = HEIGHT,
 }: Props) => {
@@ -138,7 +138,7 @@ BookPreview.List = function List({ book }: Partial<Props>) {
         >
           کتاب {book.expand.bookWork.title}
         </b>
-        <Flex>
+        <Flex wrap="wrap" gap="xs">
           {book.expand.bookWork.expand.authors.map((author) => (
             <AuthorPreview.Compact key={author.id} author={author} />
           ))}
