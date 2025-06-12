@@ -26,6 +26,5 @@ export async function isValidOtpForTestEmail({
 }: IsValidOtpForTestEmailPayload) {
   const userList = await getTestUser(client);
 
-  console.log({ userList, otp, email });
   return !!userList.find((item) => item[0] === email && item[1] == otp);
 }

@@ -19,7 +19,7 @@
     "@tabler/icons-react": "^3.31.0",
     "@tanstack/react-query": "^5.68.0",
     "@tapsioss/react-components": "^0.17.2",
-    "@tapsioss/react-icons": "^0.3.1",
+    "@tapsioss/react-icons": "^0.7.0",
     "@tapsioss/theme": "^0.5.2",
     "dayjs": "^1.11.13",
     "ioredis": "^5.6.1",
