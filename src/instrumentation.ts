@@ -1,6 +1,6 @@
 export async function register() {
-  if (typeof window === "undefined") {
-    import("@/lib/redis");
-    import("@/setup/index");
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    await import("@/lib/redis");
+    await import("@/setup/index");
   }
 }

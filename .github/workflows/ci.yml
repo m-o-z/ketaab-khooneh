@@ -33,6 +33,8 @@ jobs:
             NEXT_PUBLIC_POCKETBASE_URL=${{ vars.ENV_POCKETBASE_URL }}
             REDIS_HOST=${{ vars.REDIS_HOST }}
             REDIS_PORT=${{ vars.REDIS_PORT }}
+            POCKETBASE_ADMIN_USERNAME=${{ secrets.POCKETBASE_ADMIN_USERNAME }}
+            POCKETBASE_ADMIN_PASSWORD=${{ secrets.POCKETBASE_ADMIN_PASSWORD }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh:latest
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh:${{ github.sha }}
