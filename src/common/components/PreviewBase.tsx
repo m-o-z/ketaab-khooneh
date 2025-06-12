@@ -47,12 +47,12 @@ PreviewBase.Compact = function Compact({ imageUrl, title, url }: Props) {
     <Button
       size="compact-md"
       variant="transparent"
-      color="gray.4"
+      color="gray.9"
       style={{
         paddingInline: 0,
       }}
     >
-      <Link href={url || ""} passHref>
+      <Link href={url || ""} passHref onClick={(e) => e.stopPropagation()}>
         <Flex gap="xs">
           <Avatar image={imageUrl} size="xs" />
           <Text fw={500} size="sm" lh="1.5rem">

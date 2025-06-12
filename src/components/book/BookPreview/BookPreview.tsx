@@ -34,7 +34,7 @@ const WIDTH = "100%";
 const BookPreview = ({
   book,
   hideBottomTexts,
-  onClick = () => { },
+  onClick = () => {},
   width = WIDTH,
   height = HEIGHT,
 }: Props) => {

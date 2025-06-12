@@ -134,7 +134,9 @@ export function createApi(_config: ApiConfig = defaultConfig) {
       }
 
       // Generate query key
-      const queryKeyBase = options.queryKey || finalEndpoint.split("/")[0];
+      const queryKeyBase =
+        options.queryKey || finalEndpoint.split("/").join("-");
+
       const queryKey =
         typeof queryKeyBase === "function"
           ? queryKeyBase(actualParams)

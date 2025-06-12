@@ -1,13 +1,15 @@
 "use client";
+import "@/app/fonts.scss";
+import "@/app/globals.css";
 import Notifications from "@/common/Notifications";
+import { isClient, isLocal } from "@/env";
 import { PWAProvider } from "@/providers/PWAProvider";
+import { queryClient } from "@/queryClient";
 import { createTheme, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "@tapsioss/theme/css-variables";
-import "@/app/globals.css";
-import "@/app/fonts.scss";
-import { queryClient } from "@/queryClient";
 
 export default function RootLayout({
   children,
@@ -60,6 +62,7 @@ export default function RootLayout({
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={theme} defaultColorScheme="light">
           {children}
+          {isLocal && <ReactQueryDevtools />}
           <Notifications />
         </MantineProvider>
       </QueryClientProvider>

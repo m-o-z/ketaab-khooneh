@@ -1,12 +1,14 @@
 # Use the official Node.js 20 image as the base (recommended for Next.js v15)
 FROM docker.arvancloud.ir/node:20-slim AS base
 
-# Set working directory inside the container
+ARG APP_ENV production
 ARG NEXT_PUBLIC_POCKETBASE_URL https://pb.echa.ir
 ARG REDIS_HOST
 ARG REDIS_PORT
 ARG POCKETBASE_ADMIN_USERNAME
 ARG POCKETBASE_ADMIN_PASSWORD
+
+# Set working directory inside the container
 WORKDIR /app
 
 # Set environment variables

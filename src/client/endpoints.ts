@@ -57,7 +57,9 @@ export const books = {
   // Get book by ID
   getById: (bookId: string) =>
     api.query<ResponseWrap<Book>>(() => `books/${bookId}`, {
-      queryKey: (params) => ["books", params.id] as const,
+      queryKey: (params) => {
+        return ["books", bookId] as const;
+      },
     }),
 };
 

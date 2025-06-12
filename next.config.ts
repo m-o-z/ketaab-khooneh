@@ -1,11 +1,13 @@
 /** @type {import('next').NextConfig} */
 import withPWA from "@ducanh2912/next-pwa";
-import { isServer } from "@tanstack/react-query";
 import { NextConfig } from "next";
 
 const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
+  },
+  env: {
+    APP_ENV: process.env.APP_ENV,
   },
   webpack: (config, { isServer }) => {
     if (isServer) {
