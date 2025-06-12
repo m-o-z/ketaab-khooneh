@@ -74,6 +74,13 @@ export const PWAProvider = ({ children }: Props) => {
         left: parseFloat(computedStyle.paddingLeft) || 0,
       });
 
+      console.log({
+        top: parseFloat(computedStyle.paddingTop) || 0,
+        right: parseFloat(computedStyle.paddingRight) || 0,
+        bottom: parseFloat(computedStyle.paddingBottom) || 0,
+        left: parseFloat(computedStyle.paddingLeft) || 0,
+      });
+
       document.body.removeChild(dummyDiv); // Clean up the dummy div
     }
   }, []);

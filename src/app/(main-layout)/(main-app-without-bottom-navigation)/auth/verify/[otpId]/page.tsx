@@ -1,6 +1,6 @@
 "use client";
 import { useVerifyApi } from "@/hooks/auth";
-import { Container, Stack } from "@mantine/core";
+import { Box, Container, Flex, Stack, Text, Title } from "@mantine/core";
 import {
   IconButton,
   PinInput,
@@ -11,6 +11,7 @@ import { ArrowRight } from "@tapsioss/react-icons";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import s from "./style.module.scss";
+import Spinner from "@/common/Spinner/Spinner";
 
 const Page = () => {
   const router = useRouter();
@@ -64,8 +65,37 @@ const Page = () => {
           </IconButton>
         </Stack>
         <Stack component="main" justify="center" h="100%" maw={400} flex={1}>
-          <h1 style={{ margin: 0 }}>تایید ایمیل</h1>
-          <p>کد ارسال شده به {email} را اینجا وارد کنید.</p>
+          <Title
+            order={1}
+            styles={{
+              root: {
+                fontSize: "1.5rem",
+                textAlign: "center",
+              },
+            }}
+          >
+            تایید ایمیل
+            <Box
+              style={{
+                display: "inline-block",
+                transform: "translateY(6px) translateX(-2.25rem)",
+                marginRight: "-1.75rem",
+                width: "1.75rem",
+              }}
+            >
+              {isPending && <Spinner />}
+            </Box>
+          </Title>
+          <Text
+            styles={{
+              root: {
+                textAlign: "center",
+                color: "var(--tapsi-palette-gray-500)",
+              },
+            }}
+          >
+            کد ارسال شده به {email} را اینجا وارد کنید.
+          </Text>
 
           <PinInput
             className={s["pin-input"]}

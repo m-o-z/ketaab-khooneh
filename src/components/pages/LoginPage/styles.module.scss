@@ -1,0 +1,11 @@
+.wrapper {
+  &::part(control) {
+    direction: ltr;
+  }
+
+  &::part(input) {}
+}
+
+.postfix {
+  font-size: 1rem;
+}

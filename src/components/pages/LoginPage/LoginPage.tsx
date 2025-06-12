@@ -11,14 +11,21 @@ import {
 } from "@tapsioss/react-components";
 import { Envelope } from "@tapsioss/react-icons";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import s from "./styles.module.scss";
 
 const LoginPage = () => {
   const searchParams = useSearchParams();
   const initialEmail = (() => {
-    return validateEmail(searchParams?.get("email"));
+    const email = validateEmail(searchParams?.get("email"));
+    const [username, _ /* domain part */] = (email ?? "").split("@");
+    return username;
   })();
-  const [email, setEmail] = useState(initialEmail ?? "");
+  const [username, setUsername] = useState(initialEmail ?? "");
+
+  const email = useMemo(() => {
+    return username ? [username, "tapsi.cab"].join("@") : "";
+  }, [username]);
 
   const { mutateAsync: login, isPending, error } = useLoginApi();
 
@@ -28,7 +35,7 @@ const LoginPage = () => {
 
   const handleEmailChange = (e: Event) => {
     const textField = e.currentTarget as TextFieldElement;
-    setEmail(textField.value);
+    setUsername(textField.value);
   };
 
   const isEmailValid = useMemo(() => {
@@ -36,19 +43,28 @@ const LoginPage = () => {
     return !result.success;
   }, [email]);
 
+  useEffect(() => {
+    console.log({ isPending });
+  }, [isPending]);
+
   return (
     <Container h="100vh" pos="fixed" top="0" right="0" left="0" bottom="0">
       <Stack component="main" justify="center" h="100%" maw={400} mx="auto">
         <TextField
           error={!!error}
           errorText={error?.message}
+          placeholder="your_tapsi_email_user"
           label="آدرس ایمیل"
+          className={s.wrapper}
           autoFocus
           type="email"
-          value={email}
+          value={username}
           onChange={handleEmailChange}
         >
           <Envelope slot={TextFieldSlots.LEADING_ICON} />
+          <div className={s.postfix} slot={TextFieldSlots.TRAILING}>
+            @tapsi.cab
+          </div>
         </TextField>
         <Stack mt={8} w={"100%"}>
           <Button
