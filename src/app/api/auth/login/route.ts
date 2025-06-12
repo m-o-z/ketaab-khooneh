@@ -5,12 +5,21 @@ import { errorBadRequest } from "@/utils/errors/errors";
 import { NextResponse } from "next/server";
 import { RequestOTPRequestPayload } from "./login.schema";
 import { withLoginValidator } from "./validator";
+import { isTestUser } from "@/helpers/getTestUsers";
 
 const pb = await pbAdminClient();
 const loginHandler: ApiHandler = async (req, context: Context) => {
   const body = await req.json();
   const { email } = body as RequestOTPRequestPayload;
   let hasFirstItem = false;
+
+  if (await isTestUser(pb, email)) {
+    return NextResponse.json({
+      otpId: email,
+      email: email,
+    });
+  }
+
   try {
     await pb.collection("users").getFirstListItem(`email="${email}"`);
     hasFirstItem = true;
@@ -31,6 +40,7 @@ const loginHandler: ApiHandler = async (req, context: Context) => {
 
     const response = NextResponse.json({
       otpId: res.otpId,
+      email,
     });
 
     return response;

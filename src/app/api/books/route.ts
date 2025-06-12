@@ -1,4 +1,5 @@
 import { Context } from "@/@types/pocketbase";
+import redis from "@/lib/redis";
 import { withAuth } from "@/middlewares/withAuth";
 import { booksListingSchema } from "@/schema/books";
 import { Book, BookWork } from "@/types";
@@ -14,6 +15,8 @@ const handler = async (req: NextRequest, context: Context) => {
   try {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
     const { filter, page, perPage } = booksListingSchema.parse(searchParams);
+    const testUsers = await redis.get("test-users");
+    console.log({ testUsers });
 
     let { items } = await context.pb
       .collection("books")

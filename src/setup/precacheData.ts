@@ -1,16 +1,24 @@
 import { pbAdminClient } from "@/client/pbClient";
 import Redis from "@/lib/redis";
+import Client from "pocketbase";
+type TRedis = typeof Redis;
 export const handler = async () => {
-  const client = pbAdminClient();
-  await Redis.flushall();
-
   try {
-    let result = await Redis.get("test");
-    if (result != "value") {
-      await Redis.set("test", "value");
-      let result = await Redis.get("test");
-    }
+    const client = await pbAdminClient();
+    await Redis.flushall();
+    handleAddingTestUsers(client, Redis);
   } catch (error) {
     console.log({ error });
   }
+};
+
+const handleAddingTestUsers = async (client: Client, redis: TRedis) => {
+  const testUsers = await retrieveTestUsers(client);
+  console.log({ testUsers });
+  redis.set("test-users", JSON.stringify(testUsers));
+};
+
+const retrieveTestUsers = async (client: Client) => {
+  const result = await client.collection("test_users").getFullList();
+  return result;
 };

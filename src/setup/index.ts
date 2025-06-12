@@ -1,6 +1,5 @@
 import { handler } from "./precacheData";
-function startUp() {
-  handler();
-  console.log("setup");
+async function startUp() {
+  await handler();
 }
 startUp();

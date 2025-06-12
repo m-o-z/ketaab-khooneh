@@ -26,7 +26,7 @@ const validateBody = (body: any) => {
     );
   }
 };
-export const withLoginValidator = (handler: ApiHandler) => {
+export const withVerifyValidator = (handler: ApiHandler) => {
   return async function (req: NextRequest, context: any) {
     try {
       const body = await extractBodyJson(req.clone() as NextRequest);

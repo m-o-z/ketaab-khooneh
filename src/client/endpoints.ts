@@ -76,12 +76,12 @@ export const authors = {
 };
 
 export const auth = {
-  login: api.mutation<{ otpId: string }, RequestOTPRequestPayload>(
-    "auth/login",
-    {
-      method: "POST",
-    },
-  ),
+  login: api.mutation<
+    { otpId: string; email: string },
+    RequestOTPRequestPayload
+  >("auth/login", {
+    method: "POST",
+  }),
 
   verify: api.mutation<
     { token: string; record: UserInfo },
