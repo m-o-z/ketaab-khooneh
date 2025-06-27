@@ -17,6 +17,7 @@ const PWAContext = createContext({
 });
 
 type Props = PropsWithChildren;
+
 export const PWAProvider = ({ children }: Props) => {
   const [hasBottomNavigation, _setHasBottomNavigation] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
@@ -37,7 +38,7 @@ export const PWAProvider = ({ children }: Props) => {
 
       // iOS specific way (non-standard, but common for older iOS PWAs)
       const navigatorStandalone = !!(
-        "standalone" in navigator && navigator.standalone
+        "standalone" in navigator && (navigator as any).standalone
       );
 
       setIsStandalone(matchMediaStandalone || navigatorStandalone);
@@ -49,8 +50,6 @@ export const PWAProvider = ({ children }: Props) => {
     if (typeof window !== "undefined" && document.body) {
       // Create a temporary, hidden div to read computed styles from
       const dummyDiv = document.createElement("div");
-      // Apply CSS environment variables via inline style or a class
-      // It's crucial to set these as CSS properties that can be computed
       dummyDiv.style.cssText = `
         position: fixed;
         top: 0;
@@ -58,6 +57,7 @@ export const PWAProvider = ({ children }: Props) => {
         width: 1px;
         height: 1px;
         visibility: hidden;
+        z-index: -1;
         padding-top: env(safe-area-inset-top, 0px);
         padding-right: env(safe-area-inset-right, 0px);
         padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -67,18 +67,24 @@ export const PWAProvider = ({ children }: Props) => {
 
       const computedStyle = window.getComputedStyle(dummyDiv);
 
-      setSafeAreaInsets({
+      const newInsets = {
         top: parseFloat(computedStyle.paddingTop) || 0,
         right: parseFloat(computedStyle.paddingRight) || 0,
         bottom: parseFloat(computedStyle.paddingBottom) || 0,
         left: parseFloat(computedStyle.paddingLeft) || 0,
-      });
+      };
 
-      console.log({
-        top: parseFloat(computedStyle.paddingTop) || 0,
-        right: parseFloat(computedStyle.paddingRight) || 0,
-        bottom: parseFloat(computedStyle.paddingBottom) || 0,
-        left: parseFloat(computedStyle.paddingLeft) || 0,
+      // Optimization: Only update state if the values have actually changed
+      setSafeAreaInsets((currentInsets) => {
+        if (
+          currentInsets.top === newInsets.top &&
+          currentInsets.right === newInsets.right &&
+          currentInsets.bottom === newInsets.bottom &&
+          currentInsets.left === newInsets.left
+        ) {
+          return currentInsets;
+        }
+        return newInsets;
       });
 
       document.body.removeChild(dummyDiv); // Clean up the dummy div
@@ -88,23 +94,39 @@ export const PWAProvider = ({ children }: Props) => {
   // Effect to set up initial checks and listeners
   useEffect(() => {
     checkStandaloneMode();
-    updateSafeAreaInsets();
+
+    // ========================================================================
+    // THE FIX: Use double requestAnimationFrame instead of setTimeout.
+    // This robustly waits for the browser's rendering engine to calculate
+    // layout and style, including the `env()` CSS variables.
+    // ========================================================================
+    let rAFId1: number;
+    let rAFId2: number;
+
+    const initialCheck = () => {
+      // We request a second frame to be absolutely sure the layout is stable.
+      rAFId2 = requestAnimationFrame(() => {
+        updateSafeAreaInsets();
+      });
+    };
+
+    // Start the process by requesting the first animation frame.
+    rAFId1 = requestAnimationFrame(initialCheck);
 
     // Listen for 'resize' events to re-evaluate standalone mode and insets
-    // This catches device orientation changes and keyboard appearance/disappearance
+    // This catches device orientation changes and keyboard appearance
     const handleResize = () => {
       checkStandaloneMode();
       updateSafeAreaInsets();
     };
 
-    // For more granular control over visual viewport changes (e.g., keyboard)
-    // if window.visualViewport is available, use its resize event.
-    // Otherwise, fallback to window.resize.
     const eventTarget = window.visualViewport || window;
     eventTarget.addEventListener("resize", handleResize);
 
-    // Clean up event listeners on component unmount
+    // Clean up event listeners and animation frames on component unmount
     return () => {
+      if (rAFId1) cancelAnimationFrame(rAFId1);
+      if (rAFId2) cancelAnimationFrame(rAFId2);
       eventTarget.removeEventListener("resize", handleResize);
     };
   }, [checkStandaloneMode, updateSafeAreaInsets]); // Dependencies for useEffect
@@ -134,10 +156,6 @@ export const PWAProvider = ({ children }: Props) => {
   );
 };
 
-/**
- * Custom hook to consume the PWA context.
- * Provides access to isStandalone status and safeAreaInsets.
- */
 export const usePWA = () => {
   const context = useContext(PWAContext);
   if (context === undefined) {
@@ -145,7 +163,3 @@ export const usePWA = () => {
   }
   return context;
 };
-
-// You'll also need a global CSS file or a <style> tag in your _app.js
-// to define the 'env()' variables, especially for safe area insets.
-// This is typically done in your global CSS.
