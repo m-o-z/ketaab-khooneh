@@ -14,10 +14,8 @@ type ResponseError = {
 const handler = async (req: NextRequest, context: Context) => {
   const pbAdmin = await pbAdminClient();
   const params = await context.params;
-  console.log({ params });
   const pb = context.pb;
   if (!pb || !pb.authStore.record?.id) {
-    console.log({ record: pb.authStore.record });
     return errorBadRequest();
   }
 
@@ -35,8 +33,6 @@ const handler = async (req: NextRequest, context: Context) => {
     }
 
     const { dueDate } = result.modifiedContext.borrows;
-
-    console.log({ borrows: result.modifiedContext.borrows });
 
     if (!dueDate) {
       return wrongDueDate();

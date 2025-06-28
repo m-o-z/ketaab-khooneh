@@ -27,7 +27,6 @@ const verifyHandler: ApiHandler = async (req, context: Context) => {
     res = await pbAdmin
       .collection("users")
       .authWithPassword(testUser.email, "random@12345");
-    console.log({ res });
   } else {
     res = await pb.collection("users").authWithOTP(otpId, password);
   }

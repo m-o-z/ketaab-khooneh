@@ -58,7 +58,6 @@ const handleAuthRefresh = async ({
   if (wholeDaysLeft < DAYS_TO_REFRESH) {
     const { token } = await client.collection("users").authRefresh();
     const origin = new URL(request.url).hostname;
-    console.log({ token, origin });
     await setAccessToken({
       origin,
       token,

@@ -44,10 +44,6 @@ const LoginPage = () => {
     return !result.success;
   }, [email]);
 
-  useEffect(() => {
-    console.log({ isPending });
-  }, [isPending]);
-
   const handleKeyDown: KeyboardEventHandler = (e) => {
     if (e.key === "Enter") {
       handleSubmit();

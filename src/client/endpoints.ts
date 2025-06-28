@@ -4,7 +4,7 @@ import {
   Author,
   Book,
   BookCategory,
-  BookWork,
+  Borrow,
   ResponseWrap,
   UserInfo,
 } from "./../types";
@@ -95,6 +95,14 @@ export const auth = {
   logout: api.mutation<null, {}>("auth/logout", {
     method: "POST",
   }),
+};
+
+export const borrows = {
+  getAll: api.query<Borrow[]>("borrows"),
+  reserve: (bookId: string) =>
+    api.mutation(() => `/borrow/${bookId}`, {
+      method: "POST",
+    }),
 };
 // ===== Categories API =====
 export const categories = {

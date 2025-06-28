@@ -82,12 +82,24 @@ export type User = {
   history: Borrow[];
 };
 
+export enum BorrowStatusEnum {
+  ACTIVE = "ACTIVE",
+  RETURNED = "RETURNED",
+  RETURNED_LATE = "RETURNED_LATE",
+  EXTENDED = "EXTENDED",
+}
 export type Borrow = {
   id: string;
   user: User["id"];
   book: Book["id"];
-  startDate: string;
-  endDate: string;
+  borrowDate: string;
+  dueDate: string;
+  returnDate?: string;
+  status: `${BorrowStatusEnum}`;
+  expand?: {
+    user?: User;
+    book?: Book;
+  };
 };
 
 export type ListFetchingParams = {

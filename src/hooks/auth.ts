@@ -20,7 +20,6 @@ export const useLoginApi = () => {
     },
     onSuccess: (response) => {
       if (response.otpId) {
-        console.log({ id: response.otpId });
         let url = "/auth/verify/" + response.otpId;
         if (response.email) {
           url += "?email=" + response.email;
