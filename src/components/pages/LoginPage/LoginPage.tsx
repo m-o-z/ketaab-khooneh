@@ -2,7 +2,7 @@
 import { useLoginApi } from "@/hooks/auth";
 import { emailSchema } from "@/schema/email";
 import validateEmail from "@/utils/validateEmail";
-import { Container, Stack } from "@mantine/core";
+import { Stack } from "@mantine/core";
 import {
   Button,
   TextField,
@@ -13,6 +13,7 @@ import { Envelope } from "@tapsioss/react-icons";
 import { useSearchParams } from "next/navigation";
 import { KeyboardEventHandler, useEffect, useMemo, useState } from "react";
 import s from "./styles.module.scss";
+import Container from "@/common/Container/Container";
 
 const LoginPage = () => {
   const searchParams = useSearchParams();
@@ -49,13 +50,13 @@ const LoginPage = () => {
 
   const handleKeyDown: KeyboardEventHandler = (e) => {
     if (e.key === "Enter") {
-      handleSubmit()
+      handleSubmit();
     }
-  }
+  };
 
   return (
-    <Container h="100vh" pos="fixed" top="0" right="0" left="0" bottom="0">
-      <Stack component="main" justify="center" h="100%" maw={400} mx="auto">
+    <Container className="">
+      <Stack component="main" justify="center" h="100%" px="2rem">
         <TextField
           error={!!error}
           errorText={error?.message}

@@ -20,25 +20,12 @@ const AppShell = ({ children }: Props) => {
   }, []);
 
   return (
-    <Box mx="auto" maw={500} pos="fixed" top={0} bottom={0} left={0} right={0}>
-      <Box
-        pb={100}
-        component="main"
-        pos="absolute"
-        top={0}
-        bottom={0}
-        left={0}
-        right={0}
-        style={{
-          overflow: "auto",
-        }}
-      >
-        {children}
-      </Box>
+    <div className="h-full w-full pb-[6.25rem] px-4 pt-4 overflow-y-auto">
+      {children}
       <Portal id="#bottom-navigation">
         <BottomNavigation />
       </Portal>
-    </Box>
+    </div>
   );
 };
 

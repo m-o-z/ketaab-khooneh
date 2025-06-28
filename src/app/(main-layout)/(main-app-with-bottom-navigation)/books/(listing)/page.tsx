@@ -6,12 +6,11 @@ import ErrorSection from "@/components/ErrorSection";
 import NotFound from "@/components/NotFound";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
-import type { Book, BookWork } from "@/types";
-import { Box, Container, Grid, Stack } from "@mantine/core";
+import type { Book } from "@/types";
+import { Container, Stack } from "@mantine/core";
 import { Divider } from "@tapsioss/react-components";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 export default function Books() {
@@ -85,12 +84,10 @@ export default function Books() {
   };
 
   return (
-    <Container>
-      <Stack>
-        <h1>کتاب‌ها</h1>
-        {renderToolbar()}
-        {renderBooksSection()}
-      </Stack>
-    </Container>
+    <Stack>
+      <h1>کتاب‌ها</h1>
+      {renderToolbar()}
+      {renderBooksSection()}
+    </Stack>
   );
 }

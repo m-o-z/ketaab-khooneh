@@ -1,5 +1,10 @@
 .bottomNavigation {
+  width: 100%;
+
   &::part(root) {
+    z-index: 1000;
+    position: relative;
+    width: 100%;
     transition: all 0.1s ease-out;
     height: var(--height, 4rem);
     padding-bottom: var(--padding-bottom, 0px);

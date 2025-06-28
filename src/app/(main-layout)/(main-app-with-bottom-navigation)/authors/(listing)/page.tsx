@@ -1,12 +1,12 @@
 "use client";
-import type { Author } from "@/types";
-import { Container, Grid, Stack } from "@mantine/core";
-import { useAuthorsGetAllApi } from "@/hooks/authors";
-import AuthorPreview from "@/components/author/AuthorPreview";
-import React, { useState } from "react";
-import { useDebounce } from "use-debounce";
 import ListToolbar from "@/common/components/ListToolbar";
+import AuthorPreview from "@/components/author/AuthorPreview";
 import ErrorSection from "@/components/ErrorSection";
+import { useAuthorsGetAllApi } from "@/hooks/authors";
+import type { Author } from "@/types";
+import { Stack } from "@mantine/core";
+import { useState } from "react";
+import { useDebounce } from "use-debounce";
 
 export default function Home() {
   // TODO: refactor
@@ -58,12 +58,10 @@ export default function Home() {
   };
 
   return (
-    <Container>
-      <Stack maw={768} mx="auto">
-        <h1>نویسندگان</h1>
-        {renderToolbar()}
-        {renderAuthorsListSection()}
-      </Stack>
-    </Container>
+    <Stack maw={768} mx="auto">
+      <h1>نویسندگان</h1>
+      {renderToolbar()}
+      {renderAuthorsListSection()}
+    </Stack>
   );
 }

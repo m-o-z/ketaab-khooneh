@@ -9,11 +9,9 @@ const Page = () => {
 
   const { borrowId } = useParams();
   return (
-    <Container>
-      <Stack maw={768} mx="auto">
-        Borrow: {borrowId}
-      </Stack>
-    </Container>
+    <Stack maw={768} mx="auto">
+      Borrow: {borrowId}
+    </Stack>
   );
 };
 

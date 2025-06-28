@@ -140,11 +140,9 @@ const Page = () => {
   };
 
   return (
-    <Container>
-      <Stack gap="md" w="100%">
-        {renderBookDetail()}
-      </Stack>
-    </Container>
+    <Stack gap="md" w="100%">
+      {renderBookDetail()}
+    </Stack>
   );
 };
 

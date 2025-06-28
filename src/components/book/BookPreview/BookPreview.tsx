@@ -40,26 +40,25 @@ const BookPreview = ({
 }: Props) => {
   return (
     <Paper onClick={onClick} style={{ flex: 1, width: width }}>
-      <Container>
-        <BadgeWrapper anchorShape="rectangle">
-          <Box slot={BadgeWrapperSlots.BADGE}>
-            <BookStatus status={book.status} />
-          </Box>
-          <Box pos="relative">
-            <Image
-              src={pbClient().files.getUrl(book, book.coverImage)}
-              alt={`${book.bookWork.title} cover`}
-              width={width}
-              height={height}
-              fit={"cover"}
-              style={{
-                // filter: `grayscale(${book.status === "AVAILABLE" ? 0 : 1})`,
-                aspectRatio: 1 / 1.3636,
-              }}
-            />
-          </Box>
-        </BadgeWrapper>
-      </Container>
+      <BadgeWrapper anchorShape="rectangle">
+        <Box slot={BadgeWrapperSlots.BADGE}>
+          <BookStatus status={book.status} />
+        </Box>
+        <Box pos="relative">
+          <Image
+            src={pbClient().files.getUrl(book, book.coverImage)}
+            alt={`${book.bookWork.title} cover`}
+            width={width}
+            height={height}
+            fit={"cover"}
+            style={{
+              // filter: `grayscale(${book.status === "AVAILABLE" ? 0 : 1})`,
+              aspectRatio: 1 / 1.3636,
+            }}
+          />
+        </Box>
+      </BadgeWrapper>
+
       {!hideBottomTexts && (
         <Title
           order={1}

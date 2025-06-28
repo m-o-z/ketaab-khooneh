@@ -3,7 +3,10 @@
     direction: ltr;
   }
 
-  &::part(input) {}
+  &::part(input) {
+    min-width: 0;
+    max-width: auto;
+  }
 }
 
 .postfix {

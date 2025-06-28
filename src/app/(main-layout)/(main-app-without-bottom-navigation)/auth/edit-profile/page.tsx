@@ -24,18 +24,16 @@ const Page = () => {
   };
 
   return (
-    <Container>
-      <Stack>
-        <IconButton onClick={goToProfile} variant="naked">
-          <ArrowRight />
-        </IconButton>
-        <h1>اطلاعات حساب کاربری</h1>
-        <FileInput label="عکس پروفایل" value={"https://picsum.photos/200"} />
-        <TextField label="نام" value={profile?.name} />
-        <TextField label="شناسه" value={profile?.username} />
-        <Button onClick={handleSubmit}>ثبت تغییرات</Button>
-      </Stack>
-    </Container>
+    <Stack>
+      <IconButton onClick={goToProfile} variant="naked">
+        <ArrowRight />
+      </IconButton>
+      <h1>اطلاعات حساب کاربری</h1>
+      <FileInput label="عکس پروفایل" value={"https://picsum.photos/200"} />
+      <TextField label="نام" value={profile?.name} />
+      <TextField label="شناسه" value={profile?.username} />
+      <Button onClick={handleSubmit}>ثبت تغییرات</Button>
+    </Stack>
   );
 };
 

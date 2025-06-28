@@ -1,8 +1,9 @@
 "use client";
 import "@/app/fonts.scss";
 import "@/app/globals.css";
+import Container from "@/common/Container/Container";
 import Notifications from "@/common/Notifications";
-import { isClient, isLocal } from "@/env";
+import { isLocal } from "@/env";
 import { PWAProvider } from "@/providers/PWAProvider";
 import { queryClient } from "@/queryClient";
 import { createTheme, MantineProvider } from "@mantine/core";
@@ -61,7 +62,7 @@ export default function RootLayout({
     <PWAProvider>
       <QueryClientProvider client={queryClient}>
         <MantineProvider theme={theme} defaultColorScheme="light">
-          {children}
+          <Container>{children}</Container>
           {isLocal && <ReactQueryDevtools />}
           <Notifications />
         </MantineProvider>

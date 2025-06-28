@@ -15,6 +15,7 @@ import {
 import styles from "./BottomNavigation.module.scss";
 import { usePWA } from "@/providers/PWAProvider";
 import { usePathname, useRouter } from "next/navigation";
+import Container from "../Container/Container";
 
 const BottomNavigation = () => {
   const { safeAreaInsets } = usePWA();
@@ -68,32 +69,32 @@ const BottomNavigation = () => {
     },
   ];
   return (
-    <TapsiBottomNavigation
-      className={styles.bottomNavigation}
-      style={
-        {
-          ...generateCSSVars(),
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-        } as CSSProperties
-      }
-      onActiveChange={handleBottomNavigationClick}
-    >
-      {sidebarItems.map((item) => (
-        <BottomNavigationItem
-          key={item.title}
-          active={currentPath === item.url}
-          value={item.url}
+    <div className="fixed left-0 right-0 bottom-0 z-1">
+      <Container height="h-auto">
+        <TapsiBottomNavigation
+          className={styles.bottomNavigation}
+          style={
+            {
+              ...generateCSSVars(),
+            } as CSSProperties
+          }
+          onActiveChange={handleBottomNavigationClick}
         >
-          <div slot={BottomNavigationItemSlots.ICON}>
-            <item.Icon />
-          </div>
-          {item.titleFa}
-        </BottomNavigationItem>
-      ))}
-    </TapsiBottomNavigation>
+          {sidebarItems.map((item) => (
+            <BottomNavigationItem
+              key={item.title}
+              active={currentPath === item.url}
+              value={item.url}
+            >
+              <div slot={BottomNavigationItemSlots.ICON}>
+                <item.Icon />
+              </div>
+              {item.titleFa}
+            </BottomNavigationItem>
+          ))}
+        </TapsiBottomNavigation>
+      </Container>
+    </div>
   );
 };
 

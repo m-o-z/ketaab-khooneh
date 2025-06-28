@@ -353,6 +353,7 @@ export default function RootLayout({
         <Script src="/startup.js"></Script>
         {children}
         <div id="bottom-navigation" />
+        <div id="modal" />
       </body>
     </html>
   );

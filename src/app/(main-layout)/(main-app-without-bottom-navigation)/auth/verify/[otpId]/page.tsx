@@ -53,67 +53,72 @@ const Page = () => {
   };
 
   return (
-    <Container h="100vh" pos="fixed" top="0" right="0" left="0" bottom="0">
-      <Stack justify="center" h="100%" maw={400} mx="auto">
-        <Stack component="header" pt={10}>
-          <IconButton
-            onClick={handleGoBack}
-            label="بازگشت به صفحه وارد کردن ایمیل"
-            variant="naked"
-          >
-            <ArrowRight />
-          </IconButton>
-        </Stack>
-        <Stack component="main" justify="center" h="100%" maw={400} flex={1}>
-          <Title
-            order={1}
-            styles={{
-              root: {
-                fontSize: "1.5rem",
-                textAlign: "center",
-              },
-            }}
-          >
-            تایید ایمیل
-            <Box
-              style={{
-                display: "inline-block",
-                transform: "translateY(6px) translateX(-2.25rem)",
-                marginRight: "-1.75rem",
-                width: "1.75rem",
-              }}
-            >
-              {isPending && <Spinner />}
-            </Box>
-          </Title>
-          <Text
-            styles={{
-              root: {
-                textAlign: "center",
-                color: "var(--tapsi-palette-gray-500)",
-              },
-            }}
-          >
-            کد ارسال شده به {email} را اینجا وارد کنید.
-          </Text>
-
-          <PinInput
-            className={s["pin-input"]}
-            label="کد OTP"
-            error={!!error}
-            errorText={error?.message}
-            type="numeric"
-            inputMode="numeric"
-            autoFocus
-            hideLabel
-            autocomplete="one-time-code"
-            value={password}
-            onChange={handlePasswordChange}
-            onComplete={handleSubmit}
-          ></PinInput>
-        </Stack>
+    <Stack justify="center" h="100%" maw={400}>
+      <Stack component="header">
+        <IconButton
+          onClick={handleGoBack}
+          label="بازگشت به صفحه وارد کردن ایمیل"
+          variant="naked"
+        >
+          <ArrowRight />
+        </IconButton>
       </Stack>
-    </Container>
+      <Stack
+        component="main"
+        justify="center"
+        align="center"
+        h="100%"
+        maw={400}
+        flex={1}
+      >
+        <Title
+          order={1}
+          styles={{
+            root: {
+              // fontSize: "1.5rem",
+              position: "relative",
+            },
+          }}
+        >
+          تایید ایمیل
+          <Box
+            style={{
+              display: "inline-block",
+              transform: "translateY(6px) translateX(-2.25rem)",
+              marginRight: "-1.75rem",
+              width: "1.75rem",
+            }}
+          >
+            {isPending && <Spinner />}
+          </Box>
+        </Title>
+        <Text
+          styles={{
+            root: {
+              textAlign: "center",
+              color: "var(--tapsi-palette-gray-500)",
+            },
+          }}
+        >
+          کد ارسال شده به {email} را اینجا وارد کنید.
+        </Text>
+
+        <PinInput
+          className={s["pin-input"]}
+          label="کد OTP"
+          error={!!error}
+          errorText={error?.message}
+          type="numeric"
+          inputMode="numeric"
+          autoFocus
+          hideLabel
+          autocomplete="one-time-code"
+          value={password}
+          onChange={handlePasswordChange}
+          onComplete={handleSubmit}
+        ></PinInput>
+      </Stack>
+    </Stack>
   );
 };
 

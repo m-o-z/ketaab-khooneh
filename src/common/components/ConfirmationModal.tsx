@@ -1,10 +1,12 @@
-import React from "react";
 import {
   Button,
   ButtonGroup,
   Modal,
   ModalSlots,
 } from "@tapsioss/react-components";
+import React from "react";
+import Portal from "../Portal/Portal";
+import styles from "./ConfirmationModal.module.scss";
 
 type ChildrenProps = {
   show: () => void;
@@ -119,34 +121,41 @@ const ConfirmationModal = ({
   const renderImageSlot = () => {
     if (!renderImage) return null;
 
-    return <div slot={ModalSlots.IMAGE}>{renderImage()}</div>;
+    return (
+      <div className="flex justify-center" slot={ModalSlots.IMAGE}>
+        {renderImage()}
+      </div>
+    );
   };
 
   return (
     <>
       {children({ show, hide })}
-      <Modal
-        alignment={alignment}
-        heading={heading}
-        description={description}
-        open={showing}
-        onHide={hide}
-      >
-        {renderImageSlot()}
-        <ButtonGroup slot={ModalSlots.ACTION_BAR} fluidItems>
-          <Button variant={denyButtonVariant} onClick={hide} size="lg">
-            {denyButtonTitle}
-          </Button>
-          <Button
-            variant={acceptButtonVariant}
-            loading={isPending}
-            size="lg"
-            onClick={handleConfirm}
-          >
-            {acceptButtonTitle}
-          </Button>
-        </ButtonGroup>
-      </Modal>
+      <Portal id="#modal">
+        <Modal
+          className={styles.container}
+          alignment={alignment}
+          heading={heading}
+          description={description}
+          open={showing}
+          onHide={hide}
+        >
+          {renderImageSlot()}
+          <ButtonGroup slot={ModalSlots.ACTION_BAR} fluidItems>
+            <Button variant={denyButtonVariant} onClick={hide} size="lg">
+              {denyButtonTitle}
+            </Button>
+            <Button
+              variant={acceptButtonVariant}
+              loading={isPending}
+              size="lg"
+              onClick={handleConfirm}
+            >
+              {acceptButtonTitle}
+            </Button>
+          </ButtonGroup>
+        </Modal>
+      </Portal>
     </>
   );
 };

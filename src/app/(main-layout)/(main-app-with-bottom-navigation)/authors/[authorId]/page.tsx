@@ -45,12 +45,10 @@ const Page = () => {
   };
 
   return (
-    <Container>
-      <Stack>
-        <h1>اطلاعات {author?.name}</h1>
-        {renderAuthorPreview()}
-      </Stack>
-    </Container>
+    <Stack>
+      <h1>اطلاعات {author?.name}</h1>
+      {renderAuthorPreview()}
+    </Stack>
   );
 };
 
