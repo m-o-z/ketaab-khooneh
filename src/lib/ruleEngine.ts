@@ -1,4 +1,5 @@
 import Client from "pocketbase";
+import { Rule, RuleEventType } from "@/types";
 
 interface BorrowContext {
   user: any; // PocketBase user model
@@ -50,10 +51,10 @@ export class RuleEngineService {
   }
 
   async execute(
-    eventType: "BEFORE_BORROW" | "ON_RETURN_LATE",
+    eventType: RuleEventType,
     context: BorrowContext,
   ): Promise<RuleEngineResult> {
-    const rules = await this.pb.collection("rules").getFullList({
+    const rules = await this.pb.collection<Rule>("rules").getFullList({
       filter: `isEnabled = true && eventType = "${eventType}"`,
       sort: "-priority", // Highest priority first
       expand: "rule_conditions_via_rule", // Important: Fetch related conditions
@@ -73,9 +74,16 @@ export class RuleEngineService {
       if (allConditionsMet) {
         console.log(`Executing action for rule: ${rule.name}`);
         switch (rule.actionType) {
+          case "ALLOW":
+            result.allowed = true;
+            result.message = rule.actionParams.message;
+            break;
           case "DENY":
             result.allowed = false;
             result.message = rule.actionParams.message;
+            break;
+
+          case "APPLY_PUNISHMENT":
             break;
 
           case "SET_VALUE":
@@ -92,7 +100,7 @@ export class RuleEngineService {
           // You would implement APPLY_PUNISHMENT similarly for the return logic
         }
 
-        if (rule.stop_on_match) {
+        if (rule.stopOnMatch) {
           return result; // Stop processing further rules
         }
       }

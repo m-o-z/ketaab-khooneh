@@ -108,3 +108,43 @@ export type ListFetchingParams = {
   perPage?: number;
   filters?: string[];
 };
+
+export enum RuleEventTypeEnum {
+  BEFORE_BORROW = "BEFORE_BORROW",
+  BEFORE_EXTEND = "BEFORE_EXTEND",
+  ON_RETURN_LATE = "ON_RETURN_LATE",
+}
+export type RuleEventType = `${RuleEventTypeEnum}`;
+
+export enum RuleActionTypeEnum {
+  ALLOW = "ALLOW",
+  DENY = "DENY",
+  SET_VALUE = "SET_VALUE",
+  APPLY_PUNISHMENT = "APPLY_PUNISHMENT",
+}
+export type RuleActionType = `${RuleActionTypeEnum}`;
+
+export type Rule = {
+  id: string;
+  name: string;
+  description?: string;
+  eventType: RuleEventType;
+  actionType: RuleActionType;
+  actionParams: Record<string, any>;
+  priority: number;
+  isEnabled: boolean;
+  stopOnMatch: boolean;
+  expand?: {
+    rule_conditions_via_rule: RuleCondition[];
+  };
+};
+
+export type RuleCondition = {
+  rule: Rule["id"];
+  fact: string;
+  operator: string;
+  value: Record<string, any>;
+  expand?: {
+    rule?: Rule;
+  };
+};
