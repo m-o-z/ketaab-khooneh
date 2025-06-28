@@ -23,6 +23,8 @@
     "@tapsioss/react-components": "^0.17.2",
     "@tapsioss/react-icons": "^0.7.0",
     "@tapsioss/theme": "^0.5.2",
+    "@zoomit/dayjs-jalali-plugin": "^0.1.11",
+    "datejs": "1.0.0-rc3",
     "dayjs": "^1.11.13",
     "ioredis": "^5.6.1",
     "jwt-decode": "^4.0.0",

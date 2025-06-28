@@ -68,12 +68,14 @@ export class RuleEngineService {
         this.checkCondition(cond, result.modifiedContext),
       );
 
+      console.log({ rule, conditions, allConditionsMet });
+
       if (allConditionsMet) {
         console.log(`Executing action for rule: ${rule.name}`);
         switch (rule.actionType) {
           case "DENY":
             result.allowed = false;
-            result.message = rule.action_params.message;
+            result.message = rule.actionParams.message;
             break;
 
           case "SET_VALUE":

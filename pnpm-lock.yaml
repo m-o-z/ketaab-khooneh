@@ -44,6 +44,12 @@ importers:
       '@tapsioss/theme':
         specifier: ^0.5.2
         version: 0.5.2
+      '@zoomit/dayjs-jalali-plugin':
+        specifier: ^0.1.11
+        version: 0.1.11
+      datejs:
+        specifier: 1.0.0-rc3
+        version: 1.0.0-rc3
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
@@ -1587,6 +1593,9 @@ packages:
   '@xtuc/long@4.2.2':
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
 
+  '@zoomit/dayjs-jalali-plugin@0.1.11':
+    resolution: {integrity: sha512-xqbrBPRoBhbaAWeLbqq9QERZwj+h2KuJMehpOQrlT4y980oA+rdiF/YzXlzVaIvc845UYDrsTp8IDwttWyV/xg==}
+
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -1860,6 +1869,10 @@ packages:
   data-view-byte-offset@1.0.1:
     resolution: {integrity: sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==}
     engines: {node: '>= 0.4'}
+
+  datejs@1.0.0-rc3:
+    resolution: {integrity: sha512-c6kzWmGUKLrdT+8LjUvtAObOgsecqnkpOYOuSDzYdNhdCk3+WALxtBuSMRJDmOfS6JVs/+N2yTGHb0D8oNqB/Q==}
+    engines: {node: '>=0.8'}
 
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
@@ -5227,6 +5240,8 @@ snapshots:
 
   '@xtuc/long@4.2.2': {}
 
+  '@zoomit/dayjs-jalali-plugin@0.1.11': {}
+
   acorn-jsx@5.3.2(acorn@8.14.1):
     dependencies:
       acorn: 8.14.1
@@ -5514,6 +5529,8 @@ snapshots:
       call-bound: 1.0.4
       es-errors: 1.3.0
       is-data-view: 1.0.2
+
+  datejs@1.0.0-rc3: {}
 
   dayjs@1.11.13: {}
 

@@ -5,7 +5,13 @@ import { withAuth } from "@/middlewares/withAuth";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
 import { NextRequest, NextResponse } from "next/server";
-import { borrowingNotAllowed, wrongDueDate } from "./errors";
+import {
+  borrowingNotAllowed,
+  errorUserIsPunished,
+  wrongDueDate,
+} from "./errors";
+import { Book, Borrow, UserInfo } from "@/types";
+import { toStandardGeorgianDateTime } from "@/utils/prettifyDate";
 
 type ResponseError = {
   message: string;
@@ -20,16 +26,33 @@ const handler = async (req: NextRequest, context: Context) => {
   }
 
   try {
-    const user = await pb.collection("users").getOne(pb.authStore.record.id);
-    const book = await pb.collection("books").getOne(params.bookId);
+    const user = await pb
+      .collection<UserInfo>("users")
+      .getOne(pb.authStore.record.id);
+    const book = await pb.collection<Book>("books").getOne(params.bookId);
 
-    const initialContext = { user, book, borrows: {} };
+    const userBorrows = await pb.collection<Borrow>("borrows").getFullList({
+      filter: `user = "${user.id}" && status = "ACTIVE"`,
+    });
+
+    const initialContext = {
+      user,
+      book,
+      borrows: {
+        count: userBorrows.length,
+      },
+    };
 
     const ruleEngine = new RuleEngineService(pbAdmin);
     const result = await ruleEngine.execute("BEFORE_BORROW", initialContext);
 
     if (!result.allowed) {
-      return borrowingNotAllowed();
+      if (user.isPunished) {
+        return errorUserIsPunished(
+          toStandardGeorgianDateTime(user.punishmentEndAt),
+        );
+      }
+      return borrowingNotAllowed(result.message);
     }
 
     const { dueDate } = result.modifiedContext.borrows;
