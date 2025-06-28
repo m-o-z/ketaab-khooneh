@@ -1,0 +1,100 @@
+import Client from "pocketbase";
+
+interface BorrowContext {
+  user: any; // PocketBase user model
+  book: any; // PocketBase book model
+  borrows: {
+    // The potential borrow record we are building
+    dueDate?: Date;
+    [key: string]: any;
+  };
+}
+
+interface RuleEngineResult {
+  allowed: boolean;
+  message?: string;
+  modifiedContext: BorrowContext;
+}
+
+export class RuleEngineService {
+  private pb;
+
+  constructor(pb: Client) {
+    this.pb = pb;
+  }
+
+  private getValueFromContext(fact: string, context: any) {
+    // Simple dot notation accessor, e.g., 'user.is_punished' -> context['user']['is_punished']
+    return fact.split(".").reduce((o, i) => o?.[i], context);
+  }
+
+  private checkCondition(condition: any, context: any): boolean {
+    const contextValue = this.getValueFromContext(condition.fact, context);
+    const ruleValue = condition.value.value;
+
+    switch (condition.operator) {
+      case "EQUALS":
+        return contextValue === ruleValue;
+      case "NOT_EQUALS":
+        return contextValue !== ruleValue;
+      case "GREATER_THAN":
+        return contextValue > ruleValue;
+      case "LESS_THAN":
+        return contextValue < ruleValue;
+      case "IS_EMPTY":
+        return contextValue == null || contextValue === "";
+      // Add more operators as needed...
+      default:
+        return false;
+    }
+  }
+
+  async execute(
+    eventType: "BEFORE_BORROW" | "ON_RETURN_LATE",
+    context: BorrowContext,
+  ): Promise<RuleEngineResult> {
+    const rules = await this.pb.collection("rules").getFullList({
+      filter: `isEnabled = true && eventType = "${eventType}"`,
+      sort: "-priority", // Highest priority first
+      expand: "rule_conditions_via_rule", // Important: Fetch related conditions
+    });
+
+    let result: RuleEngineResult = { allowed: true, modifiedContext: context };
+
+    for (const rule of rules) {
+      // Check if all conditions for this rule are met
+      const conditions = rule.expand?.["rule_conditions_via_rule"] || [];
+      const allConditionsMet = conditions.every((cond) =>
+        this.checkCondition(cond, result.modifiedContext),
+      );
+
+      if (allConditionsMet) {
+        console.log(`Executing action for rule: ${rule.name}`);
+        switch (rule.actionType) {
+          case "DENY":
+            result.allowed = false;
+            result.message = rule.action_params.message;
+            break;
+
+          case "SET_VALUE":
+            const { fact, value, unit } = rule.actionParams;
+
+            if (fact === "borrows.dueDate" && unit === "days") {
+              const newDueDate = new Date();
+              newDueDate.setDate(newDueDate.getDate() + value);
+              result.modifiedContext.borrows.dueDate = newDueDate;
+            }
+            // Add more SET_VALUE logic here for other facts
+            break;
+
+          // You would implement APPLY_PUNISHMENT similarly for the return logic
+        }
+
+        if (rule.stop_on_match) {
+          return result; // Stop processing further rules
+        }
+      }
+    }
+    return result;
+  }
+}

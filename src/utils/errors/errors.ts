@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const createErrorPayload = (message: string) => {
+export const createErrorPayload = (message: string) => {
   let _message: string = message;
   if (typeof message != "string") {
     _message = String(message);

@@ -1,8 +1,7 @@
 import { Context } from "@/@types/pocketbase";
-import redis from "@/lib/redis";
 import { withAuth } from "@/middlewares/withAuth";
 import { booksListingSchema } from "@/schema/books";
-import { Book, BookWork } from "@/types";
+import { Book } from "@/types";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
 import { NextRequest } from "next/server";
