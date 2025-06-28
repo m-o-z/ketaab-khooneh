@@ -1,6 +1,6 @@
 import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
-import { booksListingSchema } from "@/schema/books";
+import { BookListingRequestSchema } from "@/schema/books";
 import { Book } from "@/types";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
@@ -13,7 +13,8 @@ type ResponseError = {
 const handler = async (req: NextRequest, context: Context) => {
   try {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
-    const { filter, page, perPage } = booksListingSchema.parse(searchParams);
+    const { filter, page, perPage } =
+      BookListingRequestSchema.parse(searchParams);
 
     let { items } = await context.pb
       .collection("books")

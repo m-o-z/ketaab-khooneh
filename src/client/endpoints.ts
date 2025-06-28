@@ -15,6 +15,7 @@ import {
 import { AuthorListingRequestPayload } from "@/schema/authors";
 import { BookListingRequestPayload } from "@/schema/books";
 import { api } from "./api";
+import { BorrowDetailsListDto } from "@/lib/dto/borrow";
 
 // ===== Types =====
 
@@ -98,7 +99,7 @@ export const auth = {
 };
 
 export const borrows = {
-  getAll: api.query<Borrow[]>("borrows"),
+  getAll: api.query<ResponseWrap<BorrowDetailsListDto>>("borrows"),
   reserve: (bookId: string) =>
     api.mutation(() => `/borrow/${bookId}`, {
       method: "POST",
