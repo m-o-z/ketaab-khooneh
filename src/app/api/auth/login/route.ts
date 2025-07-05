@@ -1,20 +1,19 @@
 import { ApiHandler } from "@/@types/api";
 import { Context } from "@/@types/pocketbase";
-import { pbAdminClient } from "@/client/pbClient";
+import { PocketBaseService } from "@/services/PocketBaseService";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { NextResponse } from "next/server";
 import { RequestOTPRequestPayload } from "./login.schema";
 import { withLoginValidator } from "./validator";
-import { isTestUser } from "@/helpers/getTestUsers";
 
-const pb = await pbAdminClient();
 const loginHandler: ApiHandler = async (req, context: Context) => {
+  const adminClient = (await PocketBaseService.GetInstance()).admin;
   const body = await req.json();
   const { email } = body as RequestOTPRequestPayload;
   let hasFirstItem = false;
 
   try {
-    await pb.collection("users").getFirstListItem(`email="${email}"`);
+    await adminClient.collection("users").getFirstListItem(`email="${email}"`);
     hasFirstItem = true;
   } catch (e) {
     console.log({ e1: e });
@@ -27,9 +26,9 @@ const loginHandler: ApiHandler = async (req, context: Context) => {
         password: "random@12345",
         passwordConfirm: "random@12345",
       };
-      await pb.collection("users").create(data);
+      await adminClient.collection("users").create(data);
     }
-    const res = await pb.collection("users").requestOTP(email);
+    const res = await adminClient.collection("users").requestOTP(email);
 
     const response = NextResponse.json({
       otpId: res.otpId,

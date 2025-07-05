@@ -9,11 +9,9 @@ import {
 import { ArrowRight } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
 import { useGetProfile } from "@/hooks/profile";
-import useCheckAuthentication from "@/hooks/useCheckAuthentication";
 
 const Page = () => {
   const router = useRouter();
-  useCheckAuthentication();
 
   const { profile } = useGetProfile();
   const goToProfile = () => router.push("/profile");

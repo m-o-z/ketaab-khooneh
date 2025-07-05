@@ -1,37 +1,36 @@
 import { Context } from "@/@types/pocketbase";
-import { pbAdminClient } from "@/client/pbClient";
 import { RuleEngineService } from "@/lib/ruleEngine";
 import { withAuth } from "@/middlewares/withAuth";
+import { Book, Borrow, UserInfo } from "@/types";
 import { errorBadRequest } from "@/utils/errors/errors";
+import { toStandardGeorgianDateTime } from "@/utils/prettifyDate";
 import { createResponsePayload } from "@/utils/response";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import {
   borrowingNotAllowed,
   errorUserIsPunished,
   wrongDueDate,
 } from "./errors";
-import { Book, Borrow, UserInfo } from "@/types";
-import { toStandardGeorgianDateTime } from "@/utils/prettifyDate";
 
 type ResponseError = {
   message: string;
 };
 
 const handler = async (req: NextRequest, context: Context) => {
-  const pbAdmin = await pbAdminClient();
   const params = await context.params;
-  const pb = context.pb;
-  if (!pb || !pb.authStore.record?.id) {
+  const clientAdmin = context.admin;
+  const client = context.pb;
+  if (!client || !client.authStore.record?.id) {
     return errorBadRequest();
   }
 
   try {
-    const user = await pb
+    const user = await client
       .collection<UserInfo>("users")
-      .getOne(pb.authStore.record.id);
-    const book = await pb.collection<Book>("books").getOne(params.bookId);
+      .getOne(client.authStore.record.id);
+    const book = await client.collection<Book>("books").getOne(params.bookId);
 
-    const userBorrows = await pb.collection<Borrow>("borrows").getFullList({
+    const userBorrows = await client.collection<Borrow>("borrows").getFullList({
       filter: `user = "${user.id}" && status = "ACTIVE"`,
     });
 
@@ -43,7 +42,7 @@ const handler = async (req: NextRequest, context: Context) => {
       },
     };
 
-    const ruleEngine = new RuleEngineService(pbAdmin);
+    const ruleEngine = new RuleEngineService(clientAdmin);
     const result = await ruleEngine.execute("BEFORE_BORROW", initialContext);
 
     if (!result.allowed) {
@@ -62,8 +61,10 @@ const handler = async (req: NextRequest, context: Context) => {
     }
 
     // (Ideally in a transaction)
-    await pbAdmin.collection("books").update(book.id, { "availableCount-": 1 });
-    const borrowRecord = await pbAdmin.collection("borrows").create({
+    await clientAdmin
+      .collection("books")
+      .update(book.id, { "availableCount-": 1 });
+    const borrowRecord = await clientAdmin.collection("borrows").create({
       user: user.id,
       book: book.id,
       borrowDate: new Date().toISOString(),

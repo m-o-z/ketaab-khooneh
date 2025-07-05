@@ -1,16 +1,15 @@
 "use client";
-import React from "react";
-import { Box, Container, Flex, Stack } from "@mantine/core";
-import { Avatar, Divider } from "@tapsioss/react-components";
+import ConfirmationModal from "@/common/components/ConfirmationModal";
+import { useLogoutApi } from "@/hooks/auth";
 import { useGetProfile } from "@/hooks/profile";
-import pbClient from "@/client/pbClient";
+import { PocketBasePublicService } from "@/services/PocketBasePublicService";
+import { Box, Flex, Stack } from "@mantine/core";
+import { Avatar, Divider } from "@tapsioss/react-components";
 import {
   ArrowRightFromLine,
   ClockArrowCirclepath,
 } from "@tapsioss/react-icons";
 import tokens from "@tapsioss/theme/tokens";
-import ConfirmationModal from "@/common/components/ConfirmationModal";
-import { useLogoutApi } from "@/hooks/auth";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
@@ -28,7 +27,12 @@ const Page = () => {
           align="center"
           gap={10}
         >
-          <Avatar image={pbClient().files.getUrl(profile, profile.avatar)} />
+          <Avatar
+            image={PocketBasePublicService.Client().files.getURL(
+              profile,
+              profile.avatar,
+            )}
+          />
           <Stack gap={0}>
             <h2 style={{ margin: 0 }}>{profile.name}</h2>
             <p>{profile.email}</p>

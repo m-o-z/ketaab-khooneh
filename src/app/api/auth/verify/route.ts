@@ -1,34 +1,35 @@
 import { ApiHandler } from "@/@types/api";
-import pbClient, { pbAdminClient } from "@/client/pbClient";
-import { NextResponse } from "next/server";
-import { VerifyOTPRequestPayload } from "./verify.schema";
-import { withVerifyValidator } from "./validator";
 import { Context } from "@/@types/pocketbase";
-import setAccessToken from "@/utils/setAcessToken";
 import { isValidOtpForTestEmail } from "@/helpers/getTestUsers";
-import { RecordAuthResponse, RecordModel } from "pocketbase";
+import { PocketBaseService } from "@/services/PocketBaseService";
 import { UserInfo } from "@/types";
+import setAccessToken from "@/utils/setAcessToken";
+import { NextResponse } from "next/server";
+import { RecordAuthResponse, RecordModel } from "pocketbase";
+import { withVerifyValidator } from "./validator";
+import { VerifyOTPRequestPayload } from "./verify.schema";
 
 const verifyHandler: ApiHandler = async (req, context: Context) => {
-  const pbAdmin = await pbAdminClient();
-  const pb = await pbClient();
+  const instance = await PocketBaseService.GetInstance();
+  const adminClient = instance.admin;
+  const client = PocketBaseService.Client();
   const body = await req.json();
   const { otpId, password, httpOnly, email } = body as VerifyOTPRequestPayload;
   const result = await isValidOtpForTestEmail({
-    client: pbAdmin,
+    client: adminClient,
     email,
     otp: password,
   });
   let res: RecordAuthResponse<RecordModel> = null!;
   if (result) {
-    const testUser = await pbAdmin
+    const testUser = await adminClient
       .collection<UserInfo>("users")
       .getFirstListItem(`email="${email}"`);
-    res = await pbAdmin
+    res = await adminClient
       .collection("users")
       .authWithPassword(testUser.email, "random@12345");
   } else {
-    res = await pb.collection("users").authWithOTP(otpId, password);
+    res = await client.collection("users").authWithOTP(otpId, password);
   }
 
   const response = NextResponse.json({

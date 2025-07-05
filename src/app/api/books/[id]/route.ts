@@ -1,5 +1,4 @@
 import { Context } from "@/@types/pocketbase";
-import pbClient from "@/client/pbClient";
 import { withAuth } from "@/middlewares/withAuth";
 import { BookCoreSchema, BookDB, BookDTOSchema } from "@/schema/books";
 import { Book } from "@/types";

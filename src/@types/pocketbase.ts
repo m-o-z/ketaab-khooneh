@@ -1,7 +1,8 @@
-import type pbClient from "@/client/pbClient";
+import type Client from "pocketbase";
 
 export type Context = Record<string, any> & {
-  pb: ReturnType<typeof pbClient>;
+  pb: Client;
+  admin: Client;
   params: {
     [key in string]: any;
   };

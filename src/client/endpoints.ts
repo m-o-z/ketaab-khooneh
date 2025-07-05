@@ -1,21 +1,15 @@
 import { RequestOTPRequestPayload } from "@/app/api/auth/login/login.schema";
 import { VerifyOTPRequestPayload } from "@/app/api/auth/verify/verify.schema";
 import {
-  Author,
-  Book,
-  BookCategory,
-  Borrow,
-  ResponseWrap,
-  UserInfo,
-} from "./../types";
-import { api } from "./api";
-import { BorrowDetailsListDto } from "@/lib/dto/borrow";
-import {
   AuthorsListingRequestPayload,
   BookListingRequestPayload,
 } from "@/app/api/authors/route.schema";
-import { ApiPagedResponse, ApiResponse } from "@/utils/response";
+import { BorrowDetailsListDto } from "@/lib/dto/borrow";
+import { AuthorDTO } from "@/schema/authors";
 import { BookDTO } from "@/schema/books";
+import { ApiPagedResponse, ApiResponse } from "@/utils/response";
+import { Author, BookCategory, ResponseWrap, UserInfo } from "./../types";
+import { api } from "./api";
 
 // ===== Types =====
 
@@ -76,7 +70,7 @@ export const authors = {
     },
   ),
   getById: (authorId: string) =>
-    api.query<ResponseWrap<Book>>(() => `authors/${authorId}`, {
+    api.query<ResponseWrap<AuthorDTO>>(() => `authors/${authorId}`, {
       queryKey: () => ["authors", authorId] as const,
     }),
 };

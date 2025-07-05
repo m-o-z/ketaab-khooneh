@@ -7,7 +7,6 @@ import { Container, Stack } from "@mantine/core";
 import ErrorSection from "@/components/ErrorSection";
 import { Avatar } from "@tapsioss/react-components";
 import { capitalizeName } from "@/utils/string";
-import pbClient from "@/client/pbClient";
 
 const Page = () => {
   const { authorId } = useParams();
@@ -29,15 +28,10 @@ const Page = () => {
     if (author) {
       return (
         <>
-          {author.author_img && (
-            <Avatar
-              image={pbClient().files.getUrl(author, author.author_img)}
-              size="xxlg"
-              alt={author.name}
-            />
+          {author.authorImg && (
+            <Avatar image={author.authorImg} size="xxlg" alt={author.name} />
           )}
-          {capitalizeName(author.name) +
-            (author.nick_name ? ` (${author.nick_name})` : "")}
+          {capitalizeName(author.name) + author.name}
           {author.bio && <p>{author.bio}</p>}
         </>
       );

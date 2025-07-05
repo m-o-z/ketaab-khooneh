@@ -1,14 +1,18 @@
+import "server-only";
 import { ApiHandler } from "@/@types/api";
+import { Context } from "@/@types/pocketbase";
+import { PocketBaseService } from "@/services/PocketBaseService";
+import setAccessToken from "@/utils/setAcessToken";
 import { jwtDecode, JwtPayload } from "jwt-decode";
-import pbClient from "@/client/pbClient";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import Client from "pocketbase";
-import setAccessToken from "@/utils/setAcessToken";
+import type PocketBase from "pocketbase";
+
 const DAYS_TO_REFRESH = parseInt(
   process.env.NEXT_PUBLIC_DAYS_TO_REFRESH ?? "7",
   10,
 );
+
 const decodeToken = (tokenString: string) => {
   try {
     const decodedToken = jwtDecode(tokenString);
@@ -42,7 +46,7 @@ const getExpiringInDays = (jwtPayload: JwtPayload | null) => {
 
 type HandleAuthRefreshPayload = {
   tokenString: string;
-  client: Client;
+  client: PocketBase;
   response: NextResponse;
   request: NextRequest;
 };
@@ -89,8 +93,8 @@ const responseUnauthorized = async (request: NextRequest) => {
 };
 
 export const withAuth = (handler: ApiHandler) => {
-  return async function (req: NextRequest, context: any) {
-    const pb = pbClient();
+  return async function (req: NextRequest, context: Context) {
+    const pb = PocketBaseService.Client();
     try {
       const accessToken = (await cookies()).get("accessToken");
       if (!accessToken) {
@@ -106,6 +110,7 @@ export const withAuth = (handler: ApiHandler) => {
       }
 
       context.pb = pb;
+      context.admin = (await PocketBaseService.GetInstance()).admin;
       const response = await handler(req, context);
       if (response instanceof NextResponse) {
         await handleAuthRefresh({

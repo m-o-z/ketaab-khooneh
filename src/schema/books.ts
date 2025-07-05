@@ -1,4 +1,3 @@
-import pbClient from "@/client/pbClient";
 import { z } from "zod";
 import { AuthorDTO, AuthorDTOSchema } from "./authors";
 import {
@@ -7,6 +6,8 @@ import {
   BookWorkDBSchema,
 } from "./bookWorks";
 import { CategoryDTO, CategoryDTOSchema } from "./categories";
+import PocketBasePublicService from "@/services/PocketBasePublicService";
+import log from "@/utils/log";
 
 export const BookDBSchema = z.object({
   id: z.string(),
@@ -63,7 +64,7 @@ export const BookCoreSchema = BookDBSchema.transform((data) => {
     }
   }
   const mappedCoverImage = coverImage.map((img) =>
-    pbClient().files.getURL(data, img),
+    PocketBasePublicService.Client().files.getURL(data, img),
   );
 
   return {
@@ -98,6 +99,8 @@ export const BookBriefDTOSchema = z.custom<BookCore>().transform((data) => {
 
   let authors: AuthorDTO[] = [];
   let categories: CategoryDTO[] = [];
+  console.log("here 2");
+  log({ data });
   if (bookWork) {
     authors = AuthorDTOSchema.array().parse(bookWork.authors);
     categories = CategoryDTOSchema.array().parse(bookWork.categories);

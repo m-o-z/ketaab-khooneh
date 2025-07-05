@@ -1,45 +1,85 @@
 import { z } from "zod";
+import type { BookWorkDB } from "./bookWorks"; // Use 'import type' for the type
+import { BookWorkDBSchema } from "./bookWorks"; // Regular import for the schema value
 import { FlexibleDateTime } from "./common/date";
-import pbClient from "@/client/pbClient";
+import PocketBasePublicService from "@/services/PocketBasePublicService";
 
+// For query params - this schema is fine as is.
 export const categoriesSchema = z.object({
-  page: z.number({ coerce: true }).default(1),
-  perPage: z.number({ coerce: true }).default(20),
-  skipTotal: z.boolean({ coerce: true }).default(true),
+  page: z.coerce.number().default(1),
+  perPage: z.coerce.number().default(20),
+  skipTotal: z.coerce.boolean().default(true),
 });
-
 export type CategoriesSchema = z.infer<typeof categoriesSchema>;
 
-export const CategoryDBSchema = z.object({
+// --- Main Schemas ---
+
+// 1. Define the TypeScript types first to break the dependency cycle.
+export type CategoryDB = {
+  id: string;
+  collectionId: string;
+  collectionName: string;
+  label: string;
+  slug: string;
+  category_icon: string | null;
+  created: Date | string;
+  updated: Date | string;
+  expand?: {
+    // This is the reverse relation from BookWorks back to Category
+    "book_works(categories)"?: BookWorkDB[];
+  };
+};
+
+export type CategoryCore = {
+  id: string;
+  label: string;
+  slug: string;
+  categoryIcon: string;
+};
+
+// 2. Define the Zod schemas and explicitly annotate them.
+export const CategoryDBSchema: z.ZodType<CategoryDB> = z.object({
   id: z.string(),
   collectionId: z.string(),
   collectionName: z.string(),
-  label: z.string().min(1), // Assuming min 1 character for label, as max/min are 0 in provided data which usually means no specific length constraint other than being present
-  slug: z.string().min(1), // Assuming min 1 character for slug
-  category_icon: z.string().nullable(), // File field, typically a string representing the filename/URL
+  label: z.string().min(1),
+  slug: z.string().min(1),
+  category_icon: z.string().nullable(),
   created: FlexibleDateTime,
   updated: FlexibleDateTime,
+  expand: z
+    .object({
+      // 3. Use z.lazy for the circular reference at runtime.
+      "book_works(categories)": z
+        .lazy(() => z.array(BookWorkDBSchema))
+        .optional(),
+    })
+    .optional(),
 });
 
-export type CategoryDB = z.infer<typeof CategoryDBSchema>;
-
-export const CategoryCoreSchema = CategoryDBSchema.transform((data) => {
+export const CategoryCoreSchema: z.ZodType<
+  CategoryCore,
+  z.ZodTypeDef,
+  CategoryDB
+> = CategoryDBSchema.transform((data) => {
   let categoryIcon = "/public/default/category-icon.png";
   if (data.category_icon) {
-    categoryIcon = pbClient().files.getURL(data, data.category_icon);
+    categoryIcon = PocketBasePublicService.Client().files.getURL(
+      data,
+      data.category_icon,
+    );
   }
   return {
     id: data.id,
     label: data.label,
-    slug: data.label,
+    slug: data.slug, // Kept your original logic where slug is from the DB
     categoryIcon,
   };
 });
 
-export type CategoryCore = z.infer<typeof CategoryCoreSchema>;
-
+// 4. Refine DTOs to be more direct and idiomatic.
+// If the DTO is the same as the Core object, just assign the schema directly.
 export const CategoryDTOSchema = z
   .custom<CategoryCore>()
   .transform((data) => data);
-
 export type CategoryDTO = z.infer<typeof CategoryDTOSchema>;

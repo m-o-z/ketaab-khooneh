@@ -5,14 +5,7 @@ import ErrorSection from "@/components/ErrorSection";
 import NotFound from "@/components/NotFound";
 import UserPreview from "@/components/user/UserPreview";
 import { useBooksGetApi } from "@/hooks/books";
-import {
-  Alert,
-  Container,
-  Flex,
-  Stack,
-  Text,
-  useMantineTheme,
-} from "@mantine/core";
+import { Alert, Flex, Stack, Text, useMantineTheme } from "@mantine/core";
 import {
   IconShoppingCart,
   IconShoppingCartExclamation,

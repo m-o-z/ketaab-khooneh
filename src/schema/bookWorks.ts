@@ -1,12 +1,36 @@
+// ./src/schema/bookWorks.ts
 import { z } from "zod";
-import { AuthorCore, AuthorCoreSchema, AuthorDBSchema } from "./authors";
+import type { AuthorCore, AuthorDB } from "./authors"; // Use 'import type'
+import { AuthorCoreSchema, AuthorDBSchema } from "./authors"; // Regular import for schema values
 import {
   CategoryCore,
   CategoryCoreSchema,
   CategoryDBSchema,
 } from "./categories";
 
-export const BookWorkDBSchema = z.object({
+// 1. Define the TypeScript types first.
+export type BookWorkDB = {
+  id: string;
+  collectionId: string;
+  collectionName: string;
+  title: string;
+  categories: string[];
+  authors: string[];
+  expand?: {
+    authors?: z.infer<typeof AuthorDBSchema>[]; // Reference the TYPE here
+    categories?: z.infer<typeof CategoryDBSchema>[];
+  };
+};
+
+export type BookWorkCore = {
+  id: string;
+  title: string;
+  authors: AuthorCore[] | null;
+  categories: CategoryCore[] | null;
+};
+
+// 2. Define the Zod schemas with explicit type annotations.
+export const BookWorkDBSchema: z.ZodType<BookWorkDB> = z.object({
   id: z.string(),
   collectionId: z.string(),
   collectionName: z.string(),
@@ -15,34 +39,37 @@ export const BookWorkDBSchema = z.object({
   authors: z.array(z.string()),
   expand: z
     .object({
-      authors: z.array(AuthorDBSchema).default([]), // TODO: define authors schema
-      categories: z.array(CategoryDBSchema).default([]), // TODO: define authors schema
+      // 3. Use z.lazy with the SCHEMA const here.
+      authors: z.lazy(() => z.array(AuthorDBSchema).default([])),
+      categories: z.lazy(() => z.array(CategoryDBSchema).default([])),
     })
     .optional(),
 });
 
-export type BookWorkDB = z.infer<typeof BookWorkDBSchema>;
-
-export const BookWorkCoreSchema = BookWorkDBSchema.transform((data) => {
+export const BookWorkCoreSchema: z.ZodType<
+  BookWorkCore,
+  z.ZodTypeDef,
+  BookWorkDB
+> = BookWorkDBSchema.transform((data) => {
   const { id, title, expand } = data;
-  // TODO: fix authors
-  let authors: null | AuthorCore[] = null;
-  let categories: null | CategoryCore[] = null;
+  let authors: AuthorCore[] | null = null;
+  let categories: CategoryCore[] | null = null;
 
-  if (expand) {
-    if ("authors" in expand) {
-      const result = z.array(AuthorCoreSchema).safeParse(expand.authors);
-      if (result.success) {
-        authors = result.data;
-      }
-    }
-    if ("categories" in expand) {
-      const result = z.array(CategoryCoreSchema).safeParse(expand.categories);
-      if (result.success) {
-        categories = result.data;
-      }
+  if (expand?.authors) {
+    // Since AuthorCoreSchema is also a transform, we parse the raw DB data
+    const result = z.array(AuthorCoreSchema).safeParse(expand.authors);
+    if (result.success) {
+      authors = result.data;
     }
   }
+
+  if (expand?.categories) {
+    const result = z.array(CategoryCoreSchema).safeParse(expand.categories);
+    if (result.success) {
+      categories = result.data;
+    }
+  }
+
   return {
     id,
     title,
@@ -50,5 +77,3 @@ export const BookWorkCoreSchema = BookWorkDBSchema.transform((data) => {
     categories,
   };
 });
-
-export type BookWorkCore = z.infer<typeof BookWorkCoreSchema>;

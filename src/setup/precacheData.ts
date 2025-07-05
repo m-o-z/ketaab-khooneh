@@ -1,12 +1,12 @@
-import { pbAdminClient } from "@/client/pbClient";
 import Redis from "@/lib/redis";
+import { PocketBaseService } from "@/services/PocketBaseService";
 import Client from "pocketbase";
 type TRedis = typeof Redis;
 export const handler = async () => {
   try {
-    const client = await pbAdminClient();
+    const adminClient = (await PocketBaseService.GetInstance()).admin;
     await Redis.flushall();
-    handleAddingTestUsers(client, Redis);
+    handleAddingTestUsers(adminClient, Redis);
   } catch (error) {
     console.log({ error });
   }
