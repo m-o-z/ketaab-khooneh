@@ -1,89 +1,134 @@
+import PocketBasePublicService from "@/services/PocketBasePublicService";
 import { z } from "zod";
-import { AuthorDTO, AuthorDTOSchema } from "./authors";
+import {
+  AuthorBriefDTO,
+  AuthorBriefDTOSchema,
+  AuthorDTO,
+  AuthorDTOSchema,
+} from "./authors";
 import {
   BookWorkCore,
   BookWorkCoreSchema,
+  BookWorkDB,
   BookWorkDBSchema,
 } from "./bookWorks";
 import { CategoryDTO, CategoryDTOSchema } from "./categories";
-import PocketBasePublicService from "@/services/PocketBasePublicService";
-import log from "@/utils/log";
 
-export const BookDBSchema = z.object({
+// 1. Correct the BookDB type to match the schema's use of .default()
+export type BookDB = {
+  id: string;
+  bookWork: string;
+  collectionId: string;
+  collectionName: string;
+  edition?: string;
+  coverImage?: string[];
+  status:
+    | "UNAVAILABLE"
+    | "AVAILABLE"
+    | "BORROWED"
+    | "RESERVED_BY_OTHERS"
+    | "RESERVED_BY_ME";
+  totalCount: number;
+  availableCount: number;
+  releaseYear: string;
+  language: "ENGLISH" | "PERSIAN";
+  subTitle: string;
+  description: string;
+  expand?: {
+    bookWork?: BookWorkDB;
+  };
+};
+
+export type BookCore = {
+  id: string;
+  title: string;
+  subTitle: string;
+  description: string;
+  status:
+    | "UNAVAILABLE"
+    | "AVAILABLE"
+    | "BORROWED"
+    | "RESERVED_BY_OTHERS"
+    | "RESERVED_BY_ME";
+  totalCount: number;
+  availableCount: number;
+  releaseYear: string;
+  edition?: string;
+  coverImage?: string[];
+  language: "ENGLISH" | "PERSIAN";
+  bookWork: BookWorkCore | null;
+};
+
+// 2. The Zod schema definitions remain the same
+export const BookDBSchema: z.ZodType<BookDB> = z.object({
   id: z.string(),
   bookWork: z.string(),
   collectionId: z.string(),
   collectionName: z.string(),
   edition: z.string().default("N/A"),
-  coverImage: z.array(z.string()).default([]), // Handle missing images
-  status: z
-    .enum([
-      "UNAVAILABLE",
-      "AVAILABLE",
-      "BORROWED",
-      "RESERVED_BY_OTHERS",
-      "RESERVED_BY_ME",
-    ])
-    .default("UNAVAILABLE"),
-  totalCount: z.number().default(0),
-  availableCount: z.number().default(0),
+  coverImage: z.array(z.string()).default([]),
+  status: z.enum([
+    "UNAVAILABLE",
+    "AVAILABLE",
+    "BORROWED",
+    "RESERVED_BY_OTHERS",
+    "RESERVED_BY_ME",
+  ]),
+  totalCount: z.number(),
+  availableCount: z.number(),
   releaseYear: z.string(),
-  language: z.enum(["ENGLISH", "PERSIAN"]).default("ENGLISH"),
+  language: z.enum(["ENGLISH", "PERSIAN"]),
   subTitle: z.string(),
   description: z.string(),
   expand: z
     .object({
-      bookWork: BookWorkDBSchema.optional(),
+      bookWork: z.lazy(() => BookWorkDBSchema).optional(),
     })
     .optional(),
 });
 
-export type BookDB = z.infer<typeof BookDBSchema>;
+export const BookCoreSchema: z.ZodType<BookCore, z.ZodTypeDef, BookDB> =
+  BookDBSchema.transform((data) => {
+    const {
+      id,
+      subTitle,
+      description,
+      status,
+      coverImage,
+      totalCount,
+      availableCount,
+      releaseYear,
+      edition,
+      language,
+      expand,
+    } = data;
 
-export const BookCoreSchema = BookDBSchema.transform((data) => {
-  console.log("here1");
-  const {
-    id,
-    subTitle,
-    description,
-    status,
-    coverImage,
-    totalCount,
-    availableCount,
-    releaseYear,
-    edition,
-    language,
-    expand,
-  } = data;
-
-  let bookWork: null | BookWorkCore = null;
-  if (expand && "bookWork" in expand) {
-    const result = BookWorkCoreSchema.safeParse(expand.bookWork);
-    if (result.success) {
-      bookWork = result.data;
+    let bookWork: null | BookWorkCore = null;
+    if (expand?.bookWork) {
+      const result = BookWorkCoreSchema.safeParse(expand.bookWork);
+      if (result.success) {
+        bookWork = result.data;
+      }
     }
-  }
-  const mappedCoverImage = coverImage.map((img) =>
-    PocketBasePublicService.Client().files.getURL(data, img),
-  );
+    const mappedCoverImage = coverImage!.map((img) =>
+      PocketBasePublicService.Client().files.getURL(data, img),
+    );
 
-  return {
-    id,
-    title: bookWork ? bookWork.title : "",
-    subTitle,
-    description,
-    status,
-    coverImage: mappedCoverImage,
-    totalCount,
-    availableCount,
-    releaseYear,
-    edition,
-    language,
-    bookWork,
-  };
-});
-
-export type BookCore = z.infer<typeof BookCoreSchema>;
+    return {
+      id,
+      title: bookWork ? bookWork.title : "",
+      subTitle,
+      description,
+      status,
+      coverImage: mappedCoverImage,
+      totalCount,
+      availableCount,
+      releaseYear,
+      edition,
+      language,
+      bookWork,
+    };
+  });
 
 export const BookBriefDTOSchema = z.custom<BookCore>().transform((data) => {
   const {
@@ -97,12 +142,12 @@ export const BookBriefDTOSchema = z.custom<BookCore>().transform((data) => {
     coverImage,
   } = data;
 
-  let authors: AuthorDTO[] = [];
-  let categories: CategoryDTO[] = [];
-  console.log("here 2");
-  log({ data });
-  if (bookWork) {
-    authors = AuthorDTOSchema.array().parse(bookWork.authors);
+  let authors: AuthorBriefDTO[];
+  let categories: CategoryDTO[];
+  if (bookWork?.authors) {
+    authors = AuthorBriefDTOSchema.array().parse(bookWork.authors);
+  }
+  if (bookWork?.categories) {
     categories = CategoryDTOSchema.array().parse(bookWork.categories);
   }
 
@@ -112,8 +157,8 @@ export const BookBriefDTOSchema = z.custom<BookCore>().transform((data) => {
     subTitle,
     availableCount,
     totalCount,
-    coverImage: coverImage.length
-      ? coverImage[0]
+    coverImage: coverImage!.length
+      ? coverImage![0]
       : "/public/default/book-cover.png",
     status,
     authors,
@@ -137,27 +182,24 @@ export const BookDTOSchema = z.custom<BookCore>().transform((data) => {
     language,
     releaseYear,
   } = data;
-  let authors: AuthorDTO[] = [];
-  let categories: CategoryDTO[] = [];
+  let authors: AuthorDTO[] | null = null;
+  let categories: CategoryDTO[] | null = null;
 
   if (bookWork?.authors) {
     const result = AuthorDTOSchema.array().safeParse(bookWork.authors);
-    if (result.success) {
-      authors = result.data;
-    }
+    if (result.success) authors = result.data;
   }
 
   if (bookWork?.categories) {
     const result = CategoryDTOSchema.array().safeParse(bookWork.categories);
-    if (result.success) {
-      categories = result.data;
-    }
+    if (result.success) categories = result.data;
   }
+
   return {
     id,
-    coverImage: coverImage.length
+    coverImage: coverImage!.length
       ? coverImage
-      : "/public/default/book-cover.png",
+      : ["/public/default/book-cover.png"],
     title,
     subTitle,
     description,
@@ -175,6 +217,5 @@ export type BookDTO = z.infer<typeof BookDTOSchema>;
 
 export const parseBooksQuery = (books: any) => {
   const booksCore = BookCoreSchema.array().parse(books);
-
   return booksCore;
 };

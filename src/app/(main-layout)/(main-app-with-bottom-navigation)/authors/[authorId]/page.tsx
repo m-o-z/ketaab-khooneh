@@ -1,12 +1,11 @@
 "use client";
-import React from "react";
-import { useParams } from "next/navigation";
-import { useAuthorGetApi } from "@/hooks/authors";
 import AuthorPreview from "@/components/author/AuthorPreview";
-import { Container, Stack } from "@mantine/core";
 import ErrorSection from "@/components/ErrorSection";
-import { Avatar } from "@tapsioss/react-components";
+import { useAuthorGetApi } from "@/hooks/authors";
 import { capitalizeName } from "@/utils/string";
+import { Stack } from "@mantine/core";
+import { Avatar } from "@tapsioss/react-components";
+import { useParams } from "next/navigation";
 
 const Page = () => {
   const { authorId } = useParams();
@@ -31,7 +30,7 @@ const Page = () => {
           {author.authorImg && (
             <Avatar image={author.authorImg} size="xxlg" alt={author.name} />
           )}
-          {capitalizeName(author.name) + author.name}
+          {capitalizeName(author.name)}
           {author.bio && <p>{author.bio}</p>}
         </>
       );

@@ -40,8 +40,8 @@ export const BookWorkDBSchema: z.ZodType<BookWorkDB> = z.object({
   expand: z
     .object({
       // 3. Use z.lazy with the SCHEMA const here.
-      authors: z.lazy(() => z.array(AuthorDBSchema).default([])),
-      categories: z.lazy(() => z.array(CategoryDBSchema).default([])),
+      authors: z.lazy(() => z.array(AuthorDBSchema)).optional(),
+      categories: z.lazy(() => z.array(CategoryDBSchema)).optional(),
     })
     .optional(),
 });
@@ -52,22 +52,16 @@ export const BookWorkCoreSchema: z.ZodType<
   BookWorkDB
 > = BookWorkDBSchema.transform((data) => {
   const { id, title, expand } = data;
-  let authors: AuthorCore[] | null = null;
-  let categories: CategoryCore[] | null = null;
+  let authors: AuthorCore[] = null!;
+  let categories: CategoryCore[] = null!;
 
   if (expand?.authors) {
     // Since AuthorCoreSchema is also a transform, we parse the raw DB data
-    const result = z.array(AuthorCoreSchema).safeParse(expand.authors);
-    if (result.success) {
-      authors = result.data;
-    }
+    authors = z.array(AuthorCoreSchema).parse(expand.authors);
   }
 
   if (expand?.categories) {
-    const result = z.array(CategoryCoreSchema).safeParse(expand.categories);
-    if (result.success) {
-      categories = result.data;
-    }
+    categories = z.array(CategoryCoreSchema).parse(expand.categories);
   }
 
   return {

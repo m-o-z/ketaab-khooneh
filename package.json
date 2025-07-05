@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "BUILD_ENV=local next dev --turbo",
+    "dev": "BUILD_ENV=local next dev",
     "dev-debug": "NODE_OPTIONS='--inspect' npm run dev",
     "build": "next build",
     "start": "next start",

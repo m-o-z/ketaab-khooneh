@@ -1,6 +1,11 @@
 import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
-import { AuthorDB } from "@/schema/authors";
+import {
+  AuthorCoreSchema,
+  AuthorDB,
+  AuthorDBSchema,
+  AuthorDTOSchema,
+} from "@/schema/authors";
 import { Author } from "@/types";
 import { errorBadRequest, errorInvalidParams } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
@@ -18,7 +23,10 @@ const handler = async (req: NextRequest, context: Context) => {
         expand: "books,categories",
       });
 
-    return NextResponse.json(createResponsePayload(result), {
+    const authorCore = AuthorCoreSchema.parse(result);
+    const authorDTO = AuthorDTOSchema.parse(authorCore);
+
+    return NextResponse.json(createResponsePayload(authorDTO), {
       status: 200,
     });
   } catch (err) {

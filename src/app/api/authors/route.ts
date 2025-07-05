@@ -1,8 +1,13 @@
 import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
+import {
+  AuthorBriefDTOSchema,
+  AuthorCoreSchema,
+  AuthorDB,
+} from "@/schema/authors";
 import { Author } from "@/types";
 import { errorBadRequest } from "@/utils/errors/errors";
-import { createResponsePayload } from "@/utils/response";
+import { createPagedResponsePayload } from "@/utils/response";
 import { NextRequest, NextResponse } from "next/server";
 import { AuthorsListingRequestSchema } from "./route.schema";
 
@@ -17,7 +22,7 @@ const handler = async (req: NextRequest, context: Context) => {
       AuthorsListingRequestSchema.parse(searchParams);
 
     const result = await context.pb
-      .collection("authors")
+      .collection<AuthorDB>("authors")
       .getList<Author>(page, perPage, {
         filter,
         page,
@@ -25,7 +30,10 @@ const handler = async (req: NextRequest, context: Context) => {
         expand: "books,categories",
       });
 
-    return NextResponse.json(createResponsePayload(result.items), {
+    const authorsCore = AuthorCoreSchema.array().parse(result.items);
+    const authorsDTO = AuthorBriefDTOSchema.array().parse(authorsCore);
+
+    return NextResponse.json(createPagedResponsePayload(authorsDTO, result), {
       status: 200,
     });
   } catch (err) {

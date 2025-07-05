@@ -1,5 +1,6 @@
 "use client";
-import { Container, Stack } from "@mantine/core";
+import { useGetProfile } from "@/hooks/profile";
+import { Stack } from "@mantine/core";
 import {
   Button,
   FileInput,
@@ -8,7 +9,6 @@ import {
 } from "@tapsioss/react-components";
 import { ArrowRight } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
-import { useGetProfile } from "@/hooks/profile";
 
 const Page = () => {
   const router = useRouter();

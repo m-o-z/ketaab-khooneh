@@ -7,6 +7,7 @@ import { jwtDecode, JwtPayload } from "jwt-decode";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import type PocketBase from "pocketbase";
+import { UserCoreSchema, UserDBSchema } from "@/schema/users";
 
 const DAYS_TO_REFRESH = parseInt(
   process.env.NEXT_PUBLIC_DAYS_TO_REFRESH ?? "7",
@@ -103,7 +104,15 @@ export const withAuth = (handler: ApiHandler) => {
 
       pb.authStore.save(accessToken.value);
       await pb.collection("users").authRefresh();
-      context["user"] = pb.authStore.record;
+      const record = pb.authStore.record;
+
+      try {
+        context["user_db"] = UserDBSchema.parse(record);
+        context["user"] = UserCoreSchema.parse(record);
+      } catch (e) {
+        debugger;
+        return responseUnauthorized(req);
+      }
 
       if (!pb.authStore.isValid) {
         return responseUnauthorized(req);
@@ -123,7 +132,6 @@ export const withAuth = (handler: ApiHandler) => {
       return response;
     } catch (e) {
       console.log({ e });
-
       return responseUnauthorized(req);
     }
   };

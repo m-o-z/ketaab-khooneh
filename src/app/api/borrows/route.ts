@@ -1,16 +1,14 @@
-import {
-  BorrowDetailsDtoSchema,
-  BorrowDetailsListDtoSchema,
-} from "@/lib/dto/borrow";
+import { AuthorizedContext } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
-import { Borrow } from "@/types";
+import { BorrowBriefDTOSchema } from "@/schema/borrows";
+import BorrowService from "@/services/BorrowService";
 import { errorBadRequest } from "@/utils/errors/errors";
-import log from "@/utils/log";
-import { createResponsePayload } from "@/utils/response";
-import { NextRequest } from "next/server";
+import { handleErrors } from "@/utils/handleErrors";
+import { createPagedResponsePayload } from "@/utils/response";
+import { NextRequest, NextResponse } from "next/server";
 import Client from "pocketbase";
 
-const handler = async (req: NextRequest, context: Context) => {
+const handler = async (req: NextRequest, context: AuthorizedContext) => {
   const page = 0;
   const perPage = 10;
 
@@ -18,25 +16,23 @@ const handler = async (req: NextRequest, context: Context) => {
   if (!pb || !pb.authStore.record?.id) {
     return errorBadRequest();
   }
-  const userId = pb.authStore.record?.id;
+  const userId = context.user.id;
 
   try {
-    const allRecords = await pb
-      .collection<Borrow>("borrows")
-      .getList(page, perPage, {
-        filter: `user = "${userId}"`,
-        expand: "user,book",
-      });
+    const { borrowsCore, meta } = await BorrowService.getUserActiveBorrows(
+      userId,
+      {
+        page,
+        perPage,
+      },
+    );
+    const userBorrowsDTO = BorrowBriefDTOSchema.array().parse(borrowsCore);
 
-    const result = BorrowDetailsListDtoSchema.safeParse(allRecords.items);
-
-    if (result.success) {
-      return Response.json(createResponsePayload(result.data));
-    }
-    return errorBadRequest();
+    return NextResponse.json(createPagedResponsePayload(userBorrowsDTO, meta), {
+      status: 200,
+    });
   } catch (err) {
-    console.log({ err });
-    return errorBadRequest();
+    return handleErrors(err);
   }
 };
 

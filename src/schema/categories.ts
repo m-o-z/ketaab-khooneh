@@ -12,9 +12,6 @@ export const categoriesSchema = z.object({
 });
 export type CategoriesSchema = z.infer<typeof categoriesSchema>;
 
-// --- Main Schemas ---
-
-// 1. Define the TypeScript types first to break the dependency cycle.
 export type CategoryDB = {
   id: string;
   collectionId: string;
@@ -25,8 +22,7 @@ export type CategoryDB = {
   created: Date | string;
   updated: Date | string;
   expand?: {
-    // This is the reverse relation from BookWorks back to Category
-    "book_works(categories)"?: BookWorkDB[];
+    book_works_via_categories?: BookWorkDB[];
   };
 };
 
@@ -50,7 +46,7 @@ export const CategoryDBSchema: z.ZodType<CategoryDB> = z.object({
   expand: z
     .object({
       // 3. Use z.lazy for the circular reference at runtime.
-      "book_works(categories)": z
+      book_works_via_categories: z
         .lazy(() => z.array(BookWorkDBSchema))
         .optional(),
     })

@@ -1,5 +1,6 @@
 import { ListResult } from "pocketbase";
 import { PageMeta } from "./pagination";
+
 export type ApiResponse<T> = {
   status: string;
   data: T;
@@ -51,4 +52,13 @@ export const createPagedResponsePayload = <T>(
   }
 
   return result;
+};
+
+export type ApiErrorResponse = {
+  status: "ERR";
+  type: "validation" | "internal";
+  errors?:
+    | Record<string, string>
+    | Record<string, string[] | undefined | string>;
+  message: string;
 };

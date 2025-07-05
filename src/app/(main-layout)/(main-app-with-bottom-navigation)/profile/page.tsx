@@ -2,7 +2,7 @@
 import ConfirmationModal from "@/common/components/ConfirmationModal";
 import { useLogoutApi } from "@/hooks/auth";
 import { useGetProfile } from "@/hooks/profile";
-import { PocketBasePublicService } from "@/services/PocketBasePublicService";
+import PocketBasePublicService from "@/services/PocketBasePublicService";
 import { Box, Flex, Stack } from "@mantine/core";
 import { Avatar, Divider } from "@tapsioss/react-components";
 import {
@@ -27,12 +27,7 @@ const Page = () => {
           align="center"
           gap={10}
         >
-          <Avatar
-            image={PocketBasePublicService.Client().files.getURL(
-              profile,
-              profile.avatar,
-            )}
-          />
+          <Avatar image={profile.avatar} />
           <Stack gap={0}>
             <h2 style={{ margin: 0 }}>{profile.name}</h2>
             <p>{profile.email}</p>
@@ -43,7 +38,6 @@ const Page = () => {
 
   return (
     <>
-      test
       <Stack>
         <h1>پروفایل</h1>
         {renderProfileHeader()}

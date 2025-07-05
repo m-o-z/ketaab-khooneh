@@ -10,6 +10,7 @@ import { BookDTO } from "@/schema/books";
 import { ApiPagedResponse, ApiResponse } from "@/utils/response";
 import { Author, BookCategory, ResponseWrap, UserInfo } from "./../types";
 import { api } from "./api";
+import { BorrowBriefDTO } from "@/schema/borrows";
 
 // ===== Types =====
 
@@ -96,7 +97,7 @@ export const auth = {
 };
 
 export const borrows = {
-  getAll: api.query<ResponseWrap<BorrowDetailsListDto>>("borrows"),
+  getAll: api.query<ApiPagedResponse<BorrowBriefDTO>>("borrows"),
   reserve: (bookId: string) =>
     api.mutation(() => `/borrow/${bookId}`, {
       method: "POST",

@@ -90,8 +90,8 @@ export const AuthorDTOSchema = z.custom<AuthorCore>().transform((data) => data);
 export type AuthorDTO = z.infer<typeof AuthorDTOSchema>;
 
 export const AuthorBriefDTOSchema = z.custom<AuthorCore>().transform((data) => {
-  const { id, name, email, authorImg: img } = data;
-  return { id, name, email, img };
+  const { created, updated, bio, ...response } = data;
+  return response;
 });
 
 export type AuthorBriefDTO = z.infer<typeof AuthorBriefDTOSchema>;

@@ -1,25 +1,10 @@
 import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
-import { Book } from "@/types";
+import { BookBriefDTOSchema, BookDB, parseBooksQuery } from "@/schema/books";
 import { errorBadRequest } from "@/utils/errors/errors";
-import {
-  createPagedResponsePayload,
-  createResponsePayload,
-} from "@/utils/response";
+import { createPagedResponsePayload } from "@/utils/response";
 import { NextRequest } from "next/server";
 import { BookListingRequestSchema } from "../authors/route.schema";
-import {
-  BookBriefDTOSchema,
-  BookDB,
-  BookDBSchema,
-  parseBooksQuery,
-} from "@/schema/books";
-import { extractPagedMeta } from "@/utils/pagination";
-import log from "@/utils/log";
-
-type ResponseError = {
-  message: string;
-};
 
 const handler = async (req: NextRequest, context: Context) => {
   try {
@@ -41,8 +26,6 @@ const handler = async (req: NextRequest, context: Context) => {
       status: 200,
     });
   } catch (err) {
-    debugger;
-    console.log({ err });
     return errorBadRequest();
   }
 };
