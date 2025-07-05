@@ -3,7 +3,7 @@ import { Avatar } from "@tapsioss/react-components";
 import Link from "next/link";
 
 type Props = {
-  imageUrl?: string;
+  imageUrl: string | null;
   title?: string;
   subtitle?: string;
   url?: string;

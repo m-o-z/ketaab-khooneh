@@ -1,6 +1,6 @@
 "use client";
 import { useLoginApi } from "@/hooks/auth";
-import { emailSchema } from "@/schema/email";
+import { emailSchema } from "@/schema/common/email";
 import validateEmail from "@/utils/validateEmail";
 import { Stack } from "@mantine/core";
 import {

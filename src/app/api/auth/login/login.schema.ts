@@ -1,4 +1,4 @@
-import { emailSchema } from "@/schema/email";
+import { emailSchema } from "@/schema/common/email";
 import { z } from "zod";
 
 export const RequestOTPRequestSchema = z.object({

@@ -13,10 +13,10 @@ export default function log(obj: any, indent = 0): void {
         console.log(`${padding}${key}:`);
         log(value, indent + 1);
       } else {
-        console.log(`${padding}${key}: ${value}`);
+        console.log(`${padding}${key}: ${value} (T: ${typeof value})`);
       }
     }
   } else {
-    console.log(`${padding}${obj}`);
+    console.log(`${padding}${obj} (T: ${typeof obj})`);
   }
 }

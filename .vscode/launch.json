@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: Debug Server-side",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm", // Use "yarn" or "pnpm" if that's your package manager
+      "runtimeArgs": ["run", "dev"], // This runs the "dev" script from your package.json
+      "skipFiles": ["<node_internals>/**", "node_modules/**"], // Skip internal Node.js and third-party modules
+      "console": "integratedTerminal", // Shows Next.js output in VS Code's integrated terminal
+      "port": 9229, // Default Node.js inspect port
+      "autoAttachChildProcesses": true, // Crucial for Next.js to debug API routes and other server processes
+      "env": {
+        "NODE_OPTIONS": "--inspect=localhost:9229" // Ensures Node.js starts in inspect mode
+      }
+    }
+  ]
+}

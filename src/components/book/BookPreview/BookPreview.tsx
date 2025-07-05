@@ -1,18 +1,8 @@
 "use client";
-import pbClient from "@/client/pbClient";
 import AuthorPreview from "@/components/author/AuthorPreview";
-import type { Book } from "@/types";
+import { BookDTO } from "@/schema/books";
 import { capitalizeName } from "@/utils/string";
-import {
-  Box,
-  Container,
-  Flex,
-  Image,
-  Paper,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Box, Flex, Image, Paper, Stack, Text, Title } from "@mantine/core";
 import {
   BadgeWrapper,
   BadgeWrapperSlots,
@@ -21,7 +11,7 @@ import {
 import BookStatus from "../BookStatus";
 
 type Props = {
-  book: Book;
+  book: BookDTO;
   hideBottomTexts?: boolean;
   onClick?: () => void;
   height?: string;
@@ -46,8 +36,8 @@ const BookPreview = ({
         </Box>
         <Box pos="relative">
           <Image
-            src={pbClient().files.getUrl(book, book.coverImage)}
-            alt={`${book.bookWork.title} cover`}
+            src={book.coverImage}
+            alt={`${book.title} cover`}
             width={width}
             height={height}
             fit={"cover"}
@@ -69,14 +59,12 @@ const BookPreview = ({
           c="gray.4"
           lineClamp={2}
         >
-          {book.bookWork.title}
+          {book.title}
         </Title>
       )}
       {!hideBottomTexts && (
         <Text truncate="end" size="xs" c="dimmed">
-          {book.expand.bookWork.expand.authors
-            .map((author) => capitalizeName(author.name))
-            .join(", ")}
+          {book.authors.map((author) => capitalizeName(author.name)).join(", ")}
         </Text>
       )}
     </Paper>
@@ -117,8 +105,8 @@ BookPreview.List = function List({ book }: Partial<Props>) {
           </Box>
           <Box pos="relative">
             <Image
-              src={pbClient().files.getUrl(book, book.coverImage)}
-              alt={`${book.expand.bookWork.title} cover`}
+              src={book.coverImage}
+              alt={`${book.title} cover`}
               fit="cover"
               style={{ borderRadius: "0.5rem" }}
               width="100%"
@@ -135,10 +123,10 @@ BookPreview.List = function List({ book }: Partial<Props>) {
             width: `calc(100%-${listWidth}px)`,
           }}
         >
-          کتاب {book.expand.bookWork.title}
+          کتاب {book.title}
         </b>
         <Flex wrap="wrap" gap="xs">
-          {book.expand.bookWork.expand.authors.map((author) => (
+          {book.authors.map((author) => (
             <AuthorPreview.Compact key={author.id} author={author} />
           ))}
         </Flex>

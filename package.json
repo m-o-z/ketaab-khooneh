@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "BUILD_ENV=local next dev --turbo",
+    "dev-debug": "NODE_OPTIONS='--inspect' npm run dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

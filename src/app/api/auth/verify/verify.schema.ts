@@ -1,5 +1,5 @@
-import { emailSchema } from "@/schema/email";
-import { passwordSchema } from "@/schema/passwordSchema";
+import { emailSchema } from "@/schema/common/email";
+import { passwordSchema } from "@/schema/common/passwordSchema";
 import { z } from "zod";
 
 export const VerifyOTPRequestSchema = z.object({

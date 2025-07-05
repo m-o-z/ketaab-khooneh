@@ -1,4 +1,4 @@
-import { emailSchema } from "@/schema/email";
+import { emailSchema } from "@/schema/common/email";
 
 export default function validateEmail(emailString?: string | null) {
   if (!emailString) {

@@ -6,9 +6,10 @@ import { Badge } from "@tapsioss/react-components";
 import { IconBooks, IconTag } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { Calendar, PencilLine } from "@tapsioss/react-icons";
+import { BookDTO } from "@/schema/books";
 
 type Props = {
-  book: Book;
+  book: BookDTO;
 };
 const BookSummary = ({ book }: Props) => {
   const renderEdition = () => {
@@ -53,7 +54,7 @@ const BookSummary = ({ book }: Props) => {
           <IconTag size={"24px"} />
         </Box>
         <label>دسته‌بندی</label>
-        {book.expand.bookWork.expand.categories.map((item) => (
+        {book.categories.map((item) => (
           <Badge key={item.label} value={item.label} color="info" />
         ))}
       </Flex>
@@ -88,7 +89,7 @@ const BookSummary = ({ book }: Props) => {
         >
           <PencilLine />
         </Box>
-        {book.expand.bookWork.expand.authors.map((author) => (
+        {book.authors.map((author) => (
           <AuthorPreview.Compact key={author.id} author={author} />
         ))}
       </Flex>

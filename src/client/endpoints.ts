@@ -8,14 +8,14 @@ import {
   ResponseWrap,
   UserInfo,
 } from "./../types";
-/**
- * API endpoints definition
- * Define all your API endpoints here with proper typing
- */
-import { AuthorListingRequestPayload } from "@/schema/authors";
-import { BookListingRequestPayload } from "@/schema/books";
 import { api } from "./api";
 import { BorrowDetailsListDto } from "@/lib/dto/borrow";
+import {
+  AuthorsListingRequestPayload,
+  BookListingRequestPayload,
+} from "@/app/api/authors/route.schema";
+import { ApiPagedResponse, ApiResponse } from "@/utils/response";
+import { BookDTO } from "@/schema/books";
 
 // ===== Types =====
 
@@ -51,13 +51,16 @@ export const users = {
 // ===== Books API =====
 export const books = {
   // Get all books
-  getAll: api.query<ResponseWrap<Book[]>, BookListingRequestPayload>("books", {
-    queryKey: (params) => ["books", "filtered", params],
-  }),
+  getAll: api.query<ApiPagedResponse<BookDTO>, BookListingRequestPayload>(
+    "books",
+    {
+      queryKey: (params) => ["books", "filtered", params],
+    },
+  ),
 
   // Get book by ID
   getById: (bookId: string) =>
-    api.query<ResponseWrap<Book>>(() => `books/${bookId}`, {
+    api.query<ApiResponse<BookDTO>>(() => `books/${bookId}`, {
       queryKey: (params) => {
         return ["books", bookId] as const;
       },
@@ -66,7 +69,7 @@ export const books = {
 
 export const authors = {
   // Get all books
-  getAll: api.query<ResponseWrap<Author[]>, AuthorListingRequestPayload>(
+  getAll: api.query<ResponseWrap<Author[]>, AuthorsListingRequestPayload>(
     "authors",
     {
       queryKey: (params) => ["authors", "filtered", params],

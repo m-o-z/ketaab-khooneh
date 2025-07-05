@@ -34,7 +34,7 @@ export default function Books() {
 
   const {
     isLoading,
-    data: bookWorks,
+    data: books,
     isError,
     isSuccess,
     refetch,
@@ -54,10 +54,10 @@ export default function Books() {
     router.push(`books/${bookId}`);
   };
   const renderBooksSection = () => {
-    if (bookWorks?.length === 0 && isSuccess) return <NotFound />;
+    if (books?.length === 0 && isSuccess) return <NotFound />;
     return (
       <Stack>
-        {bookWorks?.map((book: Book, index) => (
+        {books?.map((book, index) => (
           <Fragment key={book.id}>
             {index !== 0 && <Divider />}
             <div onClick={() => handleClick(book.id)}>

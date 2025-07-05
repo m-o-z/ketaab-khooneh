@@ -132,7 +132,7 @@ const Page = () => {
     if (!book) return <ErrorSection description="اطلاعات کتاب یافت نشد:(" />;
     return (
       <>
-        <h1>کتاب {book?.expand.bookWork.title || ""}</h1>
+        <h1>کتاب {book.title || ""}</h1>
         <BookSummary book={book} />
         {renderActionArea()}
       </>

@@ -1,30 +1,19 @@
 "use client";
-import React from "react";
-import { Author } from "@/types";
-import { capitalizeName } from "@/utils/string";
-import pbClient from "@/client/pbClient";
 import PreviewBase from "@/common/components/PreviewBase";
+import { AuthorDTO } from "@/schema/authors";
 import { Flex } from "@mantine/core";
 import { Avatar, Skeleton } from "@tapsioss/react-components";
 import Link from "next/link";
 
 type Props = {
-  author: Author;
+  author: AuthorDTO;
 };
-
-const getAuthorName = (author: Author) =>
-  capitalizeName(author.name) +
-  (author.nick_name ? ` (${author.nick_name})` : "");
 
 const AuthorPreview = ({ author }: Props) => {
   return (
     <PreviewBase
-      title={getAuthorName(author)}
-      imageUrl={
-        author.author_img
-          ? pbClient().files.getUrl(author, author.author_img)
-          : ""
-      }
+      title={author.authorImg}
+      imageUrl={author.authorImg}
       url={`/author/${author.id}`}
     />
   );
@@ -33,12 +22,8 @@ const AuthorPreview = ({ author }: Props) => {
 AuthorPreview.Compact = function Compact({ author }: Props) {
   return (
     <PreviewBase.Compact
-      title={getAuthorName(author)}
-      imageUrl={
-        author.author_img
-          ? pbClient().files.getUrl(author, author.author_img)
-          : ""
-      }
+      title={author.name}
+      imageUrl={author.authorImg}
       url={`/authors/${author.id}`}
     />
   );
@@ -48,11 +33,8 @@ AuthorPreview.List = function List({ author }: Props) {
   return (
     <Link href={`/authors/${author.id}`}>
       <Flex align="center" gap="sm">
-        <Avatar
-          image={pbClient().files.getUrl(author, author.author_img ?? "")}
-          alt={author.name}
-        />
-        <p>{getAuthorName(author)}</p>
+        <Avatar image={author.authorImg} alt={author.name} />
+        <p>{author.name}</p>
       </Flex>
     </Link>
   );

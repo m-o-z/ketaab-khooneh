@@ -1,10 +1,10 @@
 import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
-import { authorsListingSchema } from "@/schema/authors";
 import { Author } from "@/types";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
 import { NextRequest, NextResponse } from "next/server";
+import { AuthorsListingRequestSchema } from "./route.schema";
 
 type ResponseError = {
   message: string;
@@ -13,7 +13,8 @@ type ResponseError = {
 const handler = async (req: NextRequest, context: Context) => {
   try {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
-    const { filter, page, perPage } = authorsListingSchema.parse(searchParams);
+    const { filter, page, perPage } =
+      AuthorsListingRequestSchema.parse(searchParams);
 
     const result = await context.pb
       .collection("authors")
