@@ -1,0 +1,16 @@
+.page {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: var(--top, 0px);
+    margin: 0 -1rem;
+    right: 0;
+    left: 0;
+    height: 1rem;
+    pointer-events: none;
+    isolation: isolate;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.07)
+  }
+}

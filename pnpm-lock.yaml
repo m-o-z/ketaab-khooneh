@@ -47,6 +47,9 @@ importers:
       '@zoomit/dayjs-jalali-plugin':
         specifier: ^0.1.11
         version: 0.1.11
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       datejs:
         specifier: 1.0.0-rc3
         version: 1.0.0-rc3

@@ -2,9 +2,14 @@
 import BorrowList from "@/common/components/Borrow/BorrowList";
 import Spinner from "@/common/Spinner/Spinner";
 import { useGetAllBorrows } from "@/hooks/borrow";
-import { Stack } from "@mantine/core";
+import { PageLayout } from "@/providers/PageLayout";
+import { Button, Stack } from "@mantine/core";
+import { IconButton } from "@tapsioss/react-components/IconButton";
+import { ClockDashed } from "@tapsioss/react-icons";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const { data: borrows, isLoading, isSuccess } = useGetAllBorrows();
 
   if (isLoading) {
@@ -14,14 +19,25 @@ export default function Home() {
     return "no data";
   }
 
+  const onClickPreviousBorrowButton = () => {
+    router.push("/borrows/previous");
+  };
+
   if (borrows) {
     return (
-      <Stack>
-        <h1>امانت‌ها</h1>
+      <PageLayout
+        initialTitle={"امانت‌ها"}
+        goToTopEnabled
+        initialActions={
+          <IconButton variant="naked" onClick={onClickPreviousBorrowButton}>
+            <ClockDashed />
+          </IconButton>
+        }
+      >
         <div>
           <BorrowList items={borrows} />
         </div>
-      </Stack>
+      </PageLayout>
     );
   }
 }
