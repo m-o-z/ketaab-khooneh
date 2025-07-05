@@ -12,6 +12,7 @@ import {
   useState,
 } from "react";
 import { PageLayoutContext } from "./PageLayoutContext";
+import { usePWA } from "./PWAProvider";
 
 type PageLayoutProps = {
   showBackButton?: boolean;
@@ -30,6 +31,7 @@ export function PageLayout({
   goToTopEnabled = false,
   children,
 }: PageLayoutProps) {
+  const { safeAreaInsets } = usePWA();
   const [title, setTitle] = useState(initialTitle);
   const [actions, setActions] = useState(initialActions);
 
@@ -80,10 +82,18 @@ export function PageLayout({
       value={{ setTitle, resetTitle, setActions, resetActions }}
     >
       <div
-        style={{ "--top": "32px" } as CSSProperties}
-        className={clsx("flex flex-col h-full relative", {
-          [styles.page]: topShadow,
-        })}
+        style={
+          {
+            "--top": "48px",
+            "--bottom-padding": safeAreaInsets.bottom > 0 ? "5.5rem" : "4.5rem",
+          } as CSSProperties
+        }
+        className={clsx(
+          "fixed right-0 left-0 bottom-[var(--bottom-padding)] top-0 flex flex-col p-4",
+          {
+            [styles.page]: topShadow,
+          },
+        )}
       >
         {/* Header */}
         <header
@@ -107,7 +117,7 @@ export function PageLayout({
         <main
           ref={scrollRef}
           onScroll={handleScroll}
-          className={clsx("flex-1 overflow-y-auto -mx-4 px-4 -mb-[27px] pb-4", {
+          className={clsx("flex-1 overflow-y-auto -mx-4 px-4 -mb-4 pb-4", {
             "shadow-[inset_0_-8px_12px_-6px_rgba(0,0,0,0.12)]": bottomShadow,
           })}
         >
@@ -116,7 +126,7 @@ export function PageLayout({
 
         {/* Sticky Button */}
         {showStickyButton && goToTopEnabled && (
-          <div className="absolute bottom-0 right-2 z-10">
+          <div className="absolute bottom-4 right-2 z-10">
             <IconButton
               variant="ghost"
               className="shadow-lg"
