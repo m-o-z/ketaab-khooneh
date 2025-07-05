@@ -1,5 +1,5 @@
 # Use the official Node.js 20 image as the base (recommended for Next.js v15)
-FROM docker.arvancloud.ir/node:20-slim AS base
+FROM node:20-slim AS base
 
 ARG APP_ENV production
 ARG NEXT_PUBLIC_POCKETBASE_URL https://pb.echa.ir
