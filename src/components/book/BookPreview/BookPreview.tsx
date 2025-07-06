@@ -29,25 +29,27 @@ const BookPreview = ({
   height = HEIGHT,
 }: Props) => {
   return (
-    <Paper onClick={onClick} style={{ flex: 1, width: width }}>
-      <BadgeWrapper anchorShape="rectangle">
-        <Box slot={BadgeWrapperSlots.BADGE}>
-          <BookStatus status={book.status} />
-        </Box>
-        <Box pos="relative">
-          <Image
-            src={book.coverImage}
-            alt={`${book.title} cover`}
-            width={width}
-            height={height}
-            fit={"cover"}
-            style={{
-              // filter: `grayscale(${book.status === "AVAILABLE" ? 0 : 1})`,
-              aspectRatio: 1 / 1.3636,
-            }}
-          />
-        </Box>
-      </BadgeWrapper>
+    <Flex onClick={onClick} justify={"center"}>
+      <div style={{ width: width }}>
+        <BadgeWrapper anchorShape="rectangle">
+          <Box slot={BadgeWrapperSlots.BADGE}>
+            <BookStatus status={book.status} />
+          </Box>
+          <Flex pos="relative" justify={"center"}>
+            <Image
+              src={book.coverImage}
+              alt={`${book.title} cover`}
+              width={width}
+              height={height}
+              fit={"cover"}
+              style={{
+                // filter: `grayscale(${book.status === "AVAILABLE" ? 0 : 1})`,
+                aspectRatio: 1 / 1.3636,
+              }}
+            />
+          </Flex>
+        </BadgeWrapper>
+      </div>
 
       {!hideBottomTexts && (
         <Title
@@ -67,7 +69,7 @@ const BookPreview = ({
           {book.authors.map((author) => capitalizeName(author.name)).join(", ")}
         </Text>
       )}
-    </Paper>
+    </Flex>
   );
 };
 

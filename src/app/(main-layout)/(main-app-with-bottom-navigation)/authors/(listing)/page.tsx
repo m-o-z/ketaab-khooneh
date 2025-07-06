@@ -3,6 +3,7 @@ import ListToolbar from "@/common/components/ListToolbar";
 import AuthorPreview from "@/components/author/AuthorPreview";
 import ErrorSection from "@/components/ErrorSection";
 import { useAuthorsGetAllApi } from "@/hooks/authors";
+import { PageLayout } from "@/providers/PageLayout";
 import type { Author } from "@/types";
 import { Stack } from "@mantine/core";
 import { useState } from "react";
@@ -58,10 +59,11 @@ export default function Home() {
   };
 
   return (
-    <Stack maw={768} mx="auto">
-      <h1>نویسندگان</h1>
-      {renderToolbar()}
-      {renderAuthorsListSection()}
-    </Stack>
+    <PageLayout initialTitle="نویسندگان" goToTopEnabled>
+      <div className="space-y-8">
+        {renderToolbar()}
+        {renderAuthorsListSection()}
+      </div>
+    </PageLayout>
   );
 }

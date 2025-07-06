@@ -2,12 +2,14 @@
 import AuthorPreview from "@/components/author/AuthorPreview";
 import ErrorSection from "@/components/ErrorSection";
 import { useAuthorGetApi } from "@/hooks/authors";
+import { PageLayout } from "@/providers/PageLayout";
 import { capitalizeName } from "@/utils/string";
-import { Stack } from "@mantine/core";
+import { Title } from "@mantine/core";
 import { Avatar } from "@tapsioss/react-components";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const Page = () => {
+  const router = useRouter();
   const { authorId } = useParams();
   const {
     data: author,
@@ -27,21 +29,29 @@ const Page = () => {
     if (author) {
       return (
         <>
-          {author.authorImg && (
-            <Avatar image={author.authorImg} size="xxlg" alt={author.name} />
-          )}
-          {capitalizeName(author.name)}
+          <div className="flex items-center space-x-4" dir="ltr">
+            {author.authorImg && (
+              <Avatar image={author.authorImg} size="xxlg" alt={author.name} />
+            )}
+            <Title order={3}>{capitalizeName(author.name)}</Title>
+          </div>
           {author.bio && <p>{author.bio}</p>}
         </>
       );
     }
   };
+  const onBackClick = () => {
+    router.back();
+  };
 
   return (
-    <Stack>
-      <h1>اطلاعات {author?.name}</h1>
-      {renderAuthorPreview()}
-    </Stack>
+    <PageLayout
+      initialTitle="اطلاعات نویسنده"
+      showBackButton
+      onBackClick={onBackClick}
+    >
+      <div className="space-y-4">{renderAuthorPreview()}</div>
+    </PageLayout>
   );
 };
 

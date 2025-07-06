@@ -6,6 +6,7 @@ import ErrorSection from "@/components/ErrorSection";
 import NotFound from "@/components/NotFound";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
+import { PageLayout } from "@/providers/PageLayout";
 import type { Book } from "@/types";
 import { Container, Stack } from "@mantine/core";
 import { Divider } from "@tapsioss/react-components";
@@ -84,10 +85,11 @@ export default function Books() {
   };
 
   return (
-    <Stack>
-      <h1>کتاب‌ها</h1>
-      {renderToolbar()}
-      {renderBooksSection()}
-    </Stack>
+    <PageLayout initialTitle="کتاب‌ها" goToTopEnabled>
+      <div className="space-y-8">
+        {renderToolbar()}
+        {renderBooksSection()}
+      </div>
+    </PageLayout>
   );
 }

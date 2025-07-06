@@ -90,7 +90,7 @@ export function PageLayout({
           } as CSSProperties
         }
         className={clsx(
-          "fixed right-1/2 translate-x-1/2 top-0 bottom-[var(--padding-bottom)] flex flex-col w-[calc(var(--max-width)-2rem)] px-4 pt-4",
+          "fixed right-1/2 translate-x-1/2 top-0 bottom-[var(--padding-bottom)] flex flex-col w-[var(--max-width)] px-4 pt-4",
           {
             [styles.pageTopShadow]: topShadow,
             [styles.pageBottomShadow]: bottomShadow,
@@ -103,13 +103,13 @@ export function PageLayout({
             "flex items-center justify-between pb-3 transition-shadow",
           )}
         >
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center space-x-1 shrink-0">
             {showBackButton && (
               <IconButton onClick={onBackClick} variant="naked">
                 <ArrowRight />
               </IconButton>
             )}
-            {title && <h1 className="text-xl font-medium grow">{title}</h1>}
+            {title && <h2 className="grow">{title}</h2>}
           </div>
           {!!actions && (
             <div className="flex items-center gap-2 shrink-0">{actions}</div>

@@ -5,7 +5,16 @@ import ErrorSection from "@/components/ErrorSection";
 import NotFound from "@/components/NotFound";
 import UserPreview from "@/components/user/UserPreview";
 import { useBooksGetApi } from "@/hooks/books";
-import { Alert, Flex, Stack, Text, useMantineTheme } from "@mantine/core";
+import { PageLayout } from "@/providers/PageLayout";
+import { detectTextLanguage } from "@/utils/text";
+import {
+  Alert,
+  Flex,
+  Stack,
+  Text,
+  Title,
+  useMantineTheme,
+} from "@mantine/core";
 import {
   IconShoppingCart,
   IconShoppingCartExclamation,
@@ -17,10 +26,11 @@ import {
   NoticeSlots,
 } from "@tapsioss/react-components";
 import { ShoppingCart } from "@tapsioss/react-icons";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 // TODO: fix style
 const Page = () => {
+  const router = useRouter();
   const theme = useMantineTheme();
   const { bookId } = useParams();
   const {
@@ -118,24 +128,50 @@ const Page = () => {
     }
   };
 
+  const renderBookTitle = (title: string) => {
+    const language = detectTextLanguage(title);
+
+    if (language === "persian") {
+      return (
+        <Title order={3} className="text-right" dir="rtl">
+          {title}
+        </Title>
+      );
+    } else {
+      return (
+        <Title order={3} className="text-left" dir="ltr">
+          {title}
+        </Title>
+      );
+    }
+  };
+
   const renderBookDetail = () => {
     if (isLoading) return "loading";
     if (isError)
       return <ErrorSection description="خطایی در نمایش این کتاب رخ داد" />;
     if (!book) return <ErrorSection description="اطلاعات کتاب یافت نشد:(" />;
     return (
-      <>
-        <h1>کتاب {book.title || ""}</h1>
+      <div className="space-y-8">
+        <div>{renderBookTitle(book.title)}</div>
         <BookSummary book={book} />
         {renderActionArea()}
-      </>
+      </div>
     );
   };
 
+  const onBackClick = () => {
+    router.back();
+  };
+
   return (
-    <Stack gap="md" w="100%">
+    <PageLayout
+      initialTitle="جزئیات کتاب"
+      showBackButton
+      onBackClick={onBackClick}
+    >
       {renderBookDetail()}
-    </Stack>
+    </PageLayout>
   );
 };
 
