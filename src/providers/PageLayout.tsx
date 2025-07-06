@@ -85,7 +85,7 @@ export function PageLayout({
     >
       <div
         className={clsx(
-          "fixed right-1/2 translate-x-1/2 top-0 bottom-[var(--padding-bottom)] flex flex-col w-[var(--max-width)] px-4 pt-4",
+          "fixed right-1/2 translate-x-1/2 top-0 bottom-[var(--padding-bottom)] flex flex-col w-[var(--max-width)] px-4 pt-4 overflow-hidden",
           {
             [styles.pageTopShadow]: topShadow,
             [styles.pageBottomShadow]: bottomShadow,
@@ -93,7 +93,7 @@ export function PageLayout({
         )}
         style={
           {
-            "--top": "48px",
+            "--top": "42px",
             "--bottom": "-1rem",
             "--padding-bottom": safeAreaInsets.bottom > 0 ? "5.5rem" : "4.5rem",
           } as CSSProperties
@@ -120,7 +120,9 @@ export function PageLayout({
 
         <main
           ref={scrollRef}
-          className={clsx("flex-1 overflow-y-auto -mx-4 px-4 pb-4")}
+          className={clsx(
+            "flex-1 overflow-y-auto -mx-4 px-4 pb-4 overscroll-none",
+          )}
           onScroll={handleScroll}
         >
           {children}

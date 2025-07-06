@@ -8,7 +8,7 @@ import {
 } from "@tapsioss/react-components";
 import { Envelope } from "@tapsioss/react-icons";
 import { useSearchParams } from "next/navigation";
-import { KeyboardEventHandler, useEffect, useMemo, useState } from "react";
+import { KeyboardEventHandler, useMemo, useState } from "react";
 
 import Container from "@/common/Container/Container";
 import { useLoginApi } from "@/hooks/auth";
