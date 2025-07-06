@@ -8,6 +8,7 @@ import {
   UIEventHandler,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -46,7 +47,7 @@ export function PageLayout({
   retry,
   children,
 }: PageLayoutProps) {
-  const { safeAreaInsets } = usePWA();
+  const { safeAreaInsets, hasBottomNavigation } = usePWA();
   const [title, setTitle] = useState(initialTitle);
   const [actions, setActions] = useState(initialActions);
 
@@ -203,6 +204,13 @@ export function PageLayout({
     return children;
   };
 
+  const paddingBottom = useMemo(() => {
+    if (hasBottomNavigation) {
+      return safeAreaInsets.bottom > 0 ? "5.5rem" : "4.5rem";
+    }
+    return "1rem";
+  }, [safeAreaInsets, hasBottomNavigation]);
+
   if (!hasContentToShow()) {
     return renderAlternativeContent();
   }
@@ -223,7 +231,7 @@ export function PageLayout({
           {
             "--top": "42px",
             "--bottom": "-1rem",
-            "--padding-bottom": safeAreaInsets.bottom > 0 ? "5.5rem" : "4.5rem",
+            "--padding-bottom": paddingBottom,
           } as CSSProperties
         }
       >
@@ -258,10 +266,10 @@ export function PageLayout({
 
         {/* Sticky Button */}
         {showStickyButton && goToTopEnabled && (
-          <div className="absolute bottom-8 right-4 z-10">
+          <div className="absolute bottom-6 left-4 z-10">
             <IconButton
-              className="shadow-lg"
-              variant="ghost"
+              className="shadow-lg shadow-gray-400"
+              variant="primary"
               onClick={scrollToTop}
             >
               <ArrowUp />

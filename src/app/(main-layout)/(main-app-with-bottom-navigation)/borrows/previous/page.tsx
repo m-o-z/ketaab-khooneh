@@ -1,14 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React from "react";
 
-import Spinner from "@/common/Spinner/Spinner";
 import { useGetAllPreviousBorrowsQuery } from "@/hooks/borrow";
 import { PageLayout } from "@/providers/PageLayout";
 
 const Page = () => {
   const {
     data: borrows,
+    refetch,
+    isError,
     isLoading,
     isSuccess,
   } = useGetAllPreviousBorrowsQuery();
@@ -16,18 +16,18 @@ const Page = () => {
   const onGoBack = () => {
     router.back();
   };
-  if (isLoading) {
-    return <Spinner />;
-  }
-  if (isSuccess && !borrows) {
-    return "no data";
-  }
 
   if (borrows) {
     return (
       <PageLayout
         showBackButton
         initialTitle={"امانت‌های پیشین"}
+        isError={isError}
+        isLoading={isLoading}
+        noContent={borrows.length === 0 && isSuccess}
+        retry={() => {
+          void refetch();
+        }}
         onBackClick={onGoBack}
       >
         Previous

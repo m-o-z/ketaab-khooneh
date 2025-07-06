@@ -1,8 +1,10 @@
 import { notifications } from "@mantine/notifications";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { auth } from "@/client";
+
+import { queryClient } from "./../queryClient";
 
 type RequestPayload = {
   email: string;
@@ -74,6 +76,7 @@ export const useVerifyApi = () => {
 };
 
 export const useLogoutApi = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({
     ...auth.logout,
@@ -84,6 +87,7 @@ export const useLogoutApi = () => {
       });
     },
     onSuccess: () => {
+      void queryClient.invalidateQueries({});
       localStorage.removeItem("_user_info");
       localStorage.removeItem("_token");
       notifications.show({
