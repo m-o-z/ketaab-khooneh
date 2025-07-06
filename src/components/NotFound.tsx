@@ -1,4 +1,5 @@
 import { FaceSad } from "@tapsioss/react-icons";
+
 import ErrorSection from "./ErrorSection";
 
 type Props = {

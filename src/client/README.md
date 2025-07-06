@@ -16,32 +16,28 @@ A lightweight, type-safe API client designed to work seamlessly with TanStack Qu
 ### Basic Query Example
 
 ```tsx
-import { useQuery } from '@tanstack/react-query';
-import { books } from '@/client';
+import { useQuery } from "@tanstack/react-query";
+import { books } from "@/client";
 
 function BooksList() {
   // Get all books
   const { data: allBooks, isLoading } = useQuery(books.getAll());
-  
+
   // Get a specific book
   const { data: book } = useQuery(books.getById({ id: 1 }));
-  
+
   // Get filtered books
   const { data: filteredBooks } = useQuery(
-    books.getFiltered({ 
-      genre: 'fiction',
-      publishedAfter: 2000
-    })
+    books.getFiltered({
+      genre: "fiction",
+      publishedAfter: 2000,
+    }),
   );
-  
+
   if (isLoading) return <div>Loading...</div>;
-  
+
   return (
-    <div>
-      {allBooks?.map(book => (
-        <div key={book.id}>{book.title}</div>
-      ))}
-    </div>
+    <div>{allBooks?.map((book) => <div key={book.id}>{book.title}</div>)}</div>
   );
 }
 ```
@@ -49,28 +45,24 @@ function BooksList() {
 ### Mutation Example
 
 ```tsx
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { books } from '@/client';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { books } from "@/client";
 
 function CreateBookForm() {
   const queryClient = useQueryClient();
-  
+
   const createBook = useMutation({
     ...books.create,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['books'] });
+      queryClient.invalidateQueries({ queryKey: ["books"] });
     },
   });
-  
+
   const handleSubmit = (bookData) => {
     createBook.mutate(bookData);
   };
-  
-  return (
-    <form onSubmit={handleSubmit}>
-      {/* Form fields */}
-    </form>
-  );
+
+  return <form onSubmit={handleSubmit}>{/* Form fields */}</form>;
 }
 ```
 
@@ -82,27 +74,26 @@ Define your endpoints in `endpoints.ts`:
 
 ```typescript
 // Query endpoint without parameters
-const getAll = api.query<ResponseType>('endpoint-path');
+const getAll = api.query<ResponseType>("endpoint-path");
 
 // Query endpoint with parameters
 const getById = api.query<ResponseType, { id: number }>(
-  params => `endpoint-path/${params.id}`,
-  { queryKey: params => ['customKey', params.id] }
+  (params) => `endpoint-path/${params.id}`,
+  { queryKey: (params) => ["customKey", params.id] },
 );
 
 // Mutation endpoint
-const create = api.mutation<ResponseType, InputType>(
-  'endpoint-path',
-  { method: 'POST' }
-);
+const create = api.mutation<ResponseType, InputType>("endpoint-path", {
+  method: "POST",
+});
 
 // Mutation with dynamic path
 const update = api.mutation<ResponseType, InputType & { id: number }>(
-  params => `endpoint-path/${params.id}`,
-  { 
-    method: 'PUT',
-    transformVariables: ({ id, ...data }) => data 
-  }
+  (params) => `endpoint-path/${params.id}`,
+  {
+    method: "PUT",
+    transformVariables: ({ id, ...data }) => data,
+  },
 );
 ```
 
@@ -111,17 +102,17 @@ const update = api.mutation<ResponseType, InputType & { id: number }>(
 You can create a custom API instance with different configuration:
 
 ```typescript
-import { createApi } from '@/client';
+import { createApi } from "@/client";
 
 const customApi = createApi({
-  baseUrl: 'https://api.example.com',
+  baseUrl: "https://api.example.com",
   headers: {
-    'Authorization': `Bearer ${token}`,
+    Authorization: `Bearer ${token}`,
   },
 });
 
 // Use it to create endpoints
-const customEndpoint = customApi.query<ResponseType>('custom-endpoint');
+const customEndpoint = customApi.query<ResponseType>("custom-endpoint");
 ```
 
 ## Adding New Endpoints
@@ -144,11 +135,11 @@ export interface Product {
 
 // Create and export endpoints
 export const products = {
-  getAll: api.query<Product[]>('products'),
+  getAll: api.query<Product[]>("products"),
   getById: api.query<Product, { id: number }>(
-    params => `products/${params.id}`,
-    { queryKey: params => ['products', params.id] }
+    (params) => `products/${params.id}`,
+    { queryKey: (params) => ["products", params.id] },
   ),
-  create: api.mutation<Product, Omit<Product, 'id'>>('products'),
+  create: api.mutation<Product, Omit<Product, "id">>("products"),
 };
 ```

@@ -1,7 +1,9 @@
 import React from "react";
-import styles from "./BorrowList.module.scss";
+
 import { BorrowBriefDTO } from "@/schema/borrows";
+
 import BorrowItem from "./BorrowItem";
+import styles from "./BorrowList.module.scss";
 
 type Props = {
   items: BorrowBriefDTO[];

@@ -5,7 +5,8 @@ import { isZodError, createZodError } from "./zod";
 export const handleErrors = (error: any) => {
   if (isZodError(error)) {
     return createZodError(error);
-  } else if (isPocketBaseError(error)) {
+  }
+  if (isPocketBaseError(error)) {
     return createPocketBaseError();
   }
   return errorBadRequest();

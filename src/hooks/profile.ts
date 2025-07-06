@@ -1,5 +1,6 @@
-import { users } from "@/client";
 import { useQuery } from "@tanstack/react-query";
+
+import { users } from "@/client";
 
 export const useGetProfile = () => {
   return useQuery({

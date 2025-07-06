@@ -1,5 +1,5 @@
-import dayjs, { type Dayjs } from "dayjs";
 import jalaliPlugin from "@zoomit/dayjs-jalali-plugin";
+import dayjs, { type Dayjs } from "dayjs";
 import "dayjs/locale/fa";
 dayjs.extend(jalaliPlugin);
 

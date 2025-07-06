@@ -1,4 +1,5 @@
 import Client from "pocketbase";
+
 import { PocketBaseService } from "./PocketBaseService";
 
 export class BaseService {

@@ -1,4 +1,5 @@
 import { usePWA } from "@/providers/PWAProvider";
+
 import {
   Notifications as MantineNotifications,
   notifications,
@@ -27,14 +28,14 @@ const Notifications = () => {
 
   return (
     <MantineNotifications
+      withinPortal
+      limit={3}
+      position="bottom-center"
       style={
         {
           ...cssProperties(),
         } as CSSProperties
       }
-      withinPortal={true}
-      position="bottom-center"
-      limit={3}
     />
   );
 };

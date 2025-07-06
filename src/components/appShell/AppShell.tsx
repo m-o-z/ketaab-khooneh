@@ -2,11 +2,13 @@
 
 import { Box } from "@mantine/core";
 import React, { useEffect } from "react";
+
 // import styles from "./AppShell.module.scss";
-import BottomNavigation from "@/common/BottomNavigation/BottomNavigation";
-import { usePWA } from "@/providers/PWAProvider";
 import { createPortal } from "react-dom";
+
+import BottomNavigation from "@/common/BottomNavigation/BottomNavigation";
 import Portal from "@/common/Portal/Portal";
+import { usePWA } from "@/providers/PWAProvider";
 
 type Props = {
   children: React.ReactNode;

@@ -1,12 +1,4 @@
 "use client";
-import Spinner from "@/common/Spinner/Spinner";
-import BookSummary from "@/components/book/BookSummary/BookSummary";
-import ErrorSection from "@/components/ErrorSection";
-import NotFound from "@/components/NotFound";
-import UserPreview from "@/components/user/UserPreview";
-import { useBooksGetApi } from "@/hooks/books";
-import { PageLayout } from "@/providers/PageLayout";
-import { detectTextLanguage } from "@/utils/text";
 import {
   Alert,
   Flex,
@@ -27,6 +19,15 @@ import {
 } from "@tapsioss/react-components";
 import { ShoppingCart } from "@tapsioss/react-icons";
 import { useParams, useRouter } from "next/navigation";
+
+import Spinner from "@/common/Spinner/Spinner";
+import BookSummary from "@/components/book/BookSummary/BookSummary";
+import ErrorSection from "@/components/ErrorSection";
+import NotFound from "@/components/NotFound";
+import UserPreview from "@/components/user/UserPreview";
+import { useBooksGetApi } from "@/hooks/books";
+import { PageLayout } from "@/providers/PageLayout";
+import { detectTextLanguage } from "@/utils/text";
 
 // TODO: fix style
 const Page = () => {
@@ -54,27 +55,22 @@ const Page = () => {
 
   const renderActionArea = () => {
     if (book?.status === "BORROWED") {
-      return (
-        book.borrowedBy && (
-          <Alert color="gray" icon={<IconShoppingCartExclamation />}>
-            <Flex gap="sm" align="center">
-              <Text>This book is currently borrowed by</Text>
-              <UserPreview
-                user={book.borrowedBy}
-                color={theme.colors.gray[5]}
-              />
-            </Flex>
-          </Alert>
-        )
-      );
+      return book.borrowedBy ? (
+        <Alert color="gray" icon={<IconShoppingCartExclamation />}>
+          <Flex align="center" gap="sm">
+            <Text>This book is currently borrowed by</Text>
+            <UserPreview color={theme.colors.gray[5]} user={book.borrowedBy} />
+          </Flex>
+        </Alert>
+      ) : null;
     }
     if (book?.status === "RESERVED_BY_ME") {
       return (
         <>
           <Notice
-            priority="low"
             visible
             description="این کتاب توسط شما رزرو شده است."
+            priority="low"
           >
             <div slot={NoticeSlots.ACTION}>
               <Button color="red">لغو رزرو</Button>
@@ -92,27 +88,22 @@ const Page = () => {
       );
     }
     if (book?.status === "RESERVED_BY_OTHERS") {
-      return (
-        book.reservedBy && (
-          <Alert color="yellow.8">
-            <Flex gap="sm">
-              <Text>This book is currently reserved by</Text>
-              <UserPreview
-                user={book.reservedBy}
-                color={theme.colors.yellow[9]}
-              />
-            </Flex>
-          </Alert>
-        )
-      );
+      return book.reservedBy ? (
+        <Alert color="yellow.8">
+          <Flex gap="sm">
+            <Text>This book is currently reserved by</Text>
+            <UserPreview user={book.reservedBy} />
+          </Flex>
+        </Alert>
+      ) : null;
     }
     if (book?.status === "UNAVAILABLE") {
       return (
         <Notice
           visible
           color="error"
-          priority="low"
           description="این کتاب در حال حاضر در دسترس نیست."
+          priority="low"
         />
       );
     }
@@ -133,17 +124,16 @@ const Page = () => {
 
     if (language === "persian") {
       return (
-        <Title order={3} className="text-right" dir="rtl">
-          {title}
-        </Title>
-      );
-    } else {
-      return (
-        <Title order={3} className="text-left" dir="ltr">
+        <Title className="text-right" dir="rtl" order={3}>
           {title}
         </Title>
       );
     }
+    return (
+      <Title className="text-left" dir="ltr" order={3}>
+        {title}
+      </Title>
+    );
   };
 
   const renderBookDetail = () => {
@@ -166,8 +156,8 @@ const Page = () => {
 
   return (
     <PageLayout
-      initialTitle="جزئیات کتاب"
       showBackButton
+      initialTitle="جزئیات کتاب"
       onBackClick={onBackClick}
     >
       {renderBookDetail()}

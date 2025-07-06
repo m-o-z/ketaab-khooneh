@@ -1,11 +1,12 @@
 "use client";
+import { Flex, Stack } from "@mantine/core";
+import { Avatar, Divider } from "@tapsioss/react-components";
+import { useRouter } from "next/navigation";
+
 import ProfileLogoutRowItem from "@/common/components/Profile/ProfileLogoutRowItem";
 import { useLogoutApi } from "@/hooks/auth";
 import { useGetProfile } from "@/hooks/profile";
 import { PageLayout } from "@/providers/PageLayout";
-import { Flex, Stack } from "@mantine/core";
-import { Avatar, Divider } from "@tapsioss/react-components";
-import { useRouter } from "next/navigation";
 
 const Page = () => {
   const { isFetched, data: profile } = useGetProfile();
@@ -17,10 +18,10 @@ const Page = () => {
     if (isFetched && profile)
       return (
         <Flex
-          style={{ cursor: "pointer" }}
-          onClick={() => router.push("/profile/edit")}
           align="center"
           gap={10}
+          style={{ cursor: "pointer" }}
+          onClick={() => router.push("/profile/edit")}
         >
           <Avatar image={profile.avatar} />
           <Stack gap={0}>
@@ -35,11 +36,11 @@ const Page = () => {
     <PageLayout initialTitle="پروفایل">
       <div className="space-y-4">
         {renderProfileHeader()}
-        <Divider variant="thick" className="-mr-4 w-[calc(100%+2rem)]" />
+        <Divider className="-mr-4 w-[calc(100%+2rem)]" variant="thick" />
         <Stack>
           <ProfileLogoutRowItem
-            logoutMutationAsync={logout}
             isPending={isPending}
+            logoutMutationAsync={logout}
           />
         </Stack>
       </div>

@@ -11,13 +11,13 @@ type Props = {
 
 const PreviewBase = ({ imageUrl, title, subtitle, url }: Props) => {
   return (
-    <Link href={url || ""} passHref>
+    <Link passHref href={url || ""}>
       <Stack align="center">
         {imageUrl && (
-          <Avatar size="xlg" color="initials" image={imageUrl} alt={title} />
+          <Avatar alt={title} color="initials" image={imageUrl} size="xlg" />
         )}
         {title && (
-          <Title ta="center" size="sm">
+          <Title size="sm" ta="center">
             {title}
           </Title>
         )}
@@ -35,9 +35,9 @@ PreviewBase.Loading = function Loading({
 }: Props) {
   return (
     <Stack align="center">
-      <Skeleton width={84} height={84} circle />
-      <Skeleton width={100} height={20} />
-      <Skeleton width={90} height={20} />
+      <Skeleton circle height={84} width={84} />
+      <Skeleton height={20} width={100} />
+      <Skeleton height={20} width={90} />
     </Stack>
   );
 };
@@ -45,17 +45,17 @@ PreviewBase.Loading = function Loading({
 PreviewBase.Compact = function Compact({ imageUrl, title, url }: Props) {
   return (
     <Button
-      size="compact-md"
-      variant="transparent"
       color="gray.9"
+      size="compact-md"
       style={{
         paddingInline: 0,
       }}
+      variant="transparent"
     >
-      <Link href={url || ""} passHref onClick={(e) => e.stopPropagation()}>
+      <Link passHref href={url || ""} onClick={(e) => e.stopPropagation()}>
         <Flex gap="xs">
           <Avatar image={imageUrl} size="xs" />
-          <Text fw={500} size="sm" lh="1.5rem">
+          <Text fw={500} lh="1.5rem" size="sm">
             {title}
           </Text>
         </Flex>

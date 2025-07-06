@@ -1,3 +1,6 @@
+import { NextRequest, NextResponse } from "next/server";
+import Client from "pocketbase";
+
 import { AuthorizedContext } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
 import { BorrowBriefDTOSchema } from "@/schema/borrows";
@@ -5,8 +8,7 @@ import BorrowService from "@/services/BorrowService";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { handleErrors } from "@/utils/handleErrors";
 import { createPagedResponsePayload } from "@/utils/response";
-import { NextRequest, NextResponse } from "next/server";
-import Client from "pocketbase";
+
 import { ActiveBorrowsListingRequestSchema } from "../authors/route.schema";
 
 const handler = async (req: NextRequest, context: AuthorizedContext) => {
@@ -14,7 +16,7 @@ const handler = async (req: NextRequest, context: AuthorizedContext) => {
   const { filter, page, perPage } =
     ActiveBorrowsListingRequestSchema.parse(searchParams);
 
-  const pb = context.pb as Client;
+  const pb = context.pb;
   if (!pb || !pb.authStore.record?.id) {
     return errorBadRequest();
   }

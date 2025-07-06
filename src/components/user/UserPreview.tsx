@@ -1,7 +1,7 @@
 "use client";
 import PreviewBase from "@/common/components/PreviewBase";
-import { User } from "@/types";
 import PocketBasePublicService from "@/services/PocketBasePublicService";
+import { User } from "@/types";
 import { capitalizeName } from "@/utils/string";
 
 type Props = {
@@ -10,12 +10,12 @@ type Props = {
 const UserPreview = ({ user }: Props) => {
   return (
     <PreviewBase
-      title={capitalizeName(user.name)}
       imageUrl={
         user.avatar
           ? PocketBasePublicService.Client().files.getURL(user, user.avatar)
           : ""
       }
+      title={capitalizeName(user.name)}
       url={`/user/${user.id}`}
     />
   );
@@ -24,12 +24,12 @@ const UserPreview = ({ user }: Props) => {
 UserPreview.Compact = function Compact({ user }: Props) {
   return (
     <PreviewBase.Compact
-      title={capitalizeName(user.name)}
       imageUrl={
         user.avatar
           ? PocketBasePublicService.Client().files.getURL(user, user.avatar)
           : ""
       }
+      title={capitalizeName(user.name)}
       url={`/user/${user.id}`}
     />
   );

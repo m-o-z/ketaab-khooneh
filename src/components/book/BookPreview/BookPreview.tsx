@@ -1,13 +1,15 @@
 "use client";
-import AuthorPreview from "@/components/author/AuthorPreview";
-import { BookDTO } from "@/schema/books";
-import { capitalizeName } from "@/utils/string";
 import { Box, Flex, Image, Paper, Stack, Text, Title } from "@mantine/core";
 import {
   BadgeWrapper,
   BadgeWrapperSlots,
   Skeleton,
 } from "@tapsioss/react-components";
+
+import AuthorPreview from "@/components/author/AuthorPreview";
+import { BookDTO } from "@/schema/books";
+import { capitalizeName } from "@/utils/string";
+
 import BookStatus from "../BookStatus";
 
 type Props = {
@@ -29,23 +31,23 @@ const BookPreview = ({
   height = HEIGHT,
 }: Props) => {
   return (
-    <Flex onClick={onClick} justify={"center"}>
+    <Flex justify={"center"} onClick={onClick}>
       <div style={{ width: width }}>
         <BadgeWrapper anchorShape="rectangle">
           <Box slot={BadgeWrapperSlots.BADGE}>
             <BookStatus status={book.status} />
           </Box>
-          <Flex pos="relative" justify={"center"}>
+          <Flex justify={"center"} pos="relative">
             <Image
-              src={book.coverImage}
               alt={`${book.title} cover`}
-              width={width}
-              height={height}
               fit={"cover"}
+              height={height}
+              src={book.coverImage}
               style={{
                 // filter: `grayscale(${book.status === "AVAILABLE" ? 0 : 1})`,
                 aspectRatio: 1 / 1.3636,
               }}
+              width={width}
             />
           </Flex>
         </BadgeWrapper>
@@ -53,19 +55,19 @@ const BookPreview = ({
 
       {!hideBottomTexts && (
         <Title
-          order={1}
+          c="gray.4"
+          fw={"500"}
           fz={"h4"}
           lh={1.4}
-          my={".5rem"}
-          fw={"500"}
-          c="gray.4"
           lineClamp={2}
+          my={".5rem"}
+          order={1}
         >
           {book.title}
         </Title>
       )}
       {!hideBottomTexts && (
-        <Text truncate="end" size="xs" c="dimmed">
+        <Text c="dimmed" size="xs" truncate="end">
           {book.authors.map((author) => capitalizeName(author.name)).join(", ")}
         </Text>
       )}
@@ -84,12 +86,12 @@ BookPreview.Loading = function Loading() {
       </Box>
       <Stack style={{ width: `calc(100%-${listWidth}px)`, overflow: "hidden" }}>
         <Stack gap={3}>
-          <Skeleton variant={"rectangular"} width="200px" height="24px" />
-          <Skeleton variant={"rectangular"} width="100px" height="24px" />
+          <Skeleton height="24px" variant={"rectangular"} width="200px" />
+          <Skeleton height="24px" variant={"rectangular"} width="100px" />
         </Stack>
-        <Flex gap={8} align="center">
-          <Skeleton variant={"circular"} width="24px" height="24px" />
-          <Skeleton variant={"rectangular"} width="100px" height="20px" />
+        <Flex align="center" gap={8}>
+          <Skeleton height="24px" variant={"circular"} width="24px" />
+          <Skeleton height="20px" variant={"rectangular"} width="100px" />
         </Flex>
       </Stack>
     </Flex>
@@ -107,12 +109,12 @@ BookPreview.List = function List({ book }: Partial<Props>) {
           </Box>
           <Box pos="relative">
             <Image
-              src={book.coverImage}
               alt={`${book.title} cover`}
               fit="cover"
+              height={listHeight}
+              src={book.coverImage}
               style={{ borderRadius: "0.5rem" }}
               width="100%"
-              height={listHeight}
             />
           </Box>
         </BadgeWrapper>
@@ -127,7 +129,7 @@ BookPreview.List = function List({ book }: Partial<Props>) {
         >
           کتاب {book.title}
         </b>
-        <Flex wrap="wrap" gap="xs">
+        <Flex gap="xs" wrap="wrap">
           {book.authors.map((author) => (
             <AuthorPreview.Compact key={author.id} author={author} />
           ))}

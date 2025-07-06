@@ -1,5 +1,6 @@
-import { TestUser } from "@/@types/testUsers";
 import Client from "pocketbase";
+
+import { TestUser } from "@/@types/testUsers";
 
 type Users = [email: string, otpCode: string];
 export default async function getTestUser(client: Client): Promise<Users[]> {

@@ -1,6 +1,6 @@
-import React from "react";
-import { useMediaQuery } from "@mantine/hooks";
 import { Drawer, Modal } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
+import React from "react";
 
 type Props = {
   title?: string;
@@ -13,13 +13,13 @@ const PopUp = ({ opened, onClose, children, title }: Props) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   if (isMobile) {
     return (
-      <Drawer position="bottom" title={title} opened={opened} onClose={onClose}>
+      <Drawer opened={opened} position="bottom" title={title} onClose={onClose}>
         {children}
       </Drawer>
     );
   }
   return (
-    <Modal title={title} opened={opened} onClose={onClose}>
+    <Modal opened={opened} title={title} onClose={onClose}>
       {children}
     </Modal>
   );

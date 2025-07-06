@@ -1,5 +1,6 @@
-import { UserCore, UserDB } from "@/schema/users";
 import type Client from "pocketbase";
+
+import { UserCore, UserDB } from "@/schema/users";
 
 export type Context = Record<string, any> & {
   pb: Client;

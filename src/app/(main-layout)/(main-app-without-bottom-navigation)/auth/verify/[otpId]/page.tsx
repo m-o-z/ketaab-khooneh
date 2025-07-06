@@ -1,6 +1,4 @@
 "use client";
-import Spinner from "@/common/Spinner/Spinner";
-import { useVerifyApi } from "@/hooks/auth";
 import { Box, Stack, Text, Title } from "@mantine/core";
 import {
   IconButton,
@@ -11,6 +9,10 @@ import {
 import { ArrowRight } from "@tapsioss/react-icons";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+
+import Spinner from "@/common/Spinner/Spinner";
+import { useVerifyApi } from "@/hooks/auth";
+
 import s from "./style.module.scss";
 
 const Page = () => {
@@ -53,23 +55,23 @@ const Page = () => {
   };
 
   return (
-    <Stack justify="center" h="100%" maw={400}>
+    <Stack h="100%" justify="center" maw={400}>
       <Stack component="header">
         <IconButton
-          onClick={handleGoBack}
           label="بازگشت به صفحه وارد کردن ایمیل"
           variant="naked"
+          onClick={handleGoBack}
         >
           <ArrowRight />
         </IconButton>
       </Stack>
       <Stack
-        component="main"
-        justify="center"
         align="center"
-        h="100%"
-        maw={400}
+        component="main"
         flex={1}
+        h="100%"
+        justify="center"
+        maw={400}
       >
         <Title
           order={1}
@@ -104,19 +106,19 @@ const Page = () => {
         </Text>
 
         <PinInput
-          className={s["pin-input"]}
-          label="کد OTP"
-          error={!!error}
-          errorText={error?.message}
-          type="numeric"
-          inputMode="numeric"
           autoFocus
           hideLabel
           autocomplete="one-time-code"
+          className={s["pin-input"]}
+          error={!!error}
+          errorText={error?.message}
+          inputMode="numeric"
+          label="کد OTP"
+          type="numeric"
           value={password}
           onChange={handlePasswordChange}
           onComplete={handleSubmit}
-        ></PinInput>
+        />
       </Stack>
     </Stack>
   );

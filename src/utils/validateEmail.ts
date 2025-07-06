@@ -8,7 +8,6 @@ export default function validateEmail(emailString?: string | null) {
   const result = emailSchema.safeParse(emailString);
   if (result.success) {
     return result.data;
-  } else {
-    return null;
   }
+  return null;
 }

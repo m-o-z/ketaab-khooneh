@@ -1,5 +1,6 @@
-import React, { Component } from "react";
 import { Badge } from "@tapsioss/react-components";
+import React, { Component } from "react";
+
 import type { BookStatus } from "@/types";
 type Props = {
   status: BookStatus;
@@ -38,9 +39,9 @@ const BookStatus = ({ status }: Props) => {
 
   return (
     <Badge
+      color={statusInfo.color}
       radius={0}
       size="sm"
-      color={statusInfo.color}
       value={statusInfo.titleFa}
     />
   );

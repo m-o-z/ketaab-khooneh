@@ -1,9 +1,10 @@
 "use client";
+import { useRouter } from "next/navigation";
+import React from "react";
+
 import Spinner from "@/common/Spinner/Spinner";
 import { useGetAllPreviousBorrowsQuery } from "@/hooks/borrow";
 import { PageLayout } from "@/providers/PageLayout";
-import { useRouter } from "next/navigation";
-import React from "react";
 
 const Page = () => {
   const {
@@ -25,8 +26,8 @@ const Page = () => {
   if (borrows) {
     return (
       <PageLayout
-        initialTitle={"امانت‌های پیشین"}
         showBackButton
+        initialTitle={"امانت‌های پیشین"}
         onBackClick={onGoBack}
       >
         Previous

@@ -1,7 +1,8 @@
 "use client";
+import { Suspense } from "react";
+
 import Spinner from "@/common/Spinner/Spinner";
 import LoginPage from "@/components/pages/LoginPage/LoginPage";
-import { Suspense } from "react";
 
 const Page = () => {
   return (

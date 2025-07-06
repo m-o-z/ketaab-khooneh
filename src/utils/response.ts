@@ -1,4 +1,3 @@
-import { ListResult } from "pocketbase";
 import { PageMeta } from "./pagination";
 
 export type ApiResponse<T> = {
@@ -11,7 +10,7 @@ export const createResponsePayload = <T>(
   data: T,
   message?: string,
 ): ApiResponse<T> => {
-  let result: ApiResponse<T> = {
+  const result: ApiResponse<T> = {
     status: "OK",
     data,
   };

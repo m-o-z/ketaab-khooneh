@@ -1,5 +1,5 @@
-import React from "react";
 import { Box } from "@mantine/core";
+import React from "react";
 
 type Props = {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ type Props = {
 
 const Layout = ({ children }: Props) => {
   return (
-    <Box maw={500} m="auto">
+    <Box m="auto" maw={500}>
       {children}
     </Box>
   );

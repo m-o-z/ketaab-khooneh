@@ -5,8 +5,9 @@ import {
   ModalSlots,
 } from "@tapsioss/react-components";
 import React from "react";
-import Portal from "../Portal/Portal";
+
 import styles from "./ConfirmationModal.module.scss";
+import Portal from "../Portal/Portal";
 
 type ChildrenProps = {
   show: () => void;
@@ -133,22 +134,22 @@ const ConfirmationModal = ({
       {children({ show, hide })}
       <Portal id="#modal">
         <Modal
-          className={styles.container}
           alignment={alignment}
-          heading={heading}
+          className={styles.container}
           description={description}
+          heading={heading}
           open={showing}
           onHide={hide}
         >
           {renderImageSlot()}
-          <ButtonGroup slot={ModalSlots.ACTION_BAR} fluidItems>
-            <Button variant={denyButtonVariant} onClick={hide} size="lg">
+          <ButtonGroup fluidItems slot={ModalSlots.ACTION_BAR}>
+            <Button size="lg" variant={denyButtonVariant} onClick={hide}>
               {denyButtonTitle}
             </Button>
             <Button
-              variant={acceptButtonVariant}
               loading={isPending}
               size="lg"
+              variant={acceptButtonVariant}
               onClick={handleConfirm}
             >
               {acceptButtonTitle}

@@ -1,8 +1,10 @@
+import { NextResponse } from "next/server";
+
 import { ApiHandler } from "@/@types/api";
 import { Context } from "@/@types/pocketbase";
 import { PocketBaseService } from "@/services/PocketBaseService";
 import { errorBadRequest } from "@/utils/errors/errors";
-import { NextResponse } from "next/server";
+
 import { RequestOTPRequestPayload } from "./login.schema";
 import { withLoginValidator } from "./validator";
 

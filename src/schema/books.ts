@@ -1,5 +1,7 @@
-import PocketBasePublicService from "@/services/PocketBasePublicService";
 import { z } from "zod";
+
+import PocketBasePublicService from "@/services/PocketBasePublicService";
+
 import {
   AuthorBriefDTO,
   AuthorBriefDTOSchema,

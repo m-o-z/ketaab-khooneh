@@ -1,4 +1,5 @@
 import Client from "pocketbase";
+
 import { Rule, RuleEventType } from "@/types";
 
 interface BorrowContext {
@@ -60,7 +61,10 @@ export class RuleEngineService {
       expand: "rule_conditions_via_rule", // Important: Fetch related conditions
     });
 
-    let result: RuleEngineResult = { allowed: true, modifiedContext: context };
+    const result: RuleEngineResult = {
+      allowed: true,
+      modifiedContext: context,
+    };
 
     for (const rule of rules) {
       // Check if all conditions for this rule are met

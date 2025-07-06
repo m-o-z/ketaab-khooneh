@@ -1,12 +1,13 @@
+import { Box, Flex, Stack } from "@mantine/core";
+import { IconBooks, IconTag } from "@tabler/icons-react";
+import { Badge } from "@tapsioss/react-components";
+import { Calendar, PencilLine } from "@tapsioss/react-icons";
+import dayjs from "dayjs";
+
 import AuthorPreview from "@/components/author/AuthorPreview";
 import BookPreview from "@/components/book/BookPreview";
-import { Book } from "@/types";
-import { Box, Flex, Stack } from "@mantine/core";
-import { Badge } from "@tapsioss/react-components";
-import { IconBooks, IconTag } from "@tabler/icons-react";
-import dayjs from "dayjs";
-import { Calendar, PencilLine } from "@tapsioss/react-icons";
 import { BookDTO } from "@/schema/books";
+import { Book } from "@/types";
 
 type Props = {
   book: BookDTO;
@@ -26,12 +27,12 @@ const BookSummary = ({ book }: Props) => {
   };
   const renderCount = () => {
     return (
-      <Flex columnGap="xs" align="center">
+      <Flex align="center" columnGap="xs">
         <Box
+          h={24}
           style={(theme) => ({
             color: theme.colors.gray[6],
           })}
-          h={24}
           w={24}
         >
           <IconBooks />
@@ -43,31 +44,31 @@ const BookSummary = ({ book }: Props) => {
   };
   const renderCategories = () => {
     return (
-      <Flex columnGap="xs" align="center">
+      <Flex align="center" columnGap="xs">
         <Box
+          h={24}
           style={(theme) => ({
             color: theme.colors.gray[6],
           })}
-          h={24}
           w={24}
         >
           <IconTag size={"24px"} />
         </Box>
         <label>دسته‌بندی</label>
         {book.categories.map((item) => (
-          <Badge key={item.label} value={item.label} color="info" />
+          <Badge key={item.label} color="info" value={item.label} />
         ))}
       </Flex>
     );
   };
   const renderReleaseDate = () => {
     return (
-      <Flex columnGap="xs" align="center">
+      <Flex align="center" columnGap="xs">
         <Box
+          h={24}
           style={(theme) => ({
             color: theme.colors.gray[6],
           })}
-          h={24}
           w={24}
         >
           <Calendar />
@@ -81,10 +82,10 @@ const BookSummary = ({ book }: Props) => {
     return (
       <Flex columnGap="xs" wrap="wrap">
         <Box
+          h={24}
           style={(theme) => ({
             color: theme.colors.gray[6],
           })}
-          h={24}
           w={24}
         >
           <PencilLine />
@@ -97,8 +98,8 @@ const BookSummary = ({ book }: Props) => {
   };
   return (
     <Stack>
-      <BookPreview book={book} hideBottomTexts width="14rem" height="auto" />
-      <Flex direction="column" gap="md" align="flex-start" w="100%">
+      <BookPreview hideBottomTexts book={book} height="auto" width="14rem" />
+      <Flex align="flex-start" direction="column" gap="md" w="100%">
         {renderEdition()}
         {renderCount()}
         {renderCategories()}

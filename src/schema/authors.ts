@@ -1,9 +1,11 @@
 // ./src/schema/authors.ts
 import { z } from "zod";
+
+import PocketBasePublicService from "@/services/PocketBasePublicService";
+
 import type { BookWorkDB } from "./bookWorks"; // Use 'import type' for the type
 import { BookWorkDBSchema } from "./bookWorks"; // Use regular import for the schema value
 import { FlexibleDateTime } from "./common/date";
-import PocketBasePublicService from "@/services/PocketBasePublicService";
 
 // 1. Define the TypeScript types first to break the dependency cycle.
 export type AuthorDB = {
@@ -55,14 +57,14 @@ export const AuthorDBSchema: z.ZodType<AuthorDB> = z.object({
 
 export const AuthorCoreSchema: z.ZodType<AuthorCore, z.ZodTypeDef, AuthorDB> =
   AuthorDBSchema.transform((data) => {
-    let {
+    let { author_img: authorImg } = data;
+    const {
       id,
       name,
       bio,
       email,
       created,
       updated,
-      author_img: authorImg,
       nick_name: nickName = "",
     } = data;
 
@@ -91,6 +93,10 @@ export type AuthorDTO = z.infer<typeof AuthorDTOSchema>;
 
 export const AuthorBriefDTOSchema = z.custom<AuthorCore>().transform((data) => {
   const { created, updated, bio, ...response } = data;
+  void created;
+  void bio;
+  void updated;
+
   return response;
 });
 

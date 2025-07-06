@@ -1,7 +1,4 @@
 "use client";
-import { useLoginApi } from "@/hooks/auth";
-import { emailSchema } from "@/schema/common/email";
-import validateEmail from "@/utils/validateEmail";
 import { Stack } from "@mantine/core";
 import {
   Button,
@@ -12,8 +9,13 @@ import {
 import { Envelope } from "@tapsioss/react-icons";
 import { useSearchParams } from "next/navigation";
 import { KeyboardEventHandler, useEffect, useMemo, useState } from "react";
-import s from "./styles.module.scss";
+
 import Container from "@/common/Container/Container";
+import { useLoginApi } from "@/hooks/auth";
+import { emailSchema } from "@/schema/common/email";
+import validateEmail from "@/utils/validateEmail";
+
+import s from "./styles.module.scss";
 
 const LoginPage = () => {
   const searchParams = useSearchParams();
@@ -52,14 +54,14 @@ const LoginPage = () => {
 
   return (
     <Container className="">
-      <Stack component="main" justify="center" h="100%" px="2rem">
+      <Stack component="main" h="100%" justify="center" px="2rem">
         <TextField
+          autoFocus
+          className={s.wrapper}
           error={!!error}
           errorText={error?.message}
-          placeholder="your_tapsi_email_user"
           label="آدرس ایمیل"
-          className={s.wrapper}
-          autoFocus
+          placeholder="your_tapsi_email_user"
           type="email"
           value={username}
           onChange={handleEmailChange}
@@ -74,8 +76,8 @@ const LoginPage = () => {
           <Button
             disabled={isEmailValid}
             loading={isPending}
-            onClick={handleSubmit}
             size="lg"
+            onClick={handleSubmit}
           >
             ارسال
           </Button>

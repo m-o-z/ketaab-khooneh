@@ -17,14 +17,15 @@ export function middleware(request: NextRequest) {
   const hasAccessToken = request.cookies.has("accessToken");
   if (path === "/auth/login" && hasAccessToken) {
     return NextResponse.redirect(new URL("/books", request.url));
-  } else if (!hasAccessToken && !path.startsWith("/auth/")) {
+  }
+  if (!hasAccessToken && !path.startsWith("/auth/")) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
-  } else {
-    if (path.startsWith("/books")) {
-      return NextResponse.next();
-    } else if (path === "/") {
-      return NextResponse.redirect(new URL("/books", request.url));
-    }
+  }
+  if (path.startsWith("/books")) {
+    return NextResponse.next();
+  }
+  if (path === "/") {
+    return NextResponse.redirect(new URL("/books", request.url));
   }
 
   return NextResponse.next();

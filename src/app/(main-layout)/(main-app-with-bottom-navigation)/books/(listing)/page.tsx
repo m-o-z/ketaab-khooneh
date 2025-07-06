@@ -1,4 +1,10 @@
 "use client";
+import { Stack } from "@mantine/core";
+import { Divider } from "@tapsioss/react-components";
+import { useRouter } from "next/navigation";
+import { Fragment, useMemo, useState } from "react";
+import { useDebounce } from "use-debounce";
+
 import ListToolbar from "@/common/components/ListToolbar";
 import Spinner from "@/common/Spinner/Spinner";
 import BookPreview from "@/components/book/BookPreview";
@@ -7,11 +13,6 @@ import NotFound from "@/components/NotFound";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
 import { PageLayout } from "@/providers/PageLayout";
-import { Stack } from "@mantine/core";
-import { Divider } from "@tapsioss/react-components";
-import { useRouter } from "next/navigation";
-import { Fragment, useMemo, useState } from "react";
-import { useDebounce } from "use-debounce";
 
 export default function Books() {
   const router = useRouter();
@@ -74,17 +75,17 @@ export default function Books() {
     if (isError) return null;
     return (
       <ListToolbar
-        searchString={searchString}
-        setSearchString={setSearchString}
-        selectedFilters={filters}
-        setSelectedFilters={setFilters}
         filters={categories?.map((cat) => cat.label)}
+        searchString={searchString}
+        selectedFilters={filters}
+        setSearchString={setSearchString}
+        setSelectedFilters={setFilters}
       />
     );
   };
 
   return (
-    <PageLayout initialTitle="کتاب‌ها" goToTopEnabled>
+    <PageLayout goToTopEnabled initialTitle="کتاب‌ها">
       <div className="space-y-8">
         {renderToolbar()}
         {renderBooksSection()}

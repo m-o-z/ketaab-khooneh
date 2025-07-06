@@ -1,12 +1,13 @@
 "use client";
+import { Title } from "@mantine/core";
+import { Avatar } from "@tapsioss/react-components";
+import { useParams, useRouter } from "next/navigation";
+
 import AuthorPreview from "@/components/author/AuthorPreview";
 import ErrorSection from "@/components/ErrorSection";
 import { useAuthorGetApi } from "@/hooks/authors";
 import { PageLayout } from "@/providers/PageLayout";
 import { capitalizeName } from "@/utils/string";
-import { Title } from "@mantine/core";
-import { Avatar } from "@tapsioss/react-components";
-import { useParams, useRouter } from "next/navigation";
 
 const Page = () => {
   const router = useRouter();
@@ -31,7 +32,7 @@ const Page = () => {
         <>
           <div className="flex items-center space-x-4" dir="ltr">
             {author.authorImg && (
-              <Avatar image={author.authorImg} size="xxlg" alt={author.name} />
+              <Avatar alt={author.name} image={author.authorImg} size="xxlg" />
             )}
             <Title order={3}>{capitalizeName(author.name)}</Title>
           </div>
@@ -46,8 +47,8 @@ const Page = () => {
 
   return (
     <PageLayout
-      initialTitle="اطلاعات نویسنده"
       showBackButton
+      initialTitle="اطلاعات نویسنده"
       onBackClick={onBackClick}
     >
       <div className="space-y-4">{renderAuthorPreview()}</div>

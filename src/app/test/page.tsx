@@ -1,10 +1,10 @@
 "use client";
 
-import { Drawer } from "vaul";
-import React from "react";
 import { Button } from "@mantine/core";
 import { IconButton } from "@tapsioss/react-components/IconButton";
 import { LockFill } from "@tapsioss/react-icons";
+import React from "react";
+import { Drawer } from "vaul";
 
 export default function VaulDrawer() {
   const [open, setOpen] = React.useState(false);
@@ -50,6 +50,8 @@ export default function VaulDrawer() {
                 >
                   GitHub
                   <svg
+                    aria-hidden="true"
+                    className="w-3 h-3 ml-1"
                     fill="none"
                     height="16"
                     stroke="currentColor"
@@ -58,12 +60,10 @@ export default function VaulDrawer() {
                     strokeWidth="2"
                     viewBox="0 0 24 24"
                     width="16"
-                    aria-hidden="true"
-                    className="w-3 h-3 ml-1"
                   >
-                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
-                    <path d="M15 3h6v6"></path>
-                    <path d="M10 14L21 3"></path>
+                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                    <path d="M15 3h6v6" />
+                    <path d="M10 14L21 3" />
                   </svg>
                 </a>
                 <a
@@ -73,6 +73,8 @@ export default function VaulDrawer() {
                 >
                   Twitter
                   <svg
+                    aria-hidden="true"
+                    className="w-3 h-3 ml-1"
                     fill="none"
                     height="16"
                     stroke="currentColor"
@@ -81,12 +83,10 @@ export default function VaulDrawer() {
                     strokeWidth="2"
                     viewBox="0 0 24 24"
                     width="16"
-                    aria-hidden="true"
-                    className="w-3 h-3 ml-1"
                   >
-                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
-                    <path d="M15 3h6v6"></path>
-                    <path d="M10 14L21 3"></path>
+                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                    <path d="M15 3h6v6" />
+                    <path d="M10 14L21 3" />
                   </svg>
                 </a>
               </div>

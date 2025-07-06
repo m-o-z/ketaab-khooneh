@@ -1,7 +1,9 @@
-import React, { useMemo } from "react";
-import styles from "./BorrowItem.module.scss";
-import { BorrowBriefDTO } from "@/schema/borrows";
 import dayjs from "dayjs";
+import React, { useMemo } from "react";
+
+import { BorrowBriefDTO } from "@/schema/borrows";
+
+import styles from "./BorrowItem.module.scss";
 
 type Props = {
   item: BorrowBriefDTO;

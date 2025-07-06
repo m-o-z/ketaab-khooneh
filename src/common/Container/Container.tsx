@@ -1,7 +1,8 @@
 "use client";
-import { useWindowSize } from "@/hooks/useWindowSize";
 import { CSSProperties, PropsWithChildren, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
+
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 type Props = PropsWithChildren & {
   className?: string;
@@ -20,12 +21,12 @@ const Container = ({ children, className, height }: Props) => {
 
   return (
     <div
-      style={{ "--max-width": maxWidth } as CSSProperties}
       className={twMerge(
         "max-w-[var(--max-width)] mx-auto overflow-y-hidden overscroll-y-none " +
           heightClass,
         className,
       )}
+      style={{ "--max-width": maxWidth } as CSSProperties}
     >
       {children}
     </div>

@@ -7,7 +7,7 @@ export const createErrorPayload = (message: string) => {
   }
 
   if (!_message || _message == "") {
-    _message: "something went wrong!";
+    ("something went wrong!");
   }
 
   return {

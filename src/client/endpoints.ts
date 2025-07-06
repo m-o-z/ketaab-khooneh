@@ -7,10 +7,11 @@ import {
 import { BorrowDetailsListDto } from "@/lib/dto/borrow";
 import { AuthorDTO } from "@/schema/authors";
 import { BookDTO } from "@/schema/books";
+import { BorrowBriefDTO } from "@/schema/borrows";
 import { ApiPagedResponse, ApiResponse } from "@/utils/response";
+
 import { Author, BookCategory, ResponseWrap, UserInfo } from "./../types";
 import { api } from "./api";
-import { BorrowBriefDTO } from "@/schema/borrows";
 
 // ===== Types =====
 

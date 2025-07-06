@@ -1,9 +1,11 @@
+import { NextRequest } from "next/server";
+
 import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
 import { BookBriefDTOSchema, BookDB, parseBooksQuery } from "@/schema/books";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { createPagedResponsePayload } from "@/utils/response";
-import { NextRequest } from "next/server";
+
 import { BookListingRequestSchema } from "../authors/route.schema";
 
 const handler = async (req: NextRequest, context: Context) => {
@@ -12,7 +14,7 @@ const handler = async (req: NextRequest, context: Context) => {
     const { filter, page, perPage } =
       BookListingRequestSchema.parse(searchParams);
 
-    let response = await context.pb
+    const response = await context.pb
       .collection("books")
       .getList<BookDB>(page, perPage, {
         filter,

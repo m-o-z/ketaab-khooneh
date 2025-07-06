@@ -1,6 +1,7 @@
+import Client from "pocketbase";
+
 import Redis from "@/lib/redis";
 import { PocketBaseService } from "@/services/PocketBaseService";
-import Client from "pocketbase";
 type TRedis = typeof Redis;
 export const handler = async () => {
   try {

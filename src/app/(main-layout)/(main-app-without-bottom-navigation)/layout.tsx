@@ -3,6 +3,7 @@ import "@mantine/core/styles.css";
 import "@tapsioss/theme/css-variables";
 import "@/app/globals.css";
 import { useEffect } from "react";
+
 import { usePWA } from "@/providers/PWAProvider";
 
 export default function RootLayout({
@@ -14,6 +15,6 @@ export default function RootLayout({
 
   useEffect(() => {
     setHasNotBottomNavigation();
-  }, []);
+  }, [children]);
   return children;
 }

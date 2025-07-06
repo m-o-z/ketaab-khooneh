@@ -1,3 +1,5 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
 import {
@@ -9,7 +11,6 @@ import {
 import { Author } from "@/types";
 import { errorBadRequest, errorInvalidParams } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
-import { NextRequest, NextResponse } from "next/server";
 
 const handler = async (req: NextRequest, context: Context) => {
   try {

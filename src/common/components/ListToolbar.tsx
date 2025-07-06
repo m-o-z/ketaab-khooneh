@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { Flex, Popover, Stack, Text } from "@mantine/core";
 import {
   Checkbox,
@@ -8,6 +7,7 @@ import {
   TextField,
 } from "@tapsioss/react-components";
 import { ListBullet } from "@tapsioss/react-icons";
+import React from "react";
 
 type Props = {
   searchString: string;
@@ -33,7 +33,7 @@ const ListToolbar = ({
     }
   };
   return (
-    <Flex gap="sm" align="center">
+    <Flex align="center" gap="sm">
       {/*<TextInput*/}
       {/*  flex={1}*/}
       {/*  leftSection={<IconSearch size={15} />}*/}
@@ -43,10 +43,10 @@ const ListToolbar = ({
       {/*  onChange={(e) => setSearchString(e.target.value)}*/}
       {/*/>*/}
       <TextField
-        placeholder="جستجو..."
-        style={{ flex: 1 }}
         hideLabel
         label="جستجو..."
+        placeholder="جستجو..."
+        style={{ flex: 1 }}
         value={searchString}
         onChange={(e) => setSearchString(e.target.value)}
       />
@@ -71,7 +71,7 @@ const ListToolbar = ({
         //   </Menu.Dropdown>
         // </Menu>
 
-        <Popover width={300} trapFocus position="bottom" withArrow shadow="md">
+        <Popover trapFocus withArrow position="bottom" shadow="md" width={300}>
           <Popover.Target>
             <IconButton size="sm">
               <ListBullet />
@@ -86,8 +86,8 @@ const ListToolbar = ({
                   </Text>
                   <Checkbox
                     key={filter}
-                    label={filter}
                     checked={!!selectedFilters?.includes(filter)}
+                    label={filter}
                     onClick={() => handleSelectFilter(filter)}
                   />
                 </Flex>
@@ -102,8 +102,8 @@ const ListToolbar = ({
 
 ListToolbar.Loading = function Loading() {
   return (
-    <Skeleton height="52px" width="100" variant="rectangular">
-      <TextField style={{ flex: 1 }} hideLabel label="جستجو" />
+    <Skeleton height="52px" variant="rectangular" width="100">
+      <TextField hideLabel label="جستجو" style={{ flex: 1 }} />
     </Skeleton>
   );
 };

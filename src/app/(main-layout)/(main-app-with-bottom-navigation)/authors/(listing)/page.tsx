@@ -1,13 +1,14 @@
 "use client";
+import { Stack } from "@mantine/core";
+import { useState } from "react";
+import { useDebounce } from "use-debounce";
+
 import ListToolbar from "@/common/components/ListToolbar";
 import AuthorPreview from "@/components/author/AuthorPreview";
 import ErrorSection from "@/components/ErrorSection";
 import { useAuthorsGetAllApi } from "@/hooks/authors";
 import { PageLayout } from "@/providers/PageLayout";
 import type { Author } from "@/types";
-import { Stack } from "@mantine/core";
-import { useState } from "react";
-import { useDebounce } from "use-debounce";
 
 export default function Home() {
   // TODO: refactor
@@ -59,7 +60,7 @@ export default function Home() {
   };
 
   return (
-    <PageLayout initialTitle="نویسندگان" goToTopEnabled>
+    <PageLayout goToTopEnabled initialTitle="نویسندگان">
       <div className="space-y-8">
         {renderToolbar()}
         {renderAuthorsListSection()}

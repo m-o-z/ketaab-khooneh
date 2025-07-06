@@ -1,11 +1,13 @@
+import { NextResponse } from "next/server";
+import { RecordAuthResponse, RecordModel } from "pocketbase";
+
 import { ApiHandler } from "@/@types/api";
 import { Context } from "@/@types/pocketbase";
 import { isValidOtpForTestEmail } from "@/helpers/getTestUsers";
 import { PocketBaseService } from "@/services/PocketBaseService";
 import { UserInfo } from "@/types";
 import setAccessToken from "@/utils/setAcessToken";
-import { NextResponse } from "next/server";
-import { RecordAuthResponse, RecordModel } from "pocketbase";
+
 import { withVerifyValidator } from "./validator";
 import { VerifyOTPRequestPayload } from "./verify.schema";
 
@@ -41,7 +43,7 @@ const verifyHandler: ApiHandler = async (req, context: Context) => {
     .hostname;
 
   if (httpOnly) {
-    setAccessToken({
+    void setAccessToken({
       origin: origin,
       token: res.token,
       response,

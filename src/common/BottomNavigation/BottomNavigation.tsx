@@ -1,5 +1,4 @@
 "use client";
-import React, { CSSProperties } from "react";
 import {
   BottomNavigation as TapsiBottomNavigation,
   BottomNavigationActiveChangeEvent,
@@ -12,9 +11,12 @@ import {
   PencilLineFill,
   PersonFill,
 } from "@tapsioss/react-icons";
-import styles from "./BottomNavigation.module.scss";
-import { usePWA } from "@/providers/PWAProvider";
 import { usePathname, useRouter } from "next/navigation";
+import React, { CSSProperties } from "react";
+
+import { usePWA } from "@/providers/PWAProvider";
+
+import styles from "./BottomNavigation.module.scss";
 import Container from "../Container/Container";
 
 const BottomNavigation = () => {
@@ -27,12 +29,11 @@ const BottomNavigation = () => {
         "--height": "5.5rem",
         "--padding-bottom": "1.25rem",
       };
-    } else {
-      return {
-        "--height": "4.5rem",
-        "--padding-bottom": "0px",
-      };
     }
+    return {
+      "--height": "4.5rem",
+      "--padding-bottom": "0px",
+    };
   };
   const currentPath = usePathname();
 

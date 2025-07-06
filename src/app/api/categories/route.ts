@@ -1,3 +1,5 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
 import { categoriesSchema } from "@/schema/categories";
@@ -5,7 +7,6 @@ import { BookCategory } from "@/types";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
 import { withTimeout } from "@/utils/withTimeout";
-import { NextRequest, NextResponse } from "next/server";
 
 const handler = async (req: NextRequest, context: Context) => {
   try {

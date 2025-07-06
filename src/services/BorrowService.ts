@@ -1,6 +1,7 @@
-import { BorrowCoreSchema, BorrowDB } from "@/schema/borrows";
-import { BaseService } from "./BaseService";
 import { ListQueryPageOptions } from "@/@types/pocketbase";
+import { BorrowCoreSchema, BorrowDB } from "@/schema/borrows";
+
+import { BaseService } from "./BaseService";
 
 class BorrowService extends BaseService {
   createStatusQuery(status: BorrowDB["status"] | BorrowDB["status"][]) {

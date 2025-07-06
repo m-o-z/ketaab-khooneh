@@ -1,6 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
+
 import { authors } from "@/client";
 import { Author, ListFetchingParams } from "@/types";
-import { useQuery } from "@tanstack/react-query";
 
 export const useAuthorsGetAllApi = ({
   search,

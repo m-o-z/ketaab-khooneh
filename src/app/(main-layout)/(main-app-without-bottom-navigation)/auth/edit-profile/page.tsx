@@ -1,5 +1,4 @@
 "use client";
-import { useGetProfile } from "@/hooks/profile";
 import { Stack } from "@mantine/core";
 import {
   Button,
@@ -9,6 +8,8 @@ import {
 } from "@tapsioss/react-components";
 import { ArrowRight } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
+
+import { useGetProfile } from "@/hooks/profile";
 
 const Page = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ const Page = () => {
 
   return (
     <Stack>
-      <IconButton onClick={goToProfile} variant="naked">
+      <IconButton variant="naked" onClick={goToProfile}>
         <ArrowRight />
       </IconButton>
       <h1>اطلاعات حساب کاربری</h1>

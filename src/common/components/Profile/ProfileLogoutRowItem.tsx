@@ -1,9 +1,10 @@
-import React from "react";
-import ConfirmationModal from "../ConfirmationModal";
-import tokens from "@tapsioss/theme/tokens";
 import { Box, Flex } from "@mantine/core";
-import { ArrowRightFromLine } from "@tapsioss/react-icons";
 import { UseMutateAsyncFunction } from "@tanstack/react-query";
+import { ArrowRightFromLine } from "@tapsioss/react-icons";
+import tokens from "@tapsioss/theme/tokens";
+import React from "react";
+
+import ConfirmationModal from "../ConfirmationModal";
 type Props = {
   logoutMutationAsync: UseMutateAsyncFunction<null, Error, {}, unknown>;
   isPending: boolean;
@@ -16,20 +17,19 @@ const ProfileLogoutRowItem = ({ logoutMutationAsync, isPending }: Props) => {
 
   return (
     <ConfirmationModal
-      heading="خروج از حساب کاربری"
-      description={"آیا می‌خواهید از حساب کاربری خود خارج شوید؟"}
-      denyButtonTitle="انصراف"
       acceptButtonTitle="خروج"
       acceptButtonVariant="destructive"
-      onConfirm={onClick}
+      denyButtonTitle="انصراف"
+      description={"آیا می‌خواهید از حساب کاربری خود خارج شوید؟"}
+      heading="خروج از حساب کاربری"
       isPending={isPending}
       renderImage={() => (
         <svg
-          style={{ marginTop: "2rem" }}
-          width="64"
-          height="64"
-          viewBox="0 0 64 64"
           fill="none"
+          height="64"
+          style={{ marginTop: "2rem" }}
+          viewBox="0 0 64 64"
+          width="64"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -42,14 +42,15 @@ const ProfileLogoutRowItem = ({ logoutMutationAsync, isPending }: Props) => {
           />
         </svg>
       )}
+      onConfirm={onClick}
     >
       {({ show }) => (
         <Flex
-          style={{ cursor: "pointer" }}
-          onClick={show}
+          align="center"
           c={tokens.color.content.negative}
           columnGap="xs"
-          align="center"
+          style={{ cursor: "pointer" }}
+          onClick={show}
         >
           <Box h={24} w={24}>
             <ArrowRightFromLine />

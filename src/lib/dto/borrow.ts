@@ -1,7 +1,8 @@
 // lib/dto.ts (continued)
 
-import { BorrowDBSchema } from "@/schema/borrows";
 import { z } from "zod";
+
+import { BorrowDBSchema } from "@/schema/borrows";
 
 export const BorrowDetailsDtoSchema = BorrowDBSchema.transform((data) => {
   console.log({ data });

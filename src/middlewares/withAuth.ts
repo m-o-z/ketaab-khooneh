@@ -1,13 +1,14 @@
 import "server-only";
-import { ApiHandler } from "@/@types/api";
-import { Context } from "@/@types/pocketbase";
-import { PocketBaseService } from "@/services/PocketBaseService";
-import setAccessToken from "@/utils/setAcessToken";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import type PocketBase from "pocketbase";
+
+import { ApiHandler } from "@/@types/api";
+import { Context } from "@/@types/pocketbase";
 import { UserCoreSchema, UserDBSchema } from "@/schema/users";
+import { PocketBaseService } from "@/services/PocketBaseService";
+import setAccessToken from "@/utils/setAcessToken";
 
 const DAYS_TO_REFRESH = parseInt(
   process.env.NEXT_PUBLIC_DAYS_TO_REFRESH ?? "7",

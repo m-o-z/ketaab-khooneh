@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
+
 import styles from "./PageLayout.module.scss";
 import { PageLayoutContext } from "./PageLayoutContext";
 import { usePWA } from "./PWAProvider";
@@ -83,13 +84,6 @@ export function PageLayout({
       value={{ setTitle, resetTitle, setActions, resetActions }}
     >
       <div
-        style={
-          {
-            "--top": "48px",
-            "--bottom": "-1rem",
-            "--padding-bottom": safeAreaInsets.bottom > 0 ? "5.5rem" : "4.5rem",
-          } as CSSProperties
-        }
         className={clsx(
           "fixed right-1/2 translate-x-1/2 top-0 bottom-[var(--padding-bottom)] flex flex-col w-[var(--max-width)] px-4 pt-4",
           {
@@ -97,6 +91,13 @@ export function PageLayout({
             [styles.pageBottomShadow]: bottomShadow,
           },
         )}
+        style={
+          {
+            "--top": "48px",
+            "--bottom": "-1rem",
+            "--padding-bottom": safeAreaInsets.bottom > 0 ? "5.5rem" : "4.5rem",
+          } as CSSProperties
+        }
       >
         {/* Header */}
         <header
@@ -106,7 +107,7 @@ export function PageLayout({
         >
           <div className="flex items-center space-x-1 shrink-0">
             {showBackButton && (
-              <IconButton onClick={onBackClick} variant="naked">
+              <IconButton variant="naked" onClick={onBackClick}>
                 <ArrowRight />
               </IconButton>
             )}
@@ -119,8 +120,8 @@ export function PageLayout({
 
         <main
           ref={scrollRef}
-          onScroll={handleScroll}
           className={clsx("flex-1 overflow-y-auto -mx-4 px-4 pb-4")}
+          onScroll={handleScroll}
         >
           {children}
         </main>
@@ -129,8 +130,8 @@ export function PageLayout({
         {showStickyButton && goToTopEnabled && (
           <div className="absolute bottom-8 right-4 z-10">
             <IconButton
-              variant="ghost"
               className="shadow-lg"
+              variant="ghost"
               onClick={scrollToTop}
             >
               <ArrowUp />

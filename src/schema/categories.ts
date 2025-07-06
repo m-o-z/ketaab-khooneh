@@ -1,8 +1,10 @@
 import { z } from "zod";
+
+import PocketBasePublicService from "@/services/PocketBasePublicService";
+
 import type { BookWorkDB } from "./bookWorks"; // Use 'import type' for the type
 import { BookWorkDBSchema } from "./bookWorks"; // Regular import for the schema value
 import { FlexibleDateTime } from "./common/date";
-import PocketBasePublicService from "@/services/PocketBasePublicService";
 
 // For query params - this schema is fine as is.
 export const categoriesSchema = z.object({

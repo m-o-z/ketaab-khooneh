@@ -1,5 +1,7 @@
-import { ApiHandler } from "@/@types/api";
 import { NextRequest, NextResponse } from "next/server";
+
+import { ApiHandler } from "@/@types/api";
+
 import { VerifyOTPRequestSchema } from "./verify.schema";
 
 const extractBodyJson = async (req: NextRequest) => {
@@ -20,11 +22,10 @@ const validateBody = (body: any) => {
   const result = VerifyOTPRequestSchema.safeParse(body);
   if (result.success) {
     return result.data;
-  } else {
-    throw new Error(
-      result.error.errors.map((issues) => issues.message).join(", "),
-    );
   }
+  throw new Error(
+    result.error.errors.map((issues) => issues.message).join(", "),
+  );
 };
 export const withVerifyValidator = (handler: ApiHandler) => {
   return async function (req: NextRequest, context: any) {

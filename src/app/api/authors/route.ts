@@ -1,3 +1,5 @@
+import { NextRequest, NextResponse } from "next/server";
+
 import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
 import {
@@ -8,7 +10,7 @@ import {
 import { Author } from "@/types";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { createPagedResponsePayload } from "@/utils/response";
-import { NextRequest, NextResponse } from "next/server";
+
 import { AuthorsListingRequestSchema } from "./route.schema";
 
 type ResponseError = {

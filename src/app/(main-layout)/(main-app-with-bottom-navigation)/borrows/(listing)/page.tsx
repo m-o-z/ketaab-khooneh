@@ -1,12 +1,13 @@
 "use client";
-import BorrowList from "@/common/components/Borrow/BorrowList";
-import Spinner from "@/common/Spinner/Spinner";
-import { useGetAllBorrowsQuery } from "@/hooks/borrow";
-import { PageLayout } from "@/providers/PageLayout";
 import { Button, Stack } from "@mantine/core";
 import { IconButton } from "@tapsioss/react-components/IconButton";
 import { ClockDashed } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
+
+import BorrowList from "@/common/components/Borrow/BorrowList";
+import Spinner from "@/common/Spinner/Spinner";
+import { useGetAllBorrowsQuery } from "@/hooks/borrow";
+import { PageLayout } from "@/providers/PageLayout";
 
 export default function Home() {
   const router = useRouter();
@@ -26,13 +27,13 @@ export default function Home() {
   if (borrows) {
     return (
       <PageLayout
-        initialTitle={"امانت‌ها"}
         goToTopEnabled
         initialActions={
           <IconButton variant="naked" onClick={onClickPreviousBorrowButton}>
             <ClockDashed />
           </IconButton>
         }
+        initialTitle={"امانت‌ها"}
       >
         <div>
           <BorrowList items={borrows} />

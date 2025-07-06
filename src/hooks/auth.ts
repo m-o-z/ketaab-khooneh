@@ -1,7 +1,8 @@
-import { auth } from "@/client";
 import { notifications } from "@mantine/notifications";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+
+import { auth } from "@/client";
 
 type RequestPayload = {
   email: string;
