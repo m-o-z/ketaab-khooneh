@@ -1,3 +1,4 @@
+"use client";
 import { IconButton } from "@tapsioss/react-components/IconButton";
 import { ArrowRight, ArrowUp } from "@tapsioss/react-icons";
 import clsx from "clsx";

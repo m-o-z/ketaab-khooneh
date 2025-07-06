@@ -1,6 +1,7 @@
 "use client";
+import Spinner from "@/common/Spinner/Spinner";
 import { useVerifyApi } from "@/hooks/auth";
-import { Box, Container, Flex, Stack, Text, Title } from "@mantine/core";
+import { Box, Stack, Text, Title } from "@mantine/core";
 import {
   IconButton,
   PinInput,
@@ -11,7 +12,6 @@ import { ArrowRight } from "@tapsioss/react-icons";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import s from "./style.module.scss";
-import Spinner from "@/common/Spinner/Spinner";
 
 const Page = () => {
   const router = useRouter();

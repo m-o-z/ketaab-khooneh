@@ -1,3 +1,4 @@
+"use client";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { CSSProperties, PropsWithChildren, useMemo } from "react";
 import { twMerge } from "tailwind-merge";
