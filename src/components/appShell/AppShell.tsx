@@ -1,10 +1,8 @@
 "use client";
 
-import { Box } from "@mantine/core";
 import React, { useEffect } from "react";
 
 // import styles from "./AppShell.module.scss";
-import { createPortal } from "react-dom";
 
 import BottomNavigation from "@/common/BottomNavigation/BottomNavigation";
 import Portal from "@/common/Portal/Portal";

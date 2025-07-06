@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "BUILD_ENV=local next dev",
     "dev-debug": "NODE_OPTIONS='--inspect' npm run dev",
-    "build": "next build",
+    "build": "next build --no-lint",
+    "build-lint": "next build",
     "start": "next start",
     "lint": "next lint",
     "format": "pnpm exec prettier . --write",

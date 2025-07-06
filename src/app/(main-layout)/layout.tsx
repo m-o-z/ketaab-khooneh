@@ -1,6 +1,5 @@
 "use client";
 import "@/app/fonts.scss";
-import "@/app/globals.css";
 import { createTheme, MantineProvider } from "@mantine/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -12,6 +11,7 @@ import { PWAProvider } from "@/providers/PWAProvider";
 import { queryClient } from "@/queryClient";
 import "@mantine/core/styles.css";
 import "@tapsioss/theme/css-variables";
+import "@/app/globals.css";
 
 export default function RootLayout({
   children,

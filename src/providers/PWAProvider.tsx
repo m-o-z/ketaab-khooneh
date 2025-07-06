@@ -1,3 +1,4 @@
+"use client";
 import {
   createContext,
   PropsWithChildren,
@@ -6,6 +7,8 @@ import {
   useEffect,
   useState,
 } from "react";
+
+import { isClient } from "@/utils/window";
 
 // Create the context with default values
 const PWAContext = createContext({
@@ -30,7 +33,7 @@ export const PWAProvider = ({ children }: Props) => {
 
   // Function to determine if the PWA is running in standalone mode
   const checkStandaloneMode = useCallback(() => {
-    if (typeof window !== "undefined") {
+    if (isClient()) {
       // Modern way: check display-mode media query
       const matchMediaStandalone = window.matchMedia(
         "(display-mode: standalone)",
@@ -38,7 +41,7 @@ export const PWAProvider = ({ children }: Props) => {
 
       // iOS specific way (non-standard, but common for older iOS PWAs)
       const navigatorStandalone = !!(
-        "standalone" in navigator && (navigator as any).standalone
+        "standalone" in navigator && navigator.standalone
       );
 
       setIsStandalone(matchMediaStandalone || navigatorStandalone);

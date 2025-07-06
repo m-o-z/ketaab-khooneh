@@ -1,11 +1,11 @@
+"use client";
+
+import { Notifications as MantineNotifications } from "@mantine/notifications";
+import { CSSProperties } from "react";
+
 import { usePWA } from "@/providers/PWAProvider";
 
-import {
-  Notifications as MantineNotifications,
-  notifications,
-} from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
-import { CSSProperties, useEffect } from "react";
 
 const Notifications = () => {
   const { safeAreaInsets, isStandalone, hasBottomNavigation } = usePWA();

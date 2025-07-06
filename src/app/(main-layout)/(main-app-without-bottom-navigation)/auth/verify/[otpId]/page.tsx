@@ -12,6 +12,7 @@ import { useState } from "react";
 
 import Spinner from "@/common/Spinner/Spinner";
 import { useVerifyApi } from "@/hooks/auth";
+import { isClient } from "@/utils/window";
 
 import s from "./style.module.scss";
 
@@ -42,11 +43,13 @@ const Page = () => {
   };
 
   const handleGoBack = () => {
-    const url = new URL("/auth/login", window.origin);
-    if (email) {
-      url.searchParams.set("email", email);
+    if (isClient()) {
+      const url = new URL("/auth/login", window.origin);
+      if (email) {
+        url.searchParams.set("email", email);
+      }
+      router.push(url.toString());
     }
-    router.push(url.toString());
   };
 
   const handlePasswordChange = (e: Event) => {
