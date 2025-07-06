@@ -6,10 +6,7 @@ import { Fragment, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 import ListToolbar from "@/common/components/ListToolbar";
-import Spinner from "@/common/Spinner/Spinner";
 import BookPreview from "@/components/book/BookPreview";
-import ErrorSection from "@/components/ErrorSection";
-import NotFound from "@/components/NotFound";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
 import { PageLayout } from "@/providers/PageLayout";
@@ -44,18 +41,10 @@ export default function Books() {
   const { isLoading: isCategoryLoading, data: categories } =
     useCategoriesQuery();
 
-  if (isError) {
-    return <ErrorSection refetch={refetch} />;
-  }
-
-  if (isLoading) {
-    return <Spinner />;
-  }
   const handleClick = (bookId: string) => {
     router.push(`books/${bookId}`);
   };
   const renderBooksSection = () => {
-    if (books?.length === 0 && isSuccess) return <NotFound />;
     return (
       <Stack>
         {books?.map((book, index) => (
@@ -71,8 +60,6 @@ export default function Books() {
   };
 
   const renderToolbar = () => {
-    if (isCategoryLoading || isLoading) return <ListToolbar.Loading />;
-    if (isError) return null;
     return (
       <ListToolbar
         filters={categories?.map((cat) => cat.label)}
@@ -85,7 +72,16 @@ export default function Books() {
   };
 
   return (
-    <PageLayout goToTopEnabled initialTitle="کتاب‌ها">
+    <PageLayout
+      goToTopEnabled
+      initialTitle="کتاب‌ها"
+      isError={isError}
+      isLoading={isLoading || isCategoryLoading}
+      noContent={isSuccess && books.length === 0}
+      retry={() => {
+        void refetch();
+      }}
+    >
       <div className="space-y-8">
         {renderToolbar()}
         {renderBooksSection()}

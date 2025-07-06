@@ -20,10 +20,7 @@ import {
 import { ShoppingCart } from "@tapsioss/react-icons";
 import { useParams, useRouter } from "next/navigation";
 
-import Spinner from "@/common/Spinner/Spinner";
 import BookSummary from "@/components/book/BookSummary/BookSummary";
-import ErrorSection from "@/components/ErrorSection";
-import NotFound from "@/components/NotFound";
 import UserPreview from "@/components/user/UserPreview";
 import { useBooksGetApi } from "@/hooks/books";
 import { PageLayout } from "@/providers/PageLayout";
@@ -41,17 +38,6 @@ const Page = () => {
     isError,
     refetch,
   } = useBooksGetApi(bookId as string);
-
-  if (isLoading) {
-    return <Spinner />;
-  }
-  if (isError) {
-    return <ErrorSection refetch={refetch} />;
-  }
-
-  if (!book && isSuccess) {
-    <NotFound />;
-  }
 
   const renderActionArea = () => {
     if (book?.status === "BORROWED") {
@@ -137,14 +123,10 @@ const Page = () => {
   };
 
   const renderBookDetail = () => {
-    if (isLoading) return "loading";
-    if (isError)
-      return <ErrorSection description="خطایی در نمایش این کتاب رخ داد" />;
-    if (!book) return <ErrorSection description="اطلاعات کتاب یافت نشد:(" />;
     return (
       <div className="space-y-8">
-        <div>{renderBookTitle(book.title)}</div>
-        <BookSummary book={book} />
+        <div>{renderBookTitle(book!.title)}</div>
+        <BookSummary book={book!} />
         {renderActionArea()}
       </div>
     );
@@ -158,9 +140,15 @@ const Page = () => {
     <PageLayout
       showBackButton
       initialTitle="جزئیات کتاب"
+      isError={isError}
+      isLoading={isLoading}
+      noContent={!book && isSuccess}
+      retry={() => {
+        void refetch();
+      }}
       onBackClick={onBackClick}
     >
-      {renderBookDetail()}
+      {book ? renderBookDetail() : null}
     </PageLayout>
   );
 };

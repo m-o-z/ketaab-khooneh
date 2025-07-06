@@ -30,4 +30,35 @@ export default withPWA({
   register: true,
   cacheOnFrontEndNav: true,
   cacheStartUrl: true,
+  workboxOptions: {
+    runtimeCaching: [
+      {
+        urlPattern: ({ url: { pathname } }) => {
+          if (pathname.startsWith("/api/")) {
+            return true;
+          }
+
+          return false;
+        },
+        handler: "NetworkOnly", // Always go to network, never cache
+        method: "GET",
+        options: {
+          cacheName: "apis", // You can keep or remove, but no caching will happen with NetworkOnly
+          // Remove cacheableResponse and expiration to disable caching completely
+        },
+      },
+      {
+        // 🔸 Static assets: fonts, images, scripts, styles, json
+        urlPattern: /\.(?:ttf|woff2?|json|png|jpe?g|webp|gif|css|js)$/i,
+        handler: "CacheFirst",
+        options: {
+          cacheName: "static-assets",
+          expiration: {
+            maxEntries: 64,
+            maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+          },
+        },
+      },
+    ],
+  },
 })(nextConfig);

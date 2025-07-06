@@ -9,7 +9,13 @@ import { useGetProfile } from "@/hooks/profile";
 import { PageLayout } from "@/providers/PageLayout";
 
 const Page = () => {
-  const { isFetched, data: profile } = useGetProfile();
+  const {
+    isFetched,
+    data: profile,
+    refetch,
+    isError,
+    isLoading,
+  } = useGetProfile();
   const router = useRouter();
 
   const { mutateAsync: logout, isPending } = useLogoutApi();
@@ -33,7 +39,14 @@ const Page = () => {
   };
 
   return (
-    <PageLayout initialTitle="پروفایل">
+    <PageLayout
+      initialTitle="پروفایل"
+      isError={isError}
+      isLoading={isLoading}
+      retry={() => {
+        void refetch();
+      }}
+    >
       <div className="space-y-4">
         {renderProfileHeader()}
         <Divider className="-mr-4 w-[calc(100%+2rem)]" variant="thick" />

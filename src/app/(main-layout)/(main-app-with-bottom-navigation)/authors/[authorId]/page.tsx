@@ -16,17 +16,11 @@ const Page = () => {
     data: author,
     isLoading,
     isError,
+    isSuccess,
+    refetch,
   } = useAuthorGetApi(authorId as string);
 
   const renderAuthorPreview = () => {
-    if (isLoading) {
-      return <AuthorPreview.Loading />;
-    }
-    if (isError) {
-      return (
-        <ErrorSection description="خطایی در نمایش اطلاعات نویسنده رخ داد!" />
-      );
-    }
     if (author) {
       return (
         <>
@@ -49,6 +43,12 @@ const Page = () => {
     <PageLayout
       showBackButton
       initialTitle="اطلاعات نویسنده"
+      isError={isError}
+      isLoading={isLoading}
+      noContent={!author}
+      retry={() => {
+        void refetch();
+      }}
       onBackClick={onBackClick}
     >
       <div className="space-y-4">{renderAuthorPreview()}</div>
