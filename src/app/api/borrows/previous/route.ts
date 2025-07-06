@@ -7,7 +7,7 @@ import { handleErrors } from "@/utils/handleErrors";
 import { createPagedResponsePayload } from "@/utils/response";
 import { NextRequest, NextResponse } from "next/server";
 import Client from "pocketbase";
-import { ActiveBorrowsListingRequestSchema } from "../authors/route.schema";
+import { ActiveBorrowsListingRequestSchema } from "../../authors/route.schema";
 
 const handler = async (req: NextRequest, context: AuthorizedContext) => {
   const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries());
@@ -21,7 +21,7 @@ const handler = async (req: NextRequest, context: AuthorizedContext) => {
   const userId = context.user.id;
 
   try {
-    const { borrowsCore, meta } = await BorrowService.getUserActiveBorrows(
+    const { borrowsCore, meta } = await BorrowService.getUserPreviousBorrows(
       userId,
       {
         page,

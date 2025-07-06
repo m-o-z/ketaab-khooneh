@@ -1,7 +1,6 @@
 import { IconButton } from "@tapsioss/react-components/IconButton";
-import { ArrowRightFill, ArrowUp } from "@tapsioss/react-icons";
+import { ArrowRight, ArrowUp } from "@tapsioss/react-icons";
 import clsx from "clsx";
-import styles from "./PageLayout.module.scss";
 import {
   CSSProperties,
   ReactNode,
@@ -11,6 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
+import styles from "./PageLayout.module.scss";
 import { PageLayoutContext } from "./PageLayoutContext";
 import { usePWA } from "./PWAProvider";
 
@@ -51,7 +51,7 @@ export function PageLayout({
     const { scrollTop, scrollHeight, clientHeight } = el;
 
     // Scroll direction
-    const isScrollingDown = scrollTop > lastScrollTop.current;
+    const isScrollingDown = scrollTop >= lastScrollTop.current;
     lastScrollTop.current = scrollTop;
 
     // % scrolled
@@ -85,13 +85,15 @@ export function PageLayout({
         style={
           {
             "--top": "48px",
-            "--bottom-padding": safeAreaInsets.bottom > 0 ? "5.5rem" : "4.5rem",
+            "--bottom": "-1rem",
+            "--padding-bottom": safeAreaInsets.bottom > 0 ? "5.5rem" : "4.5rem",
           } as CSSProperties
         }
         className={clsx(
-          "fixed right-0 left-0 bottom-[var(--bottom-padding)] top-0 flex flex-col p-4",
+          "fixed right-1/2 translate-x-1/2 top-0 bottom-[var(--padding-bottom)] flex flex-col w-[calc(var(--max-width)-2rem)] px-4 pt-4",
           {
-            [styles.page]: topShadow,
+            [styles.pageTopShadow]: topShadow,
+            [styles.pageBottomShadow]: bottomShadow,
           },
         )}
       >
@@ -104,7 +106,7 @@ export function PageLayout({
           <div className="flex items-center gap-2 shrink-0">
             {showBackButton && (
               <IconButton onClick={onBackClick} variant="naked">
-                <ArrowRightFill />
+                <ArrowRight />
               </IconButton>
             )}
             {title && <h1 className="text-xl font-medium grow">{title}</h1>}
@@ -117,16 +119,14 @@ export function PageLayout({
         <main
           ref={scrollRef}
           onScroll={handleScroll}
-          className={clsx("flex-1 overflow-y-auto -mx-4 px-4 -mb-4 pb-4", {
-            "shadow-[inset_0_-8px_12px_-6px_rgba(0,0,0,0.12)]": bottomShadow,
-          })}
+          className={clsx("flex-1 overflow-y-auto -mx-4 px-4 pb-4")}
         >
           {children}
         </main>
 
         {/* Sticky Button */}
         {showStickyButton && goToTopEnabled && (
-          <div className="absolute bottom-4 right-2 z-10">
+          <div className="absolute bottom-8 right-4 z-10">
             <IconButton
               variant="ghost"
               className="shadow-lg"

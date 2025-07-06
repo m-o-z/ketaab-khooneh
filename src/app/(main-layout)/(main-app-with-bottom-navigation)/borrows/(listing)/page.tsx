@@ -1,7 +1,7 @@
 "use client";
 import BorrowList from "@/common/components/Borrow/BorrowList";
 import Spinner from "@/common/Spinner/Spinner";
-import { useGetAllBorrows } from "@/hooks/borrow";
+import { useGetAllBorrowsQuery } from "@/hooks/borrow";
 import { PageLayout } from "@/providers/PageLayout";
 import { Button, Stack } from "@mantine/core";
 import { IconButton } from "@tapsioss/react-components/IconButton";
@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
-  const { data: borrows, isLoading, isSuccess } = useGetAllBorrows();
+  const { data: borrows, isLoading, isSuccess } = useGetAllBorrowsQuery();
 
   if (isLoading) {
     return <Spinner />;

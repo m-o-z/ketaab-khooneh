@@ -14,7 +14,7 @@ class BorrowService extends BaseService {
 
     return `status = "${status}"`;
   }
-  public async getBorrowsByStatus(
+  private async getBorrowsByStatus(
     userId: string,
     status: BorrowDB["status"] | BorrowDB["status"][],
     { page, perPage }: ListQueryPageOptions,

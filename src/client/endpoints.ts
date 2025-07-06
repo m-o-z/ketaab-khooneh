@@ -98,6 +98,8 @@ export const auth = {
 
 export const borrows = {
   getAll: api.query<ApiPagedResponse<BorrowBriefDTO>>("borrows"),
+  getAllPrevious:
+    api.query<ApiPagedResponse<BorrowBriefDTO>>("borrows/previous"),
   reserve: (bookId: string) =>
     api.mutation(() => `/borrow/${bookId}`, {
       method: "POST",

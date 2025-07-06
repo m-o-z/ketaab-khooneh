@@ -1,4 +1,4 @@
-.page {
+.pageTopShadow {
   &::before {
     content: '';
     position: absolute;
@@ -10,5 +10,20 @@
     pointer-events: none;
     isolation: isolate;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.07)
+  }
+}
+
+.pageBottomShadow {
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: var(--bottom, 0px);
+    margin: 0 -1rem;
+    right: 0;
+    left: 0;
+    height: 1rem;
+    pointer-events: none;
+    isolation: isolate;
+    box-shadow: 0 -8px 12px rgba(0, 0, 0, 0.12)
   }
 }

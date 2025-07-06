@@ -20,7 +20,7 @@ const AppShell = ({ children }: Props) => {
   }, []);
 
   return (
-    <div className="h-full w-full pb-[6.25rem] px-4 pt-4 overflow-y-auto">
+    <div className="h-full w-full pb-[6.25rem] px-4 pt-4 relative">
       {children}
       <Portal id="#bottom-navigation">
         <BottomNavigation />
