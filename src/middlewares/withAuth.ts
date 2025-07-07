@@ -73,8 +73,9 @@ const handleAuthRefresh = async ({
 };
 
 const clearCookie = async (request: NextRequest, response: NextResponse) => {
-  const origin = new URL(request.url).hostname;
-  console.log("here");
+  const requestURL = request.headers.get("origin") || request.url;
+  const origin = new URL(requestURL).hostname;
+  console.log("here", { origin, requestURL });
   return setAccessToken({
     origin,
     maxAge: -1,
