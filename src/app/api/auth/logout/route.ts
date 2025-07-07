@@ -12,7 +12,10 @@ const createLogoutResponse = (req: NextRequest) => {
     { status: 201 },
   );
 
-  const requestOrigin = req.headers.get("origin") || "http://localhost:3000";
+  const headerOrigin = req.headers.get("origin");
+  console.log({ headerOrigin, headerOriginType: typeof headerOrigin });
+
+  const requestOrigin = headerOrigin || "http://localhost:3000";
   const originHost = new URL(requestOrigin).hostname;
 
   response.cookies.set("accessToken", "", {
