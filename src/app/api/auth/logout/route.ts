@@ -17,6 +17,7 @@ const createLogoutResponse = (req: NextRequest) => {
 
   const requestOrigin = headerOrigin || "http://localhost:3000";
   const originHost = new URL(requestOrigin).hostname;
+  console.log({ originHost });
 
   response.cookies.set("accessToken", "", {
     httpOnly: true,
@@ -38,6 +39,7 @@ const loginHandler: ApiHandler = (req: NextRequest, context) => {
 
     return response;
   } catch (e) {
+    console.log({ __e: e });
     if (isPocketBaseError(e) && e.status === 401) {
       return createLogoutResponse(req);
     }

@@ -64,7 +64,7 @@ const handleAuthRefresh = async ({
   if (wholeDaysLeft < DAYS_TO_REFRESH) {
     const { token } = await client.collection("users").authRefresh();
     const origin = new URL(request.url).hostname;
-    await setAccessToken({
+    return setAccessToken({
       origin,
       token,
       response,
@@ -74,7 +74,8 @@ const handleAuthRefresh = async ({
 
 const clearCookie = async (request: NextRequest, response: NextResponse) => {
   const origin = new URL(request.url).hostname;
-  await setAccessToken({
+  console.log("here");
+  return setAccessToken({
     origin,
     maxAge: -1,
     token: "",
