@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { ApiHandler } from "@/@types/api";
+import { Context } from "@/@types/pocketbase";
 
 import { RequestOTPRequestSchema } from "./login.schema";
 
@@ -9,7 +10,7 @@ const extractBodyJson = async (req: NextRequest) => {
     if (req.headers.get("content-type") !== "application/json") {
       throw new Error("Body is not json format");
     }
-    const body = await req.json();
+    const body = (await req.json()) as Record<string, any>;
 
     return body;
   } catch (e) {
@@ -27,15 +28,15 @@ const validateBody = (body: any) => {
     result.error.errors.map((issues) => issues.message).join(", "),
   );
 };
+
 export const withLoginValidator = (handler: ApiHandler) => {
-  return async function (req: NextRequest, context: any) {
+  return async function (req: NextRequest, context: Context) {
     try {
       const body = await extractBodyJson(req.clone() as NextRequest);
       validateBody(body);
       context.body = body;
       return await handler(req, context);
     } catch (e) {
-      console.log("ERROR::", { error: e });
       return NextResponse.json(
         {
           status: "Error",

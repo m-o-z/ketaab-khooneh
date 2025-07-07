@@ -73,8 +73,6 @@ export class RuleEngineService {
         this.checkCondition(cond, result.modifiedContext),
       );
 
-      console.log({ rule, conditions, allConditionsMet });
-
       if (allConditionsMet) {
         console.log(`Executing action for rule: ${rule.name}`);
         switch (rule.actionType) {

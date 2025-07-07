@@ -14,13 +14,11 @@ const loginHandler: ApiHandler = async (req: NextRequest, context: Context) => {
   const { email } = body;
   let hasFirstItem = false;
 
-  console.log({ email, body, adminClient });
-
   try {
     await adminClient.collection("users").getFirstListItem(`email="${email}"`);
     hasFirstItem = true;
-  } catch (e) {
-    console.log({ e1: e });
+  } catch {
+    //
   }
   try {
     if (!hasFirstItem) {

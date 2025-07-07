@@ -35,7 +35,6 @@ export const withVerifyValidator = (handler: ApiHandler) => {
       context.body = body;
       return await handler(req, context);
     } catch (e) {
-      console.log("ERROR::", { error: e });
       return NextResponse.json(
         {
           status: "Error",
