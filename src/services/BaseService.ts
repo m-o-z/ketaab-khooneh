@@ -7,8 +7,7 @@ export class BaseService {
   protected _adminClient: () => Promise<Client> = null!;
 
   protected constructor() {
-    this._adminClient = async () =>
-      (await PocketBaseService.GetInstance()).admin;
+    this._adminClient = async () => await PocketBaseService.AdminClient();
   }
 
   public static GetInstance() {

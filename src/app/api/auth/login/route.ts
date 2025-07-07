@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { ApiHandler } from "@/@types/api";
 import { Context } from "@/@types/pocketbase";
@@ -8,11 +8,13 @@ import { errorBadRequest } from "@/utils/errors/errors";
 import { RequestOTPRequestPayload } from "./login.schema";
 import { withLoginValidator } from "./validator";
 
-const loginHandler: ApiHandler = async (req, context: Context) => {
-  const adminClient = (await PocketBaseService.GetInstance()).admin;
-  const body = await req.json();
-  const { email } = body as RequestOTPRequestPayload;
+const loginHandler: ApiHandler = async (req: NextRequest, context: Context) => {
+  const adminClient = await PocketBaseService.AdminClient();
+  const body = (await req.json()) as RequestOTPRequestPayload;
+  const { email } = body;
   let hasFirstItem = false;
+
+  console.log({ email, body, adminClient });
 
   try {
     await adminClient.collection("users").getFirstListItem(`email="${email}"`);

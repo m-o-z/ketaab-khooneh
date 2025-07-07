@@ -111,7 +111,6 @@ export const withAuth = (handler: ApiHandler) => {
         context["user_db"] = UserDBSchema.parse(record);
         context["user"] = UserCoreSchema.parse(record);
       } catch (e) {
-        debugger;
         return responseUnauthorized(req);
       }
 
@@ -120,7 +119,7 @@ export const withAuth = (handler: ApiHandler) => {
       }
 
       context.pb = pb;
-      context.admin = (await PocketBaseService.GetInstance()).admin;
+      context.admin = await PocketBaseService.AdminClient();
       const response = await handler(req, context);
       if (response instanceof NextResponse) {
         await handleAuthRefresh({

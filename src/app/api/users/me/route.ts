@@ -4,11 +4,8 @@ import { AuthorizedContext } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
 import { UserDTOSchema } from "@/schema/users";
 import UserService from "@/services/UserService";
-import { errorBadRequest } from "@/utils/errors/errors";
 import { handleErrors } from "@/utils/handleErrors";
-import { createPocketBaseError, isPocketBaseError } from "@/utils/pocketbase";
 import { createResponsePayload } from "@/utils/response";
-import { createZodError, isZodError } from "@/utils/zod";
 
 const handler = async (req: NextRequest, context: AuthorizedContext) => {
   try {

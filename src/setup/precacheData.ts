@@ -5,9 +5,9 @@ import { PocketBaseService } from "@/services/PocketBaseService";
 type TRedis = typeof Redis;
 export const handler = async () => {
   try {
-    const adminClient = (await PocketBaseService.GetInstance()).admin;
+    const adminClient = await PocketBaseService.AdminClient();
     await Redis.flushall();
-    handleAddingTestUsers(adminClient, Redis);
+    void handleAddingTestUsers(adminClient, Redis);
   } catch (error) {
     console.log({ error });
   }
@@ -15,7 +15,7 @@ export const handler = async () => {
 
 const handleAddingTestUsers = async (client: Client, redis: TRedis) => {
   const testUsers = await retrieveTestUsers(client);
-  redis.set("test-users", JSON.stringify(testUsers));
+  void redis.set("test-users", JSON.stringify(testUsers));
 };
 
 const retrieveTestUsers = async (client: Client) => {
