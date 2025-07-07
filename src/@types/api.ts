@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { ApiErrorResponse } from "@/utils/response";
+import { MaybePromise } from "@/utils/type";
+
+import { Context } from "./pocketbase";
+
 export type ApiHandler = (
   request: NextRequest,
-  context: any, // Context might contain params like { params: { slug: '...' } }
+  context: Context, // Context might contain params like { params: { slug: '...' } }
   userData?: any, // Optional: Pass user data down
-) => Promise<NextResponse> | NextResponse | Response | Promise<Response>;
+) =>
+  | MaybePromise<NextResponse>
+  | MaybePromise<Response>
+  | MaybePromise<ApiErrorResponse>;

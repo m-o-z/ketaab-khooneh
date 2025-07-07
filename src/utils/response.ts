@@ -55,7 +55,7 @@ export const createPagedResponsePayload = <T>(
 
 export type ApiErrorResponse = {
   status: "ERR";
-  type: "validation" | "internal";
+  type: "validation" | "internal" | "logical";
   errors?:
     | Record<string, string>
     | Record<string, string[] | undefined | string>;
