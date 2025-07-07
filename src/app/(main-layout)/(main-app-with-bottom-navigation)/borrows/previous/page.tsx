@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 
+import BorrowList from "@/common/components/Borrow/BorrowList";
 import { useGetAllPreviousBorrowsQuery } from "@/hooks/borrow";
 import { PageLayout } from "@/providers/PageLayout";
 
@@ -30,7 +31,7 @@ const Page = () => {
         }}
         onBackClick={onGoBack}
       >
-        Previous
+        <BorrowList items={borrows} />
       </PageLayout>
     );
   }

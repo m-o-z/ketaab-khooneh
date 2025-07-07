@@ -3,6 +3,15 @@ import { BorrowCoreSchema, BorrowDB } from "@/schema/borrows";
 
 import { BaseService } from "./BaseService";
 
+type GetBorrowsByStatusParams = {
+  userId: string;
+  status: BorrowDB["status"] | BorrowDB["status"][];
+  extraFilter?: string;
+  expand?: string;
+  page: ListQueryPageOptions["page"];
+  perPage: ListQueryPageOptions["perPage"];
+};
+
 class BorrowService extends BaseService {
   createStatusQuery(status: BorrowDB["status"] | BorrowDB["status"][]) {
     if (Array.isArray(status)) {
@@ -15,46 +24,74 @@ class BorrowService extends BaseService {
 
     return `status = "${status}"`;
   }
-  private async getBorrowsByStatus(
-    userId: string,
-    status: BorrowDB["status"] | BorrowDB["status"][],
-    { page, perPage }: ListQueryPageOptions,
-  ) {
+
+  private async getBorrowsByStatus({
+    userId,
+    status,
+    extraFilter,
+    page,
+    expand = "user,book,book.bookWork",
+    perPage,
+  }: GetBorrowsByStatusParams) {
     const client = await this._adminClient();
-    const filter = `user = "${userId}" && ${this.createStatusQuery(status)}`;
-    console.log({ filter });
+    let filter = `user = "${userId}" && ${this.createStatusQuery(status)}`;
+
+    if (extraFilter) {
+      filter += " && " + extraFilter;
+    }
+
     const result = await client
       .collection<BorrowDB>("borrows")
       .getList(page, perPage, {
         filter,
         sort: "-dueDate",
-        expand: "user,book,book.bookWork",
+        expand,
       });
 
-    const { items: _, ...meta } = result;
+    const { items, ...meta } = result;
 
     const borrowsCore = BorrowCoreSchema.array().parse(result.items);
     return {
       borrowsCore,
+      items,
       meta,
     };
   }
+
   public async getUserActiveBorrows(
     userId: string,
     options: ListQueryPageOptions,
   ) {
-    return this.getBorrowsByStatus(userId, ["ACTIVE", "EXTENDED"], options);
+    return this.getBorrowsByStatus({
+      userId,
+      status: ["ACTIVE", "EXTENDED"],
+      ...options,
+    });
+  }
+
+  public async getUserActiveBorrowsForBook(
+    userId: string,
+    bookId: string,
+    options: ListQueryPageOptions,
+  ) {
+    return this.getBorrowsByStatus({
+      userId,
+      status: ["ACTIVE", "EXTENDED"],
+      expand: "",
+      extraFilter: `book = "${bookId}"`,
+      ...options,
+    });
   }
 
   public async getUserPreviousBorrows(
     userId: string,
     options: ListQueryPageOptions,
   ) {
-    return this.getBorrowsByStatus(
+    return this.getBorrowsByStatus({
       userId,
-      ["RETURNED", "RETURNED_LATE"],
-      options,
-    );
+      status: ["RETURNED", "RETURNED_LATE"],
+      ...options,
+    });
   }
 }
 

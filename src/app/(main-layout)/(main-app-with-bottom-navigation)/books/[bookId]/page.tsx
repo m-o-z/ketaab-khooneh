@@ -83,10 +83,22 @@ const Page = () => {
         </Alert>
       ) : null;
     }
+    if (book?.activeBorrow) {
+      return (
+        <Notice
+          visible
+          className="w-full"
+          color="info"
+          description="این کتاب را قبلا امانت گرفته‌اید"
+          priority="low"
+        />
+      );
+    }
     if (book?.status === "UNAVAILABLE") {
       return (
         <Notice
           visible
+          className="w-full"
           color="error"
           description="این کتاب در حال حاضر در دسترس نیست."
           priority="low"
@@ -127,7 +139,7 @@ const Page = () => {
       <div className="space-y-8">
         <div>{renderBookTitle(book!.title)}</div>
         <BookSummary book={book!} />
-        {renderActionArea()}
+        <div>{renderActionArea()}</div>
       </div>
     );
   };

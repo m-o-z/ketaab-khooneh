@@ -33,9 +33,7 @@ export default function Home() {
       isLoading={isLoading}
       noContent={isSuccess && borrows.length == 0}
     >
-      <div>
-        <BorrowList items={borrows!} />
-      </div>
+      <BorrowList items={borrows!} />
     </PageLayout>
   );
 }

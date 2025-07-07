@@ -21,9 +21,11 @@ const BorrowItem = ({ item }: Props) => {
       </div>
       <div className="grow">
         <div className="">{item.book?.title}</div>
-        <div className="">
-          <>روز‌های باقی مانده</> <>{remainingDays}</>
-        </div>
+        {remainingDays > 0 ? (
+          <div className="">
+            <>روز‌های باقی مانده</> <>{remainingDays}</>
+          </div>
+        ) : null}
       </div>
     </div>
   );

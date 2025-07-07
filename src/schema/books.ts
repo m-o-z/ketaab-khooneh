@@ -14,6 +14,14 @@ import {
   BookWorkDB,
   BookWorkDBSchema,
 } from "./bookWorks";
+import {
+  BorrowBriefDTO,
+  BorrowBriefDTOSchema,
+  BorrowCore,
+  BorrowCoreSchema,
+  BorrowDB,
+  BorrowDBSchema,
+} from "./borrows";
 import { CategoryDTO, CategoryDTOSchema } from "./categories";
 
 // 1. Correct the BookDB type to match the schema's use of .default()
@@ -24,20 +32,17 @@ export type BookDB = {
   collectionName: string;
   edition?: string;
   coverImage?: string[];
-  status:
-    | "UNAVAILABLE"
-    | "AVAILABLE"
-    | "BORROWED"
-    | "RESERVED_BY_OTHERS"
-    | "RESERVED_BY_ME";
+  status: "UNAVAILABLE" | "AVAILABLE" | "DAMAGED";
   totalCount: number;
   availableCount: number;
   releaseYear: string;
   language: "ENGLISH" | "PERSIAN";
   subTitle: string;
   description: string;
+  userBorrows?: BorrowDB[];
   expand?: {
     bookWork?: BookWorkDB;
+    borrows_via_book?: BorrowDB[];
   };
 };
 
@@ -46,12 +51,7 @@ export type BookCore = {
   title: string;
   subTitle: string;
   description: string;
-  status:
-    | "UNAVAILABLE"
-    | "AVAILABLE"
-    | "BORROWED"
-    | "RESERVED_BY_OTHERS"
-    | "RESERVED_BY_ME";
+  status: "UNAVAILABLE" | "AVAILABLE" | "DAMAGED";
   totalCount: number;
   availableCount: number;
   releaseYear: string;
@@ -59,6 +59,8 @@ export type BookCore = {
   coverImage?: string[];
   language: "ENGLISH" | "PERSIAN";
   bookWork: BookWorkCore | null;
+  activeBorrows: BorrowCore[];
+  previousBorrows: BorrowCore[];
 };
 
 // 2. The Zod schema definitions remain the same
@@ -69,22 +71,21 @@ export const BookDBSchema: z.ZodType<BookDB> = z.object({
   collectionName: z.string(),
   edition: z.string().default("N/A"),
   coverImage: z.array(z.string()).default([]),
-  status: z.enum([
-    "UNAVAILABLE",
-    "AVAILABLE",
-    "BORROWED",
-    "RESERVED_BY_OTHERS",
-    "RESERVED_BY_ME",
-  ]),
+  status: z.enum(["UNAVAILABLE", "AVAILABLE", "DAMAGED"]),
   totalCount: z.number(),
   availableCount: z.number(),
   releaseYear: z.string(),
   language: z.enum(["ENGLISH", "PERSIAN"]),
   subTitle: z.string(),
   description: z.string(),
+  userBorrows: z.lazy(() => BorrowDBSchema.array()).optional(),
   expand: z
     .object({
       bookWork: z.lazy(() => BookWorkDBSchema).optional(),
+      borrows_via_book: z
+        .lazy(() => BorrowDBSchema.array())
+        .optional()
+        .default([]),
     })
     .optional(),
 });
@@ -103,15 +104,26 @@ export const BookCoreSchema: z.ZodType<BookCore, z.ZodTypeDef, BookDB> =
       edition,
       language,
       expand,
+      userBorrows,
     } = data;
 
     let bookWork: null | BookWorkCore = null;
+    let activeBorrows: BorrowCore[] = [];
+    let previousBorrows: BorrowCore[] = [];
     if (expand?.bookWork) {
-      const result = BookWorkCoreSchema.safeParse(expand.bookWork);
-      if (result.success) {
-        bookWork = result.data;
-      }
+      bookWork = BookWorkCoreSchema.parse(expand.bookWork);
     }
+
+    if (userBorrows) {
+      const allBorrows = BorrowCoreSchema.array().parse(userBorrows);
+      activeBorrows = allBorrows.filter(
+        (item) => item.status === "ACTIVE" || item.status === "EXTENDED",
+      );
+      previousBorrows = allBorrows.filter(
+        (item) => !(item.status === "ACTIVE" || item.status === "EXTENDED"),
+      );
+    }
+
     const mappedCoverImage = coverImage!.map((img) =>
       PocketBasePublicService.Client().files.getURL(data, img),
     );
@@ -129,6 +141,8 @@ export const BookCoreSchema: z.ZodType<BookCore, z.ZodTypeDef, BookDB> =
       edition,
       language,
       bookWork,
+      activeBorrows,
+      previousBorrows,
     };
   });
 
@@ -144,8 +158,8 @@ export const BookBriefDTOSchema = z.custom<BookCore>().transform((data) => {
     coverImage,
   } = data;
 
-  let authors: AuthorBriefDTO[];
-  let categories: CategoryDTO[];
+  let authors: AuthorBriefDTO[] = null!;
+  let categories: CategoryDTO[] = null!;
   if (bookWork?.authors) {
     authors = AuthorBriefDTOSchema.array().parse(bookWork.authors);
   }
@@ -183,9 +197,13 @@ export const BookDTOSchema = z.custom<BookCore>().transform((data) => {
     edition,
     language,
     releaseYear,
+    activeBorrows: activeBorrowsCore,
+    previousBorrows: previousBorrowsCore,
   } = data;
   let authors: AuthorDTO[] | null = null;
   let categories: CategoryDTO[] | null = null;
+  let activeBorrow: BorrowBriefDTO | null = null;
+  let previousBorrows: BorrowBriefDTO[] | null = [];
 
   if (bookWork?.authors) {
     const result = AuthorDTOSchema.array().safeParse(bookWork.authors);
@@ -195,6 +213,14 @@ export const BookDTOSchema = z.custom<BookCore>().transform((data) => {
   if (bookWork?.categories) {
     const result = CategoryDTOSchema.array().safeParse(bookWork.categories);
     if (result.success) categories = result.data;
+  }
+
+  if (activeBorrowsCore && activeBorrowsCore.length) {
+    activeBorrow = BorrowBriefDTOSchema.parse(activeBorrowsCore[0]);
+  }
+
+  if (previousBorrowsCore && previousBorrowsCore.length) {
+    previousBorrows = BorrowBriefDTOSchema.array().parse(previousBorrowsCore);
   }
 
   return {
@@ -213,6 +239,8 @@ export const BookDTOSchema = z.custom<BookCore>().transform((data) => {
     status,
     authors,
     categories,
+    activeBorrow,
+    previousBorrows,
   };
 });
 export type BookDTO = z.infer<typeof BookDTOSchema>;

@@ -1,3 +1,5 @@
+import { ClientResponseError } from "pocketbase";
+
 import { ApiErrorResponse } from "./response";
 
 export function isPocketBaseError(
@@ -11,8 +13,21 @@ export function isPocketBaseError(
   );
 }
 
-export const createPocketBaseError = (message?: string) => {
+const isClientResponseError = (err: any): err is ClientResponseError => {
+  return err instanceof ClientResponseError;
+};
+
+export const createPocketBaseError = (err: any, message?: string) => {
   const _message = message ?? "Something unexpected happened.";
+
+  if (isClientResponseError(err) && err.status === 404) {
+    const response: ApiErrorResponse = {
+      status: "ERR",
+      type: "internal",
+      message: "Record did not found",
+    };
+    return Response.json(response, { status: 404 });
+  }
 
   const response: ApiErrorResponse = {
     status: "ERR",

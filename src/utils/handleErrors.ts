@@ -7,7 +7,7 @@ export const handleErrors = (error: any) => {
     return createZodError(error);
   }
   if (isPocketBaseError(error)) {
-    return createPocketBaseError();
+    return createPocketBaseError(error);
   }
   return errorBadRequest();
 };
