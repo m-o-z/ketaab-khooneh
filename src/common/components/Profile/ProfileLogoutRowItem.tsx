@@ -2,17 +2,18 @@ import { Box, Flex } from "@mantine/core";
 import { UseMutateAsyncFunction } from "@tanstack/react-query";
 import { ArrowRightFromLine } from "@tapsioss/react-icons";
 import tokens from "@tapsioss/theme/tokens";
-import React from "react";
+import React, { CSSProperties } from "react";
 
 import ConfirmationModal from "../ConfirmationModal";
+import ProfileItem from "./ProfileItem";
 type Props = {
   logoutMutationAsync: UseMutateAsyncFunction<null, Error, {}, unknown>;
   isPending: boolean;
 };
 
 const ProfileLogoutRowItem = ({ logoutMutationAsync, isPending }: Props) => {
-  const onClick = async () => {
-    logoutMutationAsync({});
+  const onClick = () => {
+    void logoutMutationAsync({});
   };
 
   return (
@@ -45,18 +46,14 @@ const ProfileLogoutRowItem = ({ logoutMutationAsync, isPending }: Props) => {
       onConfirm={onClick}
     >
       {({ show }) => (
-        <Flex
-          align="center"
-          c={tokens.color.content.negative}
-          columnGap="xs"
-          style={{ cursor: "pointer" }}
+        <ProfileItem
+          className="text-[var(--color)]"
+          renderIcon={<ArrowRightFromLine />}
+          style={{ "--color": tokens.color.content.negative } as CSSProperties}
           onClick={show}
         >
-          <Box h={24} w={24}>
-            <ArrowRightFromLine />
-          </Box>
-          <p style={{ color: "inherit" }}>خروج از حساب کاربری</p>
-        </Flex>
+          خروج از حساب کاربری
+        </ProfileItem>
       )}
     </ConfirmationModal>
   );

@@ -1,0 +1,209 @@
+@font-face {
+  font-family: "SF Pro Rounded";
+  src:
+    local("SF Pro Rounded Bold"),
+    local("SFRounded-Bold"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Bold.woff2") format("woff2"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Bold.woff") format("woff"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Rounded";
+  src:
+    local("SF Pro Rounded Black"),
+    local("SFRounded-Black"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Black.woff2") format("woff2"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Black.woff") format("woff"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Rounded";
+  src:
+    local("SF Pro Rounded Heavy"),
+    local("SFRounded-Heavy"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Heavy.woff2") format("woff2"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Heavy.woff") format("woff"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Heavy.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Rounded";
+  src:
+    local("SF Pro Rounded Light"),
+    local("SFRounded-Light"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Light.woff2") format("woff2"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Light.woff") format("woff"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Rounded";
+  src:
+    local("SF Pro Rounded Regular"),
+    local("SFRounded-Regular"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Regular.woff2") format("woff2"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Regular.woff") format("woff"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Rounded";
+  src:
+    local("SF Pro Rounded Medium"),
+    local("SFRounded-Medium"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Medium.woff2") format("woff2"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Medium.woff") format("woff"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Rounded";
+  src:
+    local("SF Pro Rounded Semibold"),
+    local("SFRounded-Semibold"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Semibold.woff2") format("woff2"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Semibold.woff") format("woff"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Semibold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Rounded";
+  src:
+    local("SF Pro Rounded Ultralight"),
+    local("SFRounded-Ultralight"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Ultralight.woff2") format("woff2"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Ultralight.woff") format("woff"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Ultralight.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Rounded";
+  src:
+    local("SF Pro Rounded Thin"),
+    local("SFRounded-Thin"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Thin.woff2") format("woff2"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Thin.woff") format("woff"),
+    url("/fonts/sf-pro-rounded/subset-SFRounded-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+
+// Vazirmatn
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Thin.woff2") format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-ExtraLight.woff2") format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Light.woff2") format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Regular.woff2") format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Medium.woff2") format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-SemiBold.woff2") format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Bold.woff2") format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-ExtraBold.woff2") format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Vazirmatn;
+  src:
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/webfonts/Vazirmatn-Black.woff2") format("woff2"),
+    url("https://media-cdn.tapsi.cab/fonts/vazirmatn-typeface/ui/farsi-digits-non-latin/ttf/Vazirmatn-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}

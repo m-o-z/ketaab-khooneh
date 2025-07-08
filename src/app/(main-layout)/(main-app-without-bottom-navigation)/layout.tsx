@@ -1,7 +1,7 @@
 "use client";
 import "@mantine/core/styles.css";
 import "@tapsioss/theme/css-variables";
-import "@/app/globals.css";
+import "@/app/globals.scss";
 import { useEffect } from "react";
 
 import { usePWA } from "@/providers/PWAProvider";

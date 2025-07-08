@@ -229,28 +229,30 @@ export function PageLayout({
         )}
         style={
           {
-            "--top": "42px",
+            "--header-height": "72px",
             "--bottom": "-1rem",
             "--padding-bottom": paddingBottom,
           } as CSSProperties
         }
       >
         {/* Header */}
-        <header
-          className={clsx(
-            "flex items-center justify-between pb-3 transition-shadow",
-          )}
-        >
-          <div className="flex items-center space-x-1 shrink-0">
-            {showBackButton && (
+        <header className="flex items-center justify-between pb-4 overflow-hidden transition-shadow w-[calc(100%+2rem)] h-14 -mx-4 px-4 space-x-2">
+          {showBackButton && (
+            <div className="flex items-center shrink-0 max-h-full">
               <IconButton variant="naked" onClick={onBackClick}>
                 <ArrowRight />
               </IconButton>
-            )}
-            {title && <h2 className="grow">{title}</h2>}
-          </div>
+            </div>
+          )}
+          {title && (
+            <h2 className="grow text-ellipsis whitespace-nowrap overflow-hidden max-h-full min-w-0 !leading-[40px]">
+              {title}
+            </h2>
+          )}
           {!!actions && (
-            <div className="flex items-center gap-2 shrink-0">{actions}</div>
+            <div className="flex items-center gap-2 shrink-0 max-h-full">
+              {actions}
+            </div>
           )}
         </header>
 

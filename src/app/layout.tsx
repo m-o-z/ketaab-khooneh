@@ -3,7 +3,7 @@ import "@mantine/notifications/styles.css";
 import "@tapsioss/theme/css-variables";
 import { Metadata, Viewport } from "next";
 import Script from "next/script";
-import "./globals.css";
+import "./globals.scss";
 
 const APP_NAME = "Ghafaseh";
 const APP_DEFAULT_TITLE = "Tapsi - Ghafaseh";

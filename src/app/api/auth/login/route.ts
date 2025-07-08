@@ -13,6 +13,7 @@ const loginHandler: ApiHandler = async (req: NextRequest, context: Context) => {
   const body = (await req.json()) as RequestOTPRequestPayload;
   const { email } = body;
   let hasFirstItem = false;
+  debugger;
 
   try {
     await adminClient.collection("users").getFirstListItem(`email="${email}"`);
@@ -20,6 +21,7 @@ const loginHandler: ApiHandler = async (req: NextRequest, context: Context) => {
   } catch {
     //
   }
+  debugger;
   try {
     if (!hasFirstItem) {
       const data = {

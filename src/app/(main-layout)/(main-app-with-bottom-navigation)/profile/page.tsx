@@ -1,8 +1,10 @@
 "use client";
 import { Flex, Stack } from "@mantine/core";
 import { Avatar, Divider } from "@tapsioss/react-components";
+import { Gear } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
 
+import ProfileItem from "@/common/components/Profile/ProfileItem";
 import ProfileLogoutRowItem from "@/common/components/Profile/ProfileLogoutRowItem";
 import { useLogoutApi } from "@/hooks/auth";
 import { useGetProfile } from "@/hooks/profile";
@@ -51,6 +53,7 @@ const Page = () => {
         {renderProfileHeader()}
         <Divider className="-mr-4 w-[calc(100%+2rem)]" variant="thick" />
         <Stack>
+          <ProfileItem renderIcon={<Gear />}>تنظیمات</ProfileItem>
           <ProfileLogoutRowItem
             isPending={isPending}
             logoutMutationAsync={logout}

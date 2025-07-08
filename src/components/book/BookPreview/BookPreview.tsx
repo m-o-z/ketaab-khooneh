@@ -101,7 +101,7 @@ BookPreview.Loading = function Loading() {
 BookPreview.List = function List({ book }: Partial<Props>) {
   if (!book) return null;
   return (
-    <Flex gap={30}>
+    <Flex className="cursor-pointer" gap={30}>
       <Box miw={listWidth} w={listWidth}>
         <BadgeWrapper anchorShape="rectangle" badgeSide="left">
           <Box slot={BadgeWrapperSlots.BADGE}>

@@ -1,6 +1,7 @@
 "use client";
 import { Stack } from "@mantine/core";
-import { Divider } from "@tapsioss/react-components";
+import { Divider, IconButton } from "@tapsioss/react-components";
+import { Scan } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
 import { Fragment, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
@@ -74,6 +75,11 @@ export default function Books() {
   return (
     <PageLayout
       goToTopEnabled
+      initialActions={
+        <IconButton variant="naked">
+          <Scan />
+        </IconButton>
+      }
       initialTitle="کتاب‌ها"
       isError={isError}
       isLoading={isLoading || isCategoryLoading}
