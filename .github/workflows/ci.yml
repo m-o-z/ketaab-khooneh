@@ -37,7 +37,7 @@ jobs:
   build_and_push_frontend:
     runs-on: ubuntu-latest
     environment: production
-    needs: check_changes # Runs in parallel with the backend job
+    needs: check_changes
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -67,8 +67,8 @@ jobs:
   build_and_push_backend:
     runs-on: ubuntu-latest
     environment: production
-    needs: check_changes # Runs in parallel with the frontend job
-    if: needs.check_changes.outputs.backend_changed == 'true' # Only runs if backend files changed
+    needs: check_changes
+    if: needs.check_changes.outputs.backend_changed == 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -86,7 +86,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          file: ./docker-build/Dockerfile # Corrected path from your original post
+          file: ./backend/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:latest
@@ -96,9 +96,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: production
-    needs: [build_and_push_frontend, build_and_push_backend] # Waits for both
-    # Always run the deploy job, even if the backend was skipped
-    if: always()
+    needs: [build_and_push_frontend, build_and_push_backend]
+    # Run only if dependent jobs succeeded or were skipped, but NOT if they failed.
+    if: ${{ !failure() && !cancelled() }}
     steps:
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
