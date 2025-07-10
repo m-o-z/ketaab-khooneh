@@ -1,47 +1,43 @@
-# Use the official Node.js 20 image as the base (recommended for Next.js v15)
-FROM node:20-slim AS base
+# ---- Builder Stage ----
+# This stage builds the Go application
+FROM golang:1.22-alpine AS builder
 
-ARG APP_ENV production
-ARG NEXT_PUBLIC_POCKETBASE_URL https://pb.echa.ir
-ARG REDIS_HOST
-ARG REDIS_PORT
-ARG POCKETBASE_ADMIN_USERNAME
-ARG POCKETBASE_ADMIN_PASSWORD
-
-# Set working directory inside the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Set environment variables
-ENV NODE_ENV=production
-ENV PORT=3000
+# Copy go.mod and go.sum to leverage Docker's build cache.
+# This step only re-runs if these files change.
+COPY go.mod go.sum ./
+RUN go mod download
 
-# Install pnpm globally
-RUN npm install -g pnpm
-
-# Install dependencies needed for sharp (image optimization) and other native modules
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy package.json, pnpm-lock.yaml, and any workspace files (if applicable)
-COPY package.json pnpm-lock.yaml ./
-
-# Install production dependencies with pnpm
-RUN pnpm install --frozen-lockfile
-
-# Copy the rest of your Next.js project files
+# Copy the rest of the application source code
 COPY . .
 
-RUN ls -lash
+# Build the Go application, creating a static binary.
+# CGO_ENABLED=0 is important for a truly static binary.
+# -o specifies the output file name.
+RUN CGO_ENABLED=0 go build -o /app/pocketbase-app ./main.go
 
-# Build the Next.js app (generates optimized production build)
-RUN pnpm build
 
-# Expose the port Next.js will run on
-EXPOSE 3000
+# ---- Final Stage ----
+# This stage creates the final, minimal image
+FROM alpine:latest
 
-# Command to start the Next.js app
-CMD ["pnpm", "start"]
+WORKDIR /app
 
-# Healthcheck to ensure the app is running (optional but recommended)
-HEALTHCHECK --interval=30s --timeout=3s \
-  CMD curl -f http://localhost:${PORT}/ || exit 1
+# Copy the compiled application binary from the builder stage
+COPY --from=builder /app/pocketbase-app .
+
+# PocketBase needs its migrations and public assets to run.
+# Ensure 'pb_migrations' and 'pb_public' folders are in your 'backend' directory.
+COPY ./pb_migrations ./pb_migrations
+COPY ./pb_public ./pb_public
+
+# Expose the default PocketBase port
+EXPOSE 8090
+
+# Command to run the application.
+# It serves on 0.0.0.0 to be accessible from outside the container.
+# The data directory (pb_data) will be created inside the container.
+# IMPORTANT: You should mount a volume to /app/pb_data to persist your data.
+CMD ["./pocketbase-app", "serve", "--http=0.0.0.0:8090"]
