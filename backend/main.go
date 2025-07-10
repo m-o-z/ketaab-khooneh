@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
@@ -20,10 +19,20 @@ func main() {
 	// 	return nil
 	// })
 
+	type Response struct {
+		Status  string `json:"status"`
+		Message string `json:"message"`
+	}
+
 	app.OnServe().BindFunc(func(e *core.ServeEvent) error {
 		e.Router.GET("/api/hello", func(e *core.RequestEvent) error {
 
-			return e.String(http.StatusOK, "{Hello /}")
+			response := Response{
+				Status:  "OK",
+				Message: "Hello",
+			}
+
+			return e.JSON(200, response)
 		})
 
 		return e.Next()
