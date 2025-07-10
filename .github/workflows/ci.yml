@@ -33,6 +33,7 @@ jobs:
         run: |
           echo "Debug: All outputs from the paths-filter step:"
           echo '${{ toJSON(steps.changes.outputs) }}'
+          echo '${{ toJSON(github.event) }}'
 
   # Job to build and push the frontend image
   build_and_push_frontend:
