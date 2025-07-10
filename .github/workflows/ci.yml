@@ -16,25 +16,24 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetches all history for an accurate diff
-      - name: Check for backend changes in the push
-        uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          base: ${{ 'main~1' }}
-          filters: |
-            backend:
-              - 'backend/**'
-              - '!backend/pb_data/**'
-      - name: Print changed files
+      - name: Show git diff range for debug
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }}
-      - name: Debug paths-filter outputs
-        if: steps.changes.outputs.backend == 'true'
-        run: |
-          echo "Debug: All outputs from the paths-filter step:"
-          echo '${{ toJSON(steps.changes.outputs) }}'
-          echo '${{ toJSON(github.event) }}'
+          echo "Before: ${{ github.event.before }}"
+          echo "After:  ${{ github.sha }}"
 
+      - name: Check for backend changes manually (excluding pb_data/)
+        id: check_backend
+        run: |
+          echo "Checking for changes in backend excluding pb_data/..."
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^backend/' | grep -v '^backend/pb_data/')
+          echo "Changed files:"
+          echo "$CHANGED"
+
+          if [[ -n "$CHANGED" ]]; then
+            echo "backend_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "backend_changed=false" >> $GITHUB_OUTPUT
+          fi
   # Job to build and push the frontend image
   build_and_push_frontend:
     runs-on: ubuntu-latest
