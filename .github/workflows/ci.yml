@@ -26,7 +26,7 @@ jobs:
         id: check_backend
         run: |
           echo "Checking for changes in backend excluding pb_data/..."
-          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^backend/' | grep -v '^backend/pb_data/' | tru)
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^backend/' | grep -v '^backend/pb_data/' | true)
           echo "Changed files:"
           echo "$CHANGED"
 
