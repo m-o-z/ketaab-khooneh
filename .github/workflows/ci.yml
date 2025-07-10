@@ -12,8 +12,10 @@ jobs:
     outputs:
       backend_changed: ${{ steps.changes.outputs.backend }}
     steps:
-      - name: Checkout code
+      - name: Checkout code with full history
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetches all history for an accurate diff
 
       - name: Check for backend changes in the push
         uses: dorny/paths-filter@v2
@@ -79,7 +81,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          file: ./docker-build/Dockerfile
+          file: ./backend/Dockerfile # Corrected path from your original post
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:latest
@@ -90,6 +92,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: [build_and_push_frontend, build_and_push_backend] # Waits for both
+    # Always run the deploy job, even if the backend was skipped
+    if: always()
     steps:
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -105,4 +109,4 @@ jobs:
             docker compose pull
             docker compose down
             docker compose up -d --build
-            docker image prune -a
+            docker image prune -f -a
