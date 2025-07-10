@@ -1,47 +1,67 @@
-# Use the official Node.js 20 image as the base (recommended for Next.js v15)
-FROM node:20-slim AS base
+# ---------- Base image for building ----------
+FROM node:20-slim AS builder
 
-ARG APP_ENV production
-ARG NEXT_PUBLIC_POCKETBASE_URL https://pb.echa.ir
-ARG REDIS_HOST
-ARG REDIS_PORT
-ARG POCKETBASE_ADMIN_USERNAME
-ARG POCKETBASE_ADMIN_PASSWORD
+# Install dependencies for native modules (like sharp)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    python3 \
+    pkg-config \
+    libvips-dev \
+ && rm -rf /var/lib/apt/lists/*
 
-# Set working directory inside the container
+# Set workdir
 WORKDIR /app
 
-# Set environment variables
+# Copy lockfile and package.json first to leverage caching
+COPY package.json pnpm-lock.yaml ./
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Install deps for build (includes devDependencies)
+RUN pnpm install --frozen-lockfile
+
+# Copy rest of the project files
+COPY . .
+
+# Build the app
+RUN pnpm build
+
+# ---------- Runtime-only image ----------
+FROM node:20-slim AS runner
+
+ARG NEXT_PUBLIC_POCKETBASE_URL=https://pb.echa.ir
+
+# Set workdir
+WORKDIR /app
+
+# Create non-root user
+RUN useradd -m appuser
+
+# Install dependencies for sharp runtime only (libvips)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libvips \
+ && rm -rf /var/lib/apt/lists/*
+
+# Only copy the built app and required files
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+
+# Set env vars
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Install pnpm globally
-RUN npm install -g pnpm
+# Use non-root user
+USER appuser
 
-# Install dependencies needed for sharp (image optimization) and other native modules
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy package.json, pnpm-lock.yaml, and any workspace files (if applicable)
-COPY package.json pnpm-lock.yaml ./
-
-# Install production dependencies with pnpm
-RUN pnpm install --frozen-lockfile
-
-# Copy the rest of your Next.js project files
-COPY . .
-
-RUN ls -lash
-
-# Build the Next.js app (generates optimized production build)
-RUN pnpm build
-
-# Expose the port Next.js will run on
+# Expose Next.js port
 EXPOSE 3000
 
-# Command to start the Next.js app
-CMD ["pnpm", "start"]
-
-# Healthcheck to ensure the app is running (optional but recommended)
+# Healthcheck (optional)
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:${PORT}/ || exit 1
+
+# Start the app
+CMD ["node", "node_modules/next/dist/bin/next", "start"]
