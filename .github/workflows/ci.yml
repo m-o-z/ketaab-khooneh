@@ -25,6 +25,9 @@ jobs:
             backend:
               - 'backend/**'
               - '!backend/pb_data/**'
+      - name: Print changed files
+        run: |
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }}
       - name: Debug paths-filter outputs
         if: steps.changes.outputs.backend == 'true'
         run: |
