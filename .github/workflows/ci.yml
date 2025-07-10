@@ -20,7 +20,7 @@ jobs:
         uses: dorny/paths-filter@v2
         id: changes
         with:
-          base: ${{ 'origin/main~1' }}
+          base: ${{ 'main~1' }}
           filters: |
             backend:
               - 'backend/**'
