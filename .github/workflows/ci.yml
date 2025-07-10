@@ -15,10 +15,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check for backend changes
+      - name: Check for backend changes in the push
         uses: dorny/paths-filter@v2
         id: changes
         with:
+          # Compares the commits of the push against the state before the push
+          base: ${{ github.event.before }}
           filters: |
             backend:
               - 'backend/**'
