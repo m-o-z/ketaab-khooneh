@@ -21,12 +21,17 @@ jobs:
         uses: dorny/paths-filter@v2
         id: changes
         with:
-          # Compares the commits of the push against the state before the push
           base: ${{ github.event.before }}
           filters: |
             backend:
               - 'backend/**'
               - '!backend/pb_*/'
+
+      - name: Log changed backend files
+        if: steps.changes.outputs.backend == 'true'
+        run: |
+          echo "Backend changes detected in the following files:"
+          echo "${{ steps.changes.outputs.backend_changed_files }}"
 
   # Job to build and push the frontend image
   build_and_push_frontend:
@@ -81,7 +86,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          file: ./backend/Dockerfile # Corrected path from your original post
+          file: ./docker-build/Dockerfile # Corrected path from your original post
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:latest
