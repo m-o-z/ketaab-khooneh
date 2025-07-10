@@ -10,12 +10,13 @@ jobs:
   check_changes:
     runs-on: ubuntu-latest
     outputs:
-      backend_changed: ${{ steps.changes.outputs.backend }}
+      backend_changed: ${{ steps.check_backend.outputs.backend_changed }}
     steps:
       - name: Checkout code with full history
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetches all history for an accurate diff
+          fetch-depth: 0
+
       - name: Show git diff range for debug
         run: |
           echo "Before: ${{ github.event.before }}"
@@ -34,6 +35,7 @@ jobs:
           else
             echo "backend_changed=false" >> $GITHUB_OUTPUT
           fi
+
   # Job to build and push the frontend image
   build_and_push_frontend:
     runs-on: ubuntu-latest
