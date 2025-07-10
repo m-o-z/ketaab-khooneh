@@ -77,7 +77,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          file: ./backend/Dockerfile
+          file: ./docker-build/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:latest
