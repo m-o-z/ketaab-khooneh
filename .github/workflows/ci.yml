@@ -16,7 +16,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetches all history for an accurate diff
-
       - name: Check for backend changes in the push
         uses: dorny/paths-filter@v2
         id: changes
@@ -26,12 +25,11 @@ jobs:
             backend:
               - 'backend/**'
               - '!backend/pb_*/'
-
-      - name: Log changed backend files
+      - name: Debug paths-filter outputs
         if: steps.changes.outputs.backend == 'true'
         run: |
-          echo "Backend changes detected in the following files:"
-          echo "${{ steps.changes.outputs.backend_changed_files }}"
+          echo "Debug: All outputs from the paths-filter step:"
+          echo '${{ toJSON(steps.changes.outputs) }}'
 
   # Job to build and push the frontend image
   build_and_push_frontend:
@@ -86,7 +84,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          file: ./backend/Dockerfile
+          file: ./docker-build/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:latest
