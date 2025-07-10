@@ -1,4 +1,4 @@
-name: Ghafaseh Workflow
+name: Ghafaseh CI/CD
 
 on:
   push:
@@ -6,9 +6,9 @@ on:
       - main
 
 jobs:
-  build:
+  # This job runs first to check for file changes
+  check_changes:
     runs-on: ubuntu-latest
-    environment: production
     outputs:
       backend_changed: ${{ steps.changes.outputs.backend }}
     steps:
@@ -24,6 +24,15 @@ jobs:
               - 'backend/**'
               - '!backend/pb_*/'
 
+  # Job to build and push the frontend image
+  build_and_push_frontend:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: check_changes # Runs in parallel with the backend job
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -37,7 +46,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./docker-build/Dockerfile.frontend # Assumes you have a Dockerfile for the frontend
+          file: ./docker-build/Dockerfile.frontend
           push: true
           build-args: |
             NEXT_PUBLIC_POCKETBASE_URL=${{ vars.ENV_POCKETBASE_URL }}
@@ -45,21 +54,40 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-frontend:latest
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-frontend:${{ github.sha }}
 
+  # Job to build and push the backend image
+  build_and_push_backend:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: check_changes # Runs in parallel with the frontend job
+    if: needs.check_changes.outputs.backend_changed == 'true' # Only runs if backend files changed
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build and push backend
-        if: steps.changes.outputs.backend == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          file: ./backend/Dockerfile # Assumes you have a Dockerfile for the backend
+          file: ./backend/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:latest
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:${{ github.sha }}
 
+  # This job waits for both build jobs to complete successfully
   deploy:
-    needs: build
     runs-on: ubuntu-latest
     environment: production
+    needs: [build_and_push_frontend, build_and_push_backend] # Waits for both
     steps:
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
