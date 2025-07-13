@@ -4,6 +4,7 @@ import "@tapsioss/theme/css-variables";
 import { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./globals.scss";
+import "./tailwind.css";
 
 const APP_NAME = "Ghafaseh";
 const APP_DEFAULT_TITLE = "Tapsi - Ghafaseh";

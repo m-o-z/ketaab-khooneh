@@ -1,6 +1,12 @@
 "use client";
 import { Flex, Stack } from "@mantine/core";
-import { Avatar, Divider } from "@tapsioss/react-components";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Divider,
+  Notice,
+} from "@tapsioss/react-components";
 import { Gear } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
 
@@ -23,21 +29,34 @@ const Page = () => {
   const { mutateAsync: logout, isPending } = useLogoutApi();
 
   const renderProfileHeader = () => {
-    if (isFetched && profile)
-      return (
-        <Flex
-          align="center"
-          gap={10}
-          style={{ cursor: "pointer" }}
-          onClick={() => router.push("/profile/edit")}
-        >
-          <Avatar image={profile.avatar} />
-          <Stack gap={0}>
-            <h2 style={{ margin: 0 }}>{profile.name}</h2>
-            <p>{profile.email}</p>
-          </Stack>
-        </Flex>
-      );
+    if (isFetched && profile) {
+      if (!profile.isProfileCompleted) {
+        return (
+          <div className="flex flex-col items-center p-4 justify-center space-y-4">
+            <Badge
+              variant="pill"
+              color="warning"
+              value="پروفایل شما تکمیل نشده است!"
+            ></Badge>
+            <Button>تکمیل پروفایل</Button>
+          </div>
+        );
+      } else if (profile.isProfileCompleted)
+        return (
+          <Flex
+            align="center"
+            gap={10}
+            style={{ cursor: "pointer" }}
+            onClick={() => router.push("/profile/edit")}
+          >
+            <Avatar image={profile.avatar} />
+            <Stack gap={0}>
+              <h2 style={{ margin: 0 }}>{profile.displayName}</h2>
+              <p>{profile.email}</p>
+            </Stack>
+          </Flex>
+        );
+    }
   };
 
   return (

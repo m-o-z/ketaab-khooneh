@@ -15,13 +15,13 @@ export type UserDB = {
   tokenKey?: string;
   email: string;
   emailVisibility?: boolean;
-  verified?: boolean;
+  verified: boolean;
   avatar?: string | null;
   firstName?: string | null;
   lastName?: string | null;
-  isPunished?: boolean;
+  isPunished: boolean;
   punishmentEndAt?: string | Date | null;
-  isProfileCompleted?: boolean;
+  isProfileCompleted: boolean;
   created: string | Date;
   updated: string | Date;
   expand?: {
@@ -37,6 +37,10 @@ export type UserCore = {
   lastName: string | null;
   displayName: string;
   borrows: z.infer<typeof BorrowCoreSchema>[];
+  isProfileCompleted: boolean;
+  isPunished: boolean;
+  punishmentEndAt?: string | Date | null;
+  verified: boolean;
   activeBorrows: z.infer<typeof BorrowCoreSchema>[];
 };
 
@@ -53,7 +57,7 @@ export const UserDBSchema: z.ZodType<UserDB> = z.object({
   avatar: z.string().nullable(),
   firstName: z.string().nullable(),
   lastName: z.string().nullable(),
-  isPunished: z.boolean().optional(),
+  isPunished: z.boolean(),
   punishmentEndAt: FlexibleDateTime.or(z.literal("")),
   isProfileCompleted: z.boolean(),
   created: FlexibleDateTime,
