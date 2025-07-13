@@ -13,6 +13,8 @@ import {
   errorUserIsPunished,
   wrongDueDate,
 } from "./errors";
+import dayjs from "dayjs";
+import { handleErrors } from "@/utils/handleErrors";
 
 type ResponseError = {
   message: string;
@@ -62,24 +64,20 @@ const handler = async (req: NextRequest, context: Context) => {
       return wrongDueDate();
     }
 
-    // (Ideally in a transaction)
-    await clientAdmin
-      .collection("books")
-      .update(book.id, { "availableCount-": 1 });
-    const borrowRecord = await clientAdmin.collection("borrows").create({
-      user: user.id,
-      book: book.id,
-      borrowDate: new Date().toISOString(),
-      dueDate: dueDate.toISOString(),
-      status: "ACTIVE",
+    const response = await clientAdmin.send("/api/borrows", {
+      method: "POST",
+      body: JSON.stringify({
+        bookId: book.id,
+        userId: user.id,
+        duration: dayjs(dueDate).diff(dayjs(), "days"),
+      }),
     });
 
     return Response.json(
-      createResponsePayload(borrowRecord, "Book borrowed successfully!"),
+      createResponsePayload(response.data, "Book borrowed successfully!"),
     );
   } catch (err) {
-    console.log({ err });
-    return errorBadRequest();
+    return handleErrors(err);
   }
 };
 
