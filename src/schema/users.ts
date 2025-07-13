@@ -3,7 +3,7 @@ import { z } from "zod";
 import PocketBasePublicService from "@/services/PocketBasePublicService";
 
 import type { BorrowDB } from "./borrows"; // Use 'import type' for the type
-import { BorrowDBSchema, BorrowCoreSchema } from "./borrows"; // Regular import for the schema value
+import { BorrowDBSchema, BorrowCoreSchema, isActiveBorrow } from "./borrows"; // Regular import for the schema value
 import { FlexibleDateTime } from "./common/date";
 
 // 1. Define the TypeScript types first to break the dependency cycle.
@@ -36,7 +36,8 @@ export type UserCore = {
   firstName: string | null;
   lastName: string | null;
   displayName: string;
-  borrows: z.infer<typeof BorrowCoreSchema>[] | null;
+  borrows: z.infer<typeof BorrowCoreSchema>[];
+  activeBorrows: z.infer<typeof BorrowCoreSchema>[];
 };
 
 // 2. Define the Zod schemas and explicitly annotate them.
@@ -68,7 +69,7 @@ export const UserDBSchema: z.ZodType<UserDB> = z.object({
 // Use the correct annotation for a transformed schema: ZodType<Output, TypeDef, Input>
 export const UserCoreSchema: z.ZodType<UserCore, z.ZodTypeDef, UserDB> =
   UserDBSchema.transform((data) => {
-    let borrows: z.infer<typeof BorrowCoreSchema>[] | null = null;
+    let borrows: z.infer<typeof BorrowCoreSchema>[] = [];
     if (data.expand?.["borrows_via_user"]) {
       borrows = z
         .array(BorrowCoreSchema)
@@ -95,11 +96,21 @@ export const UserCoreSchema: z.ZodType<UserCore, z.ZodTypeDef, UserDB> =
       verified: data.verified,
       displayName: `${data.firstName ?? ""} ${data.lastName ?? ""}`.trim(),
       borrows,
+      activeBorrows: borrows?.length
+        ? borrows.filter((item) => isActiveBorrow(item.status))
+        : [],
     };
   });
 
 // For users, the Core object is often a good base for the main DTO.
-export const UserDTOSchema = z.custom<UserCore>().transform((data) => data);
+export const UserDTOSchema = z.custom<UserCore>().transform((data) => {
+  return {
+    ...data,
+    activeBorrowsCount: data.activeBorrows?.length
+      ? data.activeBorrows.length
+      : 0,
+  };
+});
 export type UserDTO = z.infer<typeof UserDTOSchema>;
 
 export const UserBriefDTOSchema = z.custom<UserCore>().transform((data) => {

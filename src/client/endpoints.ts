@@ -12,12 +12,13 @@ import { ApiPagedResponse, ApiResponse } from "@/utils/response";
 
 import { Author, BookCategory, ResponseWrap, UserInfo } from "./../types";
 import { api } from "./api";
+import { UserDTO } from "@/schema/users";
 
 // ===== Types =====
 
 // User types
 export const users = {
-  me: api.query<ResponseWrap<UserInfo>>("users/me"),
+  me: api.query<ResponseWrap<UserDTO>>("users/me"),
   // Get all users
   // getAll: api.query<User[]>("users"),
   // // Get user by ID

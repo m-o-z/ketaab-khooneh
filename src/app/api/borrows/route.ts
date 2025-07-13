@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import Client from "pocketbase";
 
 import { AuthorizedContext } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";

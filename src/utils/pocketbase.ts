@@ -17,8 +17,8 @@ const isClientResponseError = (err: any): err is ClientResponseError => {
   return err instanceof ClientResponseError;
 };
 
-export const createPocketBaseError = (err: any, message?: string) => {
-  const _message = message ?? "Something unexpected happened.";
+export const createPocketBaseError = (err: any) => {
+  const _message = err.message ?? "Something unexpected happened.";
 
   if (isClientResponseError(err) && err.status === 404) {
     const response: ApiErrorResponse = {

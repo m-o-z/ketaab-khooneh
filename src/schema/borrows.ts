@@ -16,6 +16,15 @@ import {
   UserDBSchema,
 } from "./users";
 
+export const BorrowDBStatus = {
+  ACTIVE: "ACTIVE",
+  EXTENDED: "EXTENDED",
+  RETURNED: "RETURNED",
+  RETURNED_LATE: "RETURNED_LATE",
+} as const;
+export type BorrowDBStatusKeys =
+  (typeof BorrowDBStatus)[keyof typeof BorrowDBStatus];
+
 // 1. Define the TypeScript types first to break the dependency cycle.
 export type BorrowDB = {
   id: string;
@@ -26,7 +35,7 @@ export type BorrowDB = {
   borrowDate: string | Date;
   dueDate: string | Date;
   returnDate?: string | Date | null; // Optional and can be null
-  status: "ACTIVE" | "RETURNED" | "RETURNED_LATE" | "EXTENDED";
+  status: BorrowDBStatusKeys;
   extendedCount?: number; // Optional
   created: string | Date;
   updated: string | Date;
@@ -41,7 +50,7 @@ export type BorrowCore = {
   borrowDate: string | Date;
   dueDate: string | Date;
   returnDate?: string | Date | null;
-  status: "ACTIVE" | "RETURNED" | "RETURNED_LATE" | "EXTENDED";
+  status: BorrowDBStatusKeys;
   extendedCount: number;
   book: BookCore | null;
   user: UserCore | null;
@@ -117,3 +126,8 @@ export const BorrowBriefDTOSchema = z.custom<BorrowCore>().transform((data) => {
   };
 });
 export type BorrowBriefDTO = z.infer<typeof BorrowBriefDTOSchema>;
+
+export const isActiveBorrow = (borrowStatus: string) => {
+  const list: string[] = [BorrowDBStatus.ACTIVE, BorrowDBStatus.EXTENDED];
+  return list.includes(borrowStatus);
+};

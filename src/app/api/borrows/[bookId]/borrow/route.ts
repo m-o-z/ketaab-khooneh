@@ -8,17 +8,13 @@ import { errorBadRequest } from "@/utils/errors/errors";
 import { toStandardGeorgianDateTime } from "@/utils/prettifyDate";
 import { createResponsePayload } from "@/utils/response";
 
+import { handleErrors } from "@/utils/handleErrors";
+import dayjs from "dayjs";
 import {
   borrowingNotAllowed,
   errorUserIsPunished,
   wrongDueDate,
 } from "./errors";
-import dayjs from "dayjs";
-import { handleErrors } from "@/utils/handleErrors";
-
-type ResponseError = {
-  message: string;
-};
 
 const handler = async (req: NextRequest, context: Context) => {
   const params = await context.params;
@@ -77,6 +73,7 @@ const handler = async (req: NextRequest, context: Context) => {
       createResponsePayload(response.data, "Book borrowed successfully!"),
     );
   } catch (err) {
+    console.log({ err });
     return handleErrors(err);
   }
 };

@@ -1,35 +1,30 @@
 "use client";
-import {
-  Alert,
-  Flex,
-  Stack,
-  Text,
-  Title,
-  useMantineTheme,
-} from "@mantine/core";
-import {
-  IconShoppingCart,
-  IconShoppingCartExclamation,
-} from "@tabler/icons-react";
+import { Flex, Title } from "@mantine/core";
 import {
   Button,
   ButtonSlots,
+  IconButton,
   Notice,
   NoticeSlots,
 } from "@tapsioss/react-components";
-import { ShoppingCart } from "@tapsioss/react-icons";
+import { ArrowLeft, ShoppingCart } from "@tapsioss/react-icons";
 import { useParams, useRouter } from "next/navigation";
 
 import BookSummary from "@/components/book/BookSummary/BookSummary";
-import UserPreview from "@/components/user/UserPreview";
 import { useBooksGetApi } from "@/hooks/books";
+import { useGetProfile } from "@/hooks/profile";
 import { PageLayout } from "@/providers/PageLayout";
 import { detectTextLanguage } from "@/utils/text";
 
 // TODO: fix style
 const Page = () => {
+  const {
+    data: userProfile,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+    refetch: profileRefetch,
+  } = useGetProfile();
   const router = useRouter();
-  const theme = useMantineTheme();
   const { bookId } = useParams();
   const {
     isLoading,
@@ -40,48 +35,23 @@ const Page = () => {
   } = useBooksGetApi(bookId as string);
 
   const renderActionArea = () => {
-    if (book?.status === "BORROWED") {
-      return book.borrowedBy ? (
-        <Alert color="gray" icon={<IconShoppingCartExclamation />}>
-          <Flex align="center" gap="sm">
-            <Text>This book is currently borrowed by</Text>
-            <UserPreview color={theme.colors.gray[5]} user={book.borrowedBy} />
-          </Flex>
-        </Alert>
-      ) : null;
-    }
-    if (book?.status === "RESERVED_BY_ME") {
+    if (userProfile?.activeBorrowsCount) {
       return (
-        <>
-          <Notice
-            visible
-            description="این کتاب توسط شما رزرو شده است."
-            priority="low"
-          >
-            <div slot={NoticeSlots.ACTION}>
-              <Button color="red">لغو رزرو</Button>
-            </div>
-          </Notice>
-          <Alert color="blue" icon={<IconShoppingCart />}>
-            <Stack gap="sm">
-              <Text>This book is currently reserved by you</Text>
-              <div>
-                <Button variant="destructive">Cancel Reservation</Button>
-              </div>
-            </Stack>
-          </Alert>
-        </>
+        <Notice
+          visible
+          className="w-full"
+          color="warning"
+          description="شما به سقف تعداد امانت‌گیری رسیدید!"
+          priority="low"
+        >
+          <div slot={NoticeSlots.ACTION} className="flex content-end w-full">
+            <Button href={"/borrows/"}>
+              <div>برو به امانت‌ها</div>
+              <ArrowLeft slot={ButtonSlots.TRAILING_ICON} />
+            </Button>
+          </div>
+        </Notice>
       );
-    }
-    if (book?.status === "RESERVED_BY_OTHERS") {
-      return book.reservedBy ? (
-        <Alert color="yellow.8">
-          <Flex gap="sm">
-            <Text>This book is currently reserved by</Text>
-            <UserPreview user={book.reservedBy} />
-          </Flex>
-        </Alert>
-      ) : null;
     }
     if (book?.activeBorrow) {
       return (
@@ -91,7 +61,11 @@ const Page = () => {
           color="info"
           description="این کتاب را قبلا امانت گرفته‌اید"
           priority="low"
-        />
+        >
+          <div slot={NoticeSlots.ACTION} className="flex content-end w-full">
+            <Button href={"/borrows/" + book.activeBorrow.id}>جزئیات</Button>
+          </div>
+        </Notice>
       );
     }
     if (book?.status === "UNAVAILABLE") {
@@ -105,7 +79,7 @@ const Page = () => {
         />
       );
     }
-    if (book?.status === "AVAILABLE") {
+    if (book?.status === "AVAILABLE" && book.availableCount > 0) {
       return (
         <Flex justify={"end"}>
           <Button>
@@ -152,10 +126,11 @@ const Page = () => {
     <PageLayout
       showBackButton
       initialTitle="جزئیات کتاب"
-      isError={isError}
-      isLoading={isLoading}
+      isError={isError || isProfileError}
+      isLoading={isLoading || isProfileLoading}
       noContent={!book && isSuccess}
       retry={() => {
+        void profileRefetch();
         void refetch();
       }}
       onBackClick={onBackClick}

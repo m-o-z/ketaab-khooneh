@@ -6,7 +6,6 @@ import { withAuth } from "@/middlewares/withAuth";
 import { BookCoreSchema, BookDB, BookDTOSchema } from "@/schema/books";
 import { BorrowDBSchema } from "@/schema/borrows";
 import BorrowService from "@/services/BorrowService";
-import { Book } from "@/types";
 import { errorInvalidParams, errorRecordNotFound } from "@/utils/errors/errors";
 import { createResponsePayload } from "@/utils/response";
 

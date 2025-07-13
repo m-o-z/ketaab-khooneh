@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 	"ghafaseh-backend/models"
 	"net/http"
 	"time"
@@ -30,16 +31,32 @@ func CreateBorrowHandler(c *core.RequestEvent) error {
 
 	var borrow *core.Record
 	err := c.App.RunInTransaction(func(txApp core.App) error {
-		var available int
-		err := txApp.DB().NewQuery("SELECT availableCount FROM books WHERE id={:id}").
+		var dbQueryResult models.BorrowDBQuery
+		err := txApp.DB().NewQuery("SELECT availableCount, status FROM books WHERE id={:id}").
 			Bind(dbx.Params{"id": req.BookID}).
-			Row(&available)
+			Row(&dbQueryResult.AvailableCount, &dbQueryResult.Status)
+
 		if err != nil {
 			return errors.New("book not found")
 		}
 
-		if available <= 0 {
+		if dbQueryResult.AvailableCount <= 0 {
 			return errors.New("no available copies for this book")
+		}
+
+		fmt.Println("result", dbQueryResult.Status == models.StatusUnavailable || dbQueryResult.Status == models.StatusDamaged)
+		fmt.Println("status", dbQueryResult.Status)
+		if dbQueryResult.Status == models.StatusUnavailable || dbQueryResult.Status == models.StatusDamaged {
+			return errors.New("you can not borrow `Unavailable` book.")
+		}
+
+		if dbQueryResult.AvailableCount == 1 {
+			_, err = txApp.DB().NewQuery("UPDATE books SET status='UNAVAILABLE' WHERE id={:id}").
+				Bind(dbx.Params{"id": req.BookID}).
+				Execute()
+			if err != nil {
+				return errors.New("error while updating book count")
+			}
 		}
 
 		_, err = txApp.DB().NewQuery("UPDATE books SET availableCount=availableCount-1 WHERE id={:id}").
@@ -59,7 +76,7 @@ func CreateBorrowHandler(c *core.RequestEvent) error {
 		borrow.Set("user", req.UserID)
 		borrowDate, _ := types.ParseDateTime(time.Now())
 		dueDate, _ := types.ParseDateTime(time.Now().AddDate(0, 0, req.Duration))
-		borrow.Set("borrow枣", borrowDate.Time().Format(time.RFC3339Nano))
+		borrow.Set("borrowDate", borrowDate.Time().Format(time.RFC3339Nano))
 		borrow.Set("dueDate", dueDate.Time().Format(time.RFC3339Nano))
 		borrow.Set("status", "ACTIVE")
 

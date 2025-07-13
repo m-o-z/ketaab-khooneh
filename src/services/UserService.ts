@@ -5,7 +5,9 @@ import { BaseService } from "./BaseService";
 class UserService extends BaseService {
   public async getUser(userId: string) {
     const client = await this._adminClient();
-    const userDB = await client.collection<UserDB>("users").getOne(userId);
+    const userDB = await client.collection<UserDB>("users").getOne(userId, {
+      expand: "borrows_via_user",
+    });
 
     const userCore = UserCoreSchema.parse(userDB);
     return userCore;
