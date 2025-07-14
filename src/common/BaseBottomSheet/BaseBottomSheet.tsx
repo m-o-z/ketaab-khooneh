@@ -1,0 +1,84 @@
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  PropsWithChildren,
+  useCallback,
+} from "react";
+import { Drawer } from "vaul";
+
+// Context to share state between Wrapper and Content
+type BottomSheetContextType = {
+  show: () => void;
+  hide: () => void;
+  isOpen: boolean;
+};
+const BottomSheetContext = createContext<BottomSheetContextType | null>(null);
+
+// Compound component pattern
+const BaseBottomSheet = ({ children }: PropsWithChildren) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const show = useCallback(() => setIsOpen(true), []);
+  const hide = useCallback(() => setIsOpen(false), []);
+
+  return (
+    <BottomSheetContext.Provider value={{ isOpen, show, hide }}>
+      {children}
+    </BottomSheetContext.Provider>
+  );
+};
+
+// Wrapper: gives access to show()
+const Wrapper = ({
+  children,
+}: {
+  children: (opts: { show: () => void; isOpen: boolean }) => ReactNode;
+}) => {
+  const ctx = useContext(BottomSheetContext);
+  if (!ctx)
+    throw new Error(
+      "BaseBottomSheet.Wrapper must be used inside BaseBottomSheet",
+    );
+
+  return <>{children({ show: ctx.show, isOpen: ctx.isOpen })}</>;
+};
+
+// Content: renders the Drawer UI
+const Content = ({ children }: PropsWithChildren) => {
+  const ctx = useContext(BottomSheetContext);
+  if (!ctx)
+    throw new Error(
+      "BaseBottomSheet.Content must be used inside BaseBottomSheet",
+    );
+
+  return (
+    <Drawer.Root
+      open={ctx.isOpen}
+      onOpenChange={(open) => (open ? ctx.show() : ctx.hide())}
+      fixed
+    >
+      <Drawer.Portal>
+        <Drawer.Overlay className="fixed inset-0 bg-black/40" />
+        <Drawer.Content className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none isolate z-50 p-4 pt-8">
+          <div
+            aria-hidden
+            className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 absolute top-3 right-[50%] translate-x-[50%]"
+          />
+
+          {children}
+        </Drawer.Content>
+      </Drawer.Portal>
+    </Drawer.Root>
+  );
+};
+
+// Attach compound parts
+BaseBottomSheet.Wrapper = Wrapper;
+BaseBottomSheet.Content = Content;
+
+export default BaseBottomSheet as React.FC<PropsWithChildren> & {
+  Wrapper: typeof Wrapper;
+  Content: typeof Content;
+};
