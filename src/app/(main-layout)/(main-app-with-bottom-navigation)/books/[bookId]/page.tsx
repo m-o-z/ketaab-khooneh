@@ -34,6 +34,9 @@ const Page = () => {
     refetch,
   } = useBooksGetApi(bookId as string);
 
+  const onGoBorrowsPage = () => {
+    router.push("/borrows");
+  };
   const renderActionArea = () => {
     if (userProfile?.activeBorrowsCount) {
       return (
@@ -45,7 +48,7 @@ const Page = () => {
           priority="low"
         >
           <div slot={NoticeSlots.ACTION} className="flex content-end w-full">
-            <Button href={"/borrows/"}>
+            <Button onClick={() => onGoBorrowsPage()}>
               <div>برو به امانت‌ها</div>
               <ArrowLeft slot={ButtonSlots.TRAILING_ICON} />
             </Button>

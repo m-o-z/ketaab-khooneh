@@ -41,7 +41,14 @@ const Page = () => {
               heading="پروفایل شما تکمیل نشده است!"
               description="جهت فعال‌سازی امکانت امانت‌گیری لازم است ابتدا پروفایل خود را تکمیل کنید."
             >
-              <Button slot={NoticeSlots.ACTION}>تکمیل پروفایل</Button>
+              <Button
+                onClick={() => {
+                  router.push("/profile/completion");
+                }}
+                slot={NoticeSlots.ACTION}
+              >
+                تکمیل پروفایل
+              </Button>
             </Notice>
           </div>
         );
@@ -75,9 +82,23 @@ const Page = () => {
       <div className="space-y-4">
         {renderProfileHeader()}
         <Divider className="-mr-4 w-[calc(100%+2rem)]" variant="thick" />
-        <div className="space-y-5 py-4">
-          <ProfileItem renderIcon={<Gear />}>تنظیمات</ProfileItem>
-          <ProfileItem renderIcon={<FactCheck />}>قوانین و شرایط</ProfileItem>
+        <div className="space-y-6 py-4">
+          <ProfileItem
+            onClick={() => {
+              router.push("/user/settings");
+            }}
+            renderIcon={<Gear />}
+          >
+            تنظیمات
+          </ProfileItem>
+          <ProfileItem
+            onClick={() => {
+              router.push("/tac");
+            }}
+            renderIcon={<FactCheck />}
+          >
+            قوانین و شرایط
+          </ProfileItem>
           <ProfileLogoutRowItem
             isPending={isPending}
             logoutMutationAsync={logout}

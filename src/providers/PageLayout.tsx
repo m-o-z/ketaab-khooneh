@@ -41,9 +41,9 @@ export function PageLayout({
   initialTitle,
   initialActions,
   goToTopEnabled = false,
-  isLoading,
-  isError,
-  noContent,
+  isLoading = false,
+  isError = false,
+  noContent = false,
   retry,
   children,
 }: PageLayoutProps) {
