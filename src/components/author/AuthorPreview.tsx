@@ -8,6 +8,7 @@ import { AuthorDTO } from "@/schema/authors";
 
 type Props = {
   author: AuthorDTO;
+  noLink?: boolean;
 };
 
 const AuthorPreview = ({ author }: Props) => {
@@ -20,12 +21,13 @@ const AuthorPreview = ({ author }: Props) => {
   );
 };
 
-AuthorPreview.Compact = function Compact({ author }: Props) {
+AuthorPreview.Compact = function Compact({ author, noLink }: Props) {
   return (
     <PreviewBase.Compact
       imageUrl={author.authorImg}
       title={author.name}
       url={`/authors/${author.id}`}
+      noLink={noLink}
     />
   );
 };

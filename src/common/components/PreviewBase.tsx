@@ -7,6 +7,7 @@ type Props = {
   title?: string;
   subtitle?: string;
   url?: string;
+  noLink?: boolean;
 };
 
 const PreviewBase = ({ imageUrl, title, subtitle, url }: Props) => {
@@ -42,25 +43,22 @@ PreviewBase.Loading = function Loading({
   );
 };
 
-PreviewBase.Compact = function Compact({ imageUrl, title, url }: Props) {
+PreviewBase.Compact = function Compact({ imageUrl, title, url, noLink }: Props) {
+  const view = (
+    <Flex gap="xs">
+        {imageUrl && <Avatar image={imageUrl} size="xs" />}
+        <Text fw={500} lh="1.5rem" size="sm">
+          {title}
+        </Text>
+      </Flex>
+  )
+  if (noLink) {
+    return view
+  }
   return (
-    <Button
-      color="gray.9"
-      size="compact-md"
-      style={{
-        paddingInline: 0,
-      }}
-      variant="transparent"
-    >
-      <Link passHref href={url || ""} onClick={(e) => e.stopPropagation()}>
-        <Flex gap="xs">
-          <Avatar image={imageUrl} size="xs" />
-          <Text fw={500} lh="1.5rem" size="sm">
-            {title}
-          </Text>
-        </Flex>
-      </Link>
-    </Button>
+    <Link passHref href={url || ""} onClick={(e) => e.stopPropagation()}>
+      {view}
+    </Link>
   );
 };
 

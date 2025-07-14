@@ -11,6 +11,7 @@ import BookPreview from "@/components/book/BookPreview";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
 import { PageLayout } from "@/providers/PageLayout";
+import Link from "next/link";
 
 export default function Books() {
   const router = useRouter();
@@ -51,9 +52,9 @@ export default function Books() {
         {books?.map((book, index) => (
           <Fragment key={book.id}>
             {index !== 0 && <Divider />}
-            <div onClick={() => handleClick(book.id)}>
+            <Link href={`books/${book.id}`} aria-label={`کتاب ${book.title}`}>
               <BookPreview.List book={book} />
-            </div>
+            </Link>
           </Fragment>
         ))}
       </Stack>

@@ -50,7 +50,7 @@ const ListToolbar = ({
         value={searchString}
         onChange={(e) => setSearchString(e.target.value)}
       />
-      {filters && (
+      {/* {filters && (
         // <Select
         //     label="Filters"
         //     placeholder="Pick value"
@@ -95,7 +95,7 @@ const ListToolbar = ({
             </Stack>
           </Popover.Dropdown>
         </Popover>
-      )}
+      )} */}
     </Flex>
   );
 };

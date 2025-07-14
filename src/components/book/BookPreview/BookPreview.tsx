@@ -131,7 +131,7 @@ BookPreview.List = function List({ book }: Partial<Props>) {
         </b>
         <Flex gap="xs" wrap="wrap">
           {book.authors.map((author) => (
-            <AuthorPreview.Compact key={author.id} author={author} />
+            <AuthorPreview.Compact key={author.id} author={author} noLink />
           ))}
         </Flex>
       </Stack>
