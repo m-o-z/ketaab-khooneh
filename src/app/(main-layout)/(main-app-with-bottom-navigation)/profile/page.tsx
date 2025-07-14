@@ -6,8 +6,9 @@ import {
   Button,
   Divider,
   Notice,
+  NoticeSlots,
 } from "@tapsioss/react-components";
-import { Gear } from "@tapsioss/react-icons";
+import { FactCheck, Gear } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
 
 import ProfileItem from "@/common/components/Profile/ProfileItem";
@@ -32,13 +33,16 @@ const Page = () => {
     if (isFetched && profile) {
       if (!profile.isProfileCompleted) {
         return (
-          <div className="flex flex-col items-center p-4 justify-center space-y-4">
-            <Badge
-              variant="pill"
+          <div className="flex flex-col items-center justify-center space-y-4">
+            <Notice
+              visible
               color="warning"
-              value="پروفایل شما تکمیل نشده است!"
-            ></Badge>
-            <Button>تکمیل پروفایل</Button>
+              priority="low"
+              heading="پروفایل شما تکمیل نشده است!"
+              description="جهت فعال‌سازی امکانت امانت‌گیری لازم است ابتدا پروفایل خود را تکمیل کنید."
+            >
+              <Button slot={NoticeSlots.ACTION}>تکمیل پروفایل</Button>
+            </Notice>
           </div>
         );
       } else if (profile.isProfileCompleted)
@@ -71,13 +75,14 @@ const Page = () => {
       <div className="space-y-4">
         {renderProfileHeader()}
         <Divider className="-mr-4 w-[calc(100%+2rem)]" variant="thick" />
-        <Stack>
+        <div className="space-y-5 py-4">
           <ProfileItem renderIcon={<Gear />}>تنظیمات</ProfileItem>
+          <ProfileItem renderIcon={<FactCheck />}>قوانین و شرایط</ProfileItem>
           <ProfileLogoutRowItem
             isPending={isPending}
             logoutMutationAsync={logout}
           />
-        </Stack>
+        </div>
       </div>
     </PageLayout>
   );
