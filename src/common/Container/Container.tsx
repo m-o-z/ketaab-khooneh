@@ -9,14 +9,14 @@ type Props = PropsWithChildren & {
   height?: string;
 };
 const Container = ({ children, className, height }: Props) => {
-  const { width } = useWindowSize();
+  const { width, maxWidth } = useWindowSize();
 
   let heightClass = "h-[var(--height)]";
   if (height) {
     heightClass = height;
   }
-  const maxWidth = useMemo(() => {
-    return width > 440 ? "440px" : `${width}px`;
+  const maxWidthValue = useMemo(() => {
+    return width > maxWidth ? `${maxWidth}px` : `${width}px`;
   }, [width]);
 
   return (
@@ -26,7 +26,7 @@ const Container = ({ children, className, height }: Props) => {
           heightClass,
         className,
       )}
-      style={{ "--max-width": maxWidth } as CSSProperties}
+      style={{ "--max-width": maxWidthValue } as CSSProperties}
     >
       {children}
     </div>

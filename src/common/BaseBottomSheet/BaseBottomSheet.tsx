@@ -5,8 +5,11 @@ import React, {
   ReactNode,
   PropsWithChildren,
   useCallback,
+  CSSProperties,
 } from "react";
 import { Drawer } from "vaul";
+import Container from "../Container/Container";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 // Context to share state between Wrapper and Content
 type BottomSheetContextType = {
@@ -47,6 +50,7 @@ const Wrapper = ({
 
 // Content: renders the Drawer UI
 const Content = ({ children }: PropsWithChildren) => {
+  const { maxWidth } = useWindowSize();
   const ctx = useContext(BottomSheetContext);
   if (!ctx)
     throw new Error(
@@ -61,7 +65,10 @@ const Content = ({ children }: PropsWithChildren) => {
     >
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-        <Drawer.Content className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 left-0 right-0 outline-none isolate z-50 p-4 pt-8">
+        <Drawer.Content
+          style={{ "--max-width": `${maxWidth}px` } as CSSProperties}
+          className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 w-full max-w-[var(--max-width)] right-[50%] translate-x-[50%] outline-none isolate z-50 p-4 pt-8"
+        >
           <div
             aria-hidden
             className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 absolute top-3 right-[50%] translate-x-[50%]"
