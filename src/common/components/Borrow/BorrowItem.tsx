@@ -87,12 +87,14 @@ const BorrowItem = ({ item }: Props) => {
 
     if (!isDueDatePassed) {
       content.push(
-        <Typography.Label size="xs" color="color.content.secondary">
-          {remaining.display}
-        </Typography.Label>,
-        <Typography.Body size="xs" color="color.content.tertiary">
-          باقی مانده
-        </Typography.Body>,
+        <div className="flex space-x-1 flex-wrap items-center">
+          <Typography.Label size="xs" color="color.content.secondary">
+            {remaining.display}
+          </Typography.Label>
+          <Typography.Body size="xs" color="color.content.tertiary">
+            باقی مانده
+          </Typography.Body>
+        </div>,
       );
     } else {
       content.push(
@@ -102,7 +104,11 @@ const BorrowItem = ({ item }: Props) => {
       );
     }
 
-    return <div className="space-x-1 flex items-center">{content}</div>;
+    return (
+      <div className="space-x-1 flex flex-wrap whitespace-pre-wrap">
+        {content}
+      </div>
+    );
   };
 
   return (
