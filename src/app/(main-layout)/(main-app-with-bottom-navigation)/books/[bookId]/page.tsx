@@ -30,7 +30,8 @@ const Page = () => {
     isError: isProfileError,
     refetch: profileRefetch,
   } = useGetProfile();
-  const { mutateAsync: borrowBookMutateAsync } = useBorrowBookMutation();
+  const { mutateAsync: borrowBookMutateAsync, isPending } =
+    useBorrowBookMutation();
   const router = useRouter();
   const { bookId } = useParams();
   const {
@@ -135,7 +136,7 @@ const Page = () => {
     if (book?.status === "AVAILABLE" && book.availableCount > 0) {
       return (
         <Flex justify={"end"}>
-          <Button onClick={() => onBorrowBook(book.id)}>
+          <Button onClick={() => onBorrowBook(book.id)} loading={isPending}>
             <ShoppingCart slot={ButtonSlots.TRAILING_ICON} />
             امانت بگیر
           </Button>
