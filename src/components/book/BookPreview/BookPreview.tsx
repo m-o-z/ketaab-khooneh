@@ -123,8 +123,8 @@ BookPreview.List = function List({ book }: Partial<Props>) {
         </BadgeWrapper>
       </Box>
       <div className="grow space-y-4">
-        <div className="w-full">
-          <Typography.Headline size="sm">
+        <div className="w-full ">
+          <Typography.Headline size="xs">
             <TextEllipses lines={2}>
               <DirectionAwareText>{book.title}</DirectionAwareText>
             </TextEllipses>

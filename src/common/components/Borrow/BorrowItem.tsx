@@ -12,6 +12,7 @@ import { ArrowLeft } from "@tapsioss/react-icons";
 import BorrowStatusBadge from "./components/BorrowStatusBadge";
 import BorrowReturnBottom from "./components/BorrowReturnBottom";
 import TextEllipses from "../TextEllipses";
+import DirectionAwareText from "../DirectionAwareText";
 
 type Props = {
   item: BorrowBriefDTO;
@@ -54,6 +55,10 @@ const BorrowItem = ({ item }: Props) => {
     }
     return item.status;
   };
+
+  if (!item.book) {
+    return null;
+  }
 
   const renderCaption = () => {
     if (isReturned) {
@@ -116,12 +121,16 @@ const BorrowItem = ({ item }: Props) => {
       <div className="flex space-x-4">
         <div className="max-w-18 min-w-10 shrink-0 overflow-hidden rounded-lg self-start">
           {/* Cover */}
-          <img src={item.book?.coverImage} />
+          <img src={item.book.coverImage} />
         </div>
         <div className="grow overflow-hidden w-full space-y-2 flex flex-col">
-          <Typography.Label color="color.content.secondary" size="md">
-            <TextEllipses lines={2}>{item.book?.title}</TextEllipses>
-          </Typography.Label>
+          <Typography.Headline size="xs">
+            <TextEllipses lines={2}>
+              <DirectionAwareText noAlignment className="text-right">
+                {item.book.title}
+              </DirectionAwareText>
+            </TextEllipses>
+          </Typography.Headline>
           <div>{renderCaption()}</div>
         </div>
       </div>

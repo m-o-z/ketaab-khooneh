@@ -1,6 +1,16 @@
 import { detectTextLanguage } from "@/utils/text";
+import clsx from "clsx";
 
-const DirectionAwareText = ({ children }: { children: string | number }) => {
+type Props = {
+  children: string | number;
+  noAlignment?: boolean;
+  className?: string;
+};
+const DirectionAwareText = ({
+  children,
+  noAlignment = false,
+  className,
+}: Props) => {
   if (typeof children !== "string" && typeof children !== "number") {
     throw new Error(
       "TextOnlyComponent only accepts text (string or number) as children.",
@@ -11,13 +21,29 @@ const DirectionAwareText = ({ children }: { children: string | number }) => {
 
   if (language === "persian") {
     return (
-      <div className="text-right" dir="rtl">
+      <div
+        className={clsx(
+          {
+            "text-right": !noAlignment,
+          },
+          className,
+        )}
+        dir="rtl"
+      >
         {children}
       </div>
     );
   }
   return (
-    <div className="text-left" dir="ltr">
+    <div
+      className={clsx(
+        {
+          "text-left": !noAlignment,
+        },
+        className,
+      )}
+      dir="ltr"
+    >
       {children}
     </div>
   );

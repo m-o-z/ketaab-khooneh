@@ -147,9 +147,24 @@ export default function Books() {
     <PageLayout
       goToTopEnabled
       initialActions={
-        <IconButton label="اسکن کتاب با دوربین" variant="naked">
-          <Scan />
-        </IconButton>
+        <BaseBottomSheet>
+          <BaseBottomSheet.Wrapper>
+            {({ show }) => (
+              <IconButton
+                label="اسکن کتاب با دوربین"
+                variant="naked"
+                onClick={show}
+              >
+                <Scan />
+              </IconButton>
+            )}
+          </BaseBottomSheet.Wrapper>
+          <BaseBottomSheet.Content>
+            <div className="w-full flex items-center justify-center h-[calc(var(--height)*0.7)] ">
+              QR Code Scanner Goes here
+            </div>
+          </BaseBottomSheet.Content>
+        </BaseBottomSheet>
       }
       initialTitle="کتاب‌ها"
       isError={isError}
