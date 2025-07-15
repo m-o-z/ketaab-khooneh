@@ -15,15 +15,22 @@ import { useBooksGetApi } from "@/hooks/books";
 import { useGetProfile } from "@/hooks/profile";
 import { PageLayout } from "@/providers/PageLayout";
 import { detectTextLanguage } from "@/utils/text";
+import dayjs from "dayjs";
+import { toStandardJalaliDateTime } from "@/utils/prettifyDate";
+import { useBorrowBookMutation } from "@/hooks/borrow";
+import { notifications } from "@mantine/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 
 // TODO: fix style
 const Page = () => {
+  const queryClient = useQueryClient();
   const {
     data: userProfile,
     isLoading: isProfileLoading,
     isError: isProfileError,
     refetch: profileRefetch,
   } = useGetProfile();
+  const { mutateAsync: borrowBookMutateAsync } = useBorrowBookMutation();
   const router = useRouter();
   const { bookId } = useParams();
   const {
@@ -37,7 +44,48 @@ const Page = () => {
   const onGoBorrowsPage = () => {
     router.push("/borrows");
   };
+
+  const onBorrowBook = async (bookId: string) => {
+    try {
+      const result = await borrowBookMutateAsync(bookId);
+      notifications.show({
+        message: "امانت‌گیری کتاب با موفقیت ثبت شد!",
+        color: "green",
+      });
+
+      queryClient.invalidateQueries({});
+    } catch (err: any) {
+      console.log({ err });
+      if ("message" in err) {
+        notifications.show({
+          title: "خطا در رزرو!",
+          message: err.message,
+          color: "red",
+        });
+      }
+    }
+  };
   const renderActionArea = () => {
+    if (userProfile?.isPunished) {
+      const dateString = toStandardJalaliDateTime(
+        dayjs(userProfile.punishmentEndAt),
+      );
+      const description = `
+      شما تا تاریخ 
+      ${dateString}
+      امکانت امانت گیری کتاب‌ها را نخواهید داشت
+      `;
+      return (
+        <Notice
+          visible
+          className="w-full"
+          color="error"
+          heading="شما جریمه شدید"
+          description={description}
+          priority="high"
+        ></Notice>
+      );
+    }
     if (book?.activeBorrow) {
       return (
         <Notice
@@ -48,7 +96,7 @@ const Page = () => {
           priority="low"
         >
           <div slot={NoticeSlots.ACTION} className="flex content-end w-full">
-            <Button href={"/borrows/" + book.activeBorrow.id}>جزئیات</Button>
+            <Button href={"/borrows"}>جزئیات</Button>
           </div>
         </Notice>
       );
@@ -72,7 +120,7 @@ const Page = () => {
         </Notice>
       );
     }
-    
+
     if (book?.status === "UNAVAILABLE") {
       return (
         <Notice
@@ -87,7 +135,7 @@ const Page = () => {
     if (book?.status === "AVAILABLE" && book.availableCount > 0) {
       return (
         <Flex justify={"end"}>
-          <Button>
+          <Button onClick={() => onBorrowBook(book.id)}>
             <ShoppingCart slot={ButtonSlots.TRAILING_ICON} />
             امانت بگیر
           </Button>

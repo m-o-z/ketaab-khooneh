@@ -1,10 +1,15 @@
 import Client from "pocketbase";
 
 import { Rule, RuleEventType } from "@/types";
+import { UserDB } from "@/schema/users";
+import { BorrowDB } from "@/schema/borrows";
+import { BookDB } from "@/schema/books";
+import dayjs from "dayjs";
 
 interface BorrowContext {
-  user: any; // PocketBase user model
-  book: any; // PocketBase book model
+  user: UserDB; // PocketBase user model
+  book: BookDB; // PocketBase book model
+  borrow?: BorrowDB;
   borrows: {
     // The potential borrow record we are building
     dueDate?: Date;
@@ -86,6 +91,30 @@ export class RuleEngineService {
             break;
 
           case "APPLY_PUNISHMENT":
+            (() => {
+              result.allowed = true;
+              const { multiplier, reason, unit } = rule.actionParams;
+              let punishmentEndAt = dayjs().toISOString();
+              const dueDate =
+                dayjs(result.modifiedContext.borrow?.dueDate) ?? dayjs();
+              const now = dayjs();
+              const nowDiffFromDueDate = now.diff(dueDate, "hours");
+
+              if (nowDiffFromDueDate > 0) {
+                const lateInDays = Math.floor(nowDiffFromDueDate / 24);
+                const lateInDaysMultiplied = lateInDays * multiplier;
+                punishmentEndAt = dayjs()
+                  .add(lateInDaysMultiplied, "days")
+                  .endOf("day")
+                  .toISOString();
+                console.log({ punishmentEndAt });
+                result.modifiedContext.user.isPunished = true;
+                result.modifiedContext.user.punishmentEndAt = punishmentEndAt;
+                if (reason) {
+                  result.message = reason;
+                }
+              }
+            })();
             break;
 
           case "SET_VALUE":

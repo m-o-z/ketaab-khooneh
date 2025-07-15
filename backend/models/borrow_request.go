@@ -18,3 +18,9 @@ type BorrowRequest struct {
 	UserID   string `json:"userId"`
 	Duration int    `json:"duration"`
 }
+
+type ReturnBorrowRequest struct {
+	BorrowId        string `json:"borrowId"`
+	ShouldPunished  bool   `json:"shouldPunished"`
+	PunishmentEndAt string `json:"punishmentEndAt"`
+}

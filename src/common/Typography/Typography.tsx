@@ -1,0 +1,49 @@
+import { TokenColorPath } from "@/utils/types/color-path";
+import { getTokenValueFromPath } from "@/utils/types/colors";
+import tokens from "@tapsioss/theme/tokens";
+import React, { CSSProperties, PropsWithChildren } from "react";
+
+type TypographyKeys = Exclude<keyof typeof tokens.typography, "font-family">;
+
+type TypographyVariantProps<K extends TypographyKeys> = PropsWithChildren<{
+  size: keyof (typeof tokens.typography)[K];
+  color?: TokenColorPath;
+}>;
+
+const createTypographyComponent = <K extends TypographyKeys>(type: K) => {
+  const Component = ({ size, color, children }: TypographyVariantProps<K>) => {
+    const typeMap = tokens.typography[type];
+    const variant = typeMap[size] as {
+      font: string;
+      size: string;
+      weight: number;
+      height: number;
+    };
+
+    const resolvedColor = color ? getTokenValueFromPath(color) : undefined;
+
+    const style: CSSProperties = {
+      fontFamily: variant.font,
+      fontSize: variant.size,
+      fontWeight: variant.weight,
+      fontStyle: "normal",
+      lineHeight: variant.height,
+      ...(resolvedColor && { color: resolvedColor }),
+    };
+
+    return <div style={style}>{children}</div>;
+  };
+
+  Component.displayName = `Typography.${type[0].toUpperCase()}${type.slice(1)}`;
+
+  return Component;
+};
+
+const Typography = {
+  Body: createTypographyComponent("body"),
+  Label: createTypographyComponent("label"),
+  Headline: createTypographyComponent("headline"),
+  Display: createTypographyComponent("display"),
+};
+
+export default Typography;

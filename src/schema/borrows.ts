@@ -22,8 +22,19 @@ export const BorrowDBStatus = {
   RETURNED: "RETURNED",
   RETURNED_LATE: "RETURNED_LATE",
 } as const;
+
 export type BorrowDBStatusKeys =
   (typeof BorrowDBStatus)[keyof typeof BorrowDBStatus];
+
+export const BorrowDBStatusLabels: Record<BorrowDBStatusKeys, string> = {
+  ACTIVE: "در حال امانت",
+  EXTENDED: "تمدید شده",
+  RETURNED: "بازگشتی",
+  RETURNED_LATE: "بازگشت با تاخیر",
+};
+export function getBorrowStatusLabel(status: BorrowDBStatusKeys): string {
+  return BorrowDBStatusLabels[status];
+}
 
 // 1. Define the TypeScript types first to break the dependency cycle.
 export type BorrowDB = {
@@ -51,6 +62,7 @@ export type BorrowCore = {
   dueDate: string | Date;
   returnDate?: string | Date | null;
   status: BorrowDBStatusKeys;
+  statusFa: string;
   extendedCount: number;
   book: BookCore | null;
   user: UserCore | null;
@@ -106,6 +118,7 @@ export const BorrowCoreSchema: z.ZodType<BorrowCore, z.ZodTypeDef, BorrowDB> =
       dueDate: data.dueDate,
       returnDate: data.returnDate,
       status: data.status,
+      statusFa: getBorrowStatusLabel(data.status),
       extendedCount: data.extendedCount ?? 0, // Provide a default for the optional field
       book,
       user,

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { borrows } from "@/client";
 
@@ -17,5 +17,17 @@ export const useGetAllPreviousBorrowsQuery = () => {
     select(response) {
       return response.data;
     },
+  });
+};
+
+export const useBorrowBookMutation = () => {
+  return useMutation({
+    ...borrows.borrowBook,
+  });
+};
+
+export const useReturnBookMutation = () => {
+  return useMutation({
+    ...borrows.returnBook,
   });
 };

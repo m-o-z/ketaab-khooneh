@@ -15,6 +15,9 @@ import {
   errorUserIsPunished,
   wrongDueDate,
 } from "./errors";
+import { BorrowCoreSchema, BorrowDB, BorrowDTOSchema } from "@/schema/borrows";
+import { BookDB, BookDTOSchema } from "@/schema/books";
+import { UserDB } from "@/schema/users";
 
 const handler = async (req: NextRequest, context: Context) => {
   const params = await context.params;
@@ -26,9 +29,9 @@ const handler = async (req: NextRequest, context: Context) => {
 
   try {
     const user = await client
-      .collection<UserInfo>("users")
+      .collection<UserDB>("users")
       .getOne(client.authStore.record.id);
-    const book = await client.collection<Book>("books").getOne(params.bookId);
+    const book = await client.collection<BookDB>("books").getOne(params.id);
 
     const userBorrows = await client.collection<Borrow>("borrows").getFullList({
       filter: `user = "${user.id}" && status = "ACTIVE"`,
@@ -48,7 +51,7 @@ const handler = async (req: NextRequest, context: Context) => {
     if (!result.allowed) {
       if (user.isPunished) {
         return errorUserIsPunished(
-          toStandardGeorgianDateTime(user.punishmentEndAt),
+          toStandardGeorgianDateTime(user.punishmentEndAt!),
         );
       }
       return borrowingNotAllowed(result.message);
@@ -69,8 +72,11 @@ const handler = async (req: NextRequest, context: Context) => {
       }),
     });
 
+    const borrowCore = BorrowCoreSchema.parse(response.data);
+    const borrowDto = BorrowDTOSchema.parse(borrowCore);
+
     return Response.json(
-      createResponsePayload(response.data, "Book borrowed successfully!"),
+      createResponsePayload(borrowDto, "Book borrowed successfully!"),
     );
   } catch (err) {
     console.log({ err });

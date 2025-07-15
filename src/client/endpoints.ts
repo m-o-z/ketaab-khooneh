@@ -7,7 +7,7 @@ import {
 import { BorrowDetailsListDto } from "@/lib/dto/borrow";
 import { AuthorDTO } from "@/schema/authors";
 import { BookDTO } from "@/schema/books";
-import { BorrowBriefDTO } from "@/schema/borrows";
+import { BorrowBriefDTO, BorrowDTO } from "@/schema/borrows";
 import { ApiPagedResponse, ApiResponse } from "@/utils/response";
 
 import { Author, BookCategory, ResponseWrap, UserInfo } from "./../types";
@@ -106,6 +106,20 @@ export const borrows = {
     api.mutation(() => `/borrow/${bookId}`, {
       method: "POST",
     }),
+
+  borrowBook: api.mutation<ApiResponse<BorrowDTO>, string>(
+    (bookId: string) => `borrows/${bookId}/borrow`,
+    {
+      method: "POST",
+    },
+  ),
+
+  returnBook: api.mutation<null, string>(
+    (borrowId: string) => `borrows/${borrowId}/return`,
+    {
+      method: "DELETE",
+    },
+  ),
 };
 // ===== Categories API =====
 export const categories = {

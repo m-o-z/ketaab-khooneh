@@ -62,7 +62,17 @@ const Page = () => {
           >
             <Avatar image={profile.avatar} />
             <Stack gap={0}>
-              <h2 style={{ margin: 0 }}>{profile.displayName}</h2>
+              <h2 className="space-x-2 m-0">
+                <span>{profile.displayName}</span>
+                {profile.isPunished ? (
+                  <Badge
+                    className="inline-block"
+                    color="error"
+                    priority="low"
+                    value={"جریمه شده"}
+                  ></Badge>
+                ) : null}
+              </h2>
               <p>{profile.email}</p>
             </Stack>
           </Flex>
