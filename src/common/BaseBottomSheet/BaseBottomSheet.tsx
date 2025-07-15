@@ -67,7 +67,7 @@ const Content = ({ children }: PropsWithChildren) => {
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
         <Drawer.Content
           style={{ "--max-width": `${maxWidth}px` } as CSSProperties}
-          className="bg-gray-100 flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 w-full max-w-[var(--max-width)] right-[50%] translate-x-[50%] outline-none isolate z-50 p-4 pt-8"
+          className="bg-white flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 w-full max-w-[var(--max-width)] right-[50%] translate-x-[50%] outline-none isolate z-50 p-4 pt-8"
         >
           <div
             aria-hidden

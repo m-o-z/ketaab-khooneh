@@ -1,7 +1,7 @@
 "use client";
 import { Stack } from "@mantine/core";
-import { Divider, IconButton } from "@tapsioss/react-components";
-import { Scan } from "@tapsioss/react-icons";
+import { Button, ButtonGroup, Checkbox, Divider, IconButton, Switch, TextField } from "@tapsioss/react-components";
+import { LineThreeHorizontalDecrease, Scan } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
 import { Fragment, useMemo, useState } from "react";
 import { useDebounce } from "use-debounce";
@@ -12,6 +12,9 @@ import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
 import { PageLayout } from "@/providers/PageLayout";
 import Link from "next/link";
+import BaseBottomSheet from "@/common/BaseBottomSheet/BaseBottomSheet";
+import Text from "@/common/Text/Text";
+import { MultiSelect } from "@/common/MultiSelect";
 
 export default function Books() {
   const router = useRouter();
@@ -63,13 +66,62 @@ export default function Books() {
 
   const renderToolbar = () => {
     return (
-      <ListToolbar
-        filters={categories?.map((cat) => cat.label)}
-        searchString={searchString}
-        selectedFilters={filters}
-        setSearchString={setSearchString}
-        setSelectedFilters={setFilters}
-      />
+      <div className="flex align-middle gap-1 w-full">
+        <ListToolbar
+          filters={categories?.map((cat) => cat.label)}
+          searchString={searchString}
+          selectedFilters={filters}
+          setSearchString={setSearchString}
+          setSelectedFilters={setFilters}
+        />
+        <BaseBottomSheet>
+          <BaseBottomSheet.Wrapper>
+            {({ show, isOpen }) => (
+              <IconButton label="اعمال فیلتر روی کتاب‌ها" onClick={show} variant={isOpen ? "primary" : "ghost"}>
+                <LineThreeHorizontalDecrease />
+              </IconButton>
+            )}
+          </BaseBottomSheet.Wrapper>
+
+          <BaseBottomSheet.Content>
+            <div
+              className="h-[calc(var(--height)*0.85)] "
+            >
+              <Text type="headline" size="sm">فیلتر‌ها</Text>
+              <Stack>
+                <div className="flex items-center">
+                <Checkbox id="show-only-available-books-input" labelledBy="show-only-available-books-label" />
+                <span><label htmlFor="show-only-available-books-input" id="show-only-available-books-label">نمایش کتاب موجود</label></span>
+              </div>
+              <MultiSelect
+                placeholder="انتخاب دسته‌بندی"
+                data={categories?.map(c => c.label)}
+                label="بر اساس دسته‌بندی کتاب"
+              />
+
+              <MultiSelect
+                placeholder="انتخاب وضعیت کتاب"
+                data={['React', 'Angular', 'Vue', 'Svelte']}
+                label="بر اساس وضعیت"
+              />
+
+              <MultiSelect
+                placeholder="انتخاب نویسنده..."
+                data={['React', 'Angular', 'Vue', 'Svelte']}
+                label="بر اساس نویسنده"
+              />
+
+              <ButtonGroup fluidItems>
+                <Button>
+                  اعمال فیلتر
+                </Button>
+              </ButtonGroup>
+              </Stack>
+
+            </div>
+          </BaseBottomSheet.Content>
+        </BaseBottomSheet>
+      </div>
     );
   };
 
@@ -77,7 +129,7 @@ export default function Books() {
     <PageLayout
       goToTopEnabled
       initialActions={
-        <IconButton variant="naked">
+        <IconButton label="اسکن کتاب با دوربین" variant="naked">
           <Scan />
         </IconButton>
       }
