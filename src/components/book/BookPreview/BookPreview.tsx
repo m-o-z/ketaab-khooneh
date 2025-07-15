@@ -104,7 +104,7 @@ BookPreview.Loading = function Loading() {
 BookPreview.List = function List({ book }: Partial<Props>) {
   if (!book) return null;
   return (
-    <Flex className="cursor-pointer" gap={30}>
+    <Flex className="cursor-pointer" gap={20}>
       <Box miw={listWidth} w={listWidth}>
         <BadgeWrapper anchorShape="rectangle" badgeSide="left">
           <Box slot={BadgeWrapperSlots.BADGE}>
@@ -122,18 +122,20 @@ BookPreview.List = function List({ book }: Partial<Props>) {
           </Box>
         </BadgeWrapper>
       </Box>
-      <Stack style={{ width: `calc(100%-${listWidth}px)`, overflow: "hidden" }}>
-        <Typography.Label size="lg">
-          <TextEllipses lines={2}>
-            <DirectionAwareText>{book.title}</DirectionAwareText>
-          </TextEllipses>
-        </Typography.Label>
+      <div className="grow space-y-4">
+        <div className="w-full">
+          <Typography.Headline size="sm">
+            <TextEllipses lines={2}>
+              <DirectionAwareText>{book.title}</DirectionAwareText>
+            </TextEllipses>
+          </Typography.Headline>
+        </div>
         <Flex gap="xs" wrap="wrap">
           {book.authors?.map((author) => (
             <AuthorPreview.Compact key={author.id} author={author} noLink />
           ))}
         </Flex>
-      </Stack>
+      </div>
     </Flex>
   );
 };
