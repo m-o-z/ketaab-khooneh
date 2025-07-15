@@ -12,8 +12,8 @@ func RegisterRoutes(app *pocketbase.PocketBase) {
 	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		se.Router.GET("/api/test", handlers.TestHandler)
 		se.Router.POST("/api/borrows", handlers.CreateBorrowHandler).Bind(apis.RequireSuperuserAuth())
-		se.Router.DELETE("/api/borrows/{borrowID}", handlers.DeleteBorrowHandler).Bind(apis.RequireSuperuserAuth())
-		se.Router.POST("/api/notify/book-release", handlers.NotifyBookRelease) /* .Bind(apis.RequireSuperuserAuth()) */
+		se.Router.DELETE("/api/borrows", handlers.DeleteBorrowHandler) /* .Bind(apis.RequireSuperuserAuth()) */
+		se.Router.POST("/api/notify/book-release", handlers.NotifyBookRelease).Bind(apis.RequireSuperuserAuth())
 		return se.Next()
 	})
 }

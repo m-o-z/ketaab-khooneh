@@ -32,6 +32,9 @@ func NotifyBookRelease(c *core.RequestEvent) error {
 		domain = "https://ketab.echa.ir"
 	}
 
+	_domain := c.App.Settings().Meta.AppURL
+	fmt.Println("_domain", _domain)
+
 	html, err := registry.LoadFiles(
 		"views/book_release_email.html",
 	).Render(map[string]any{
