@@ -1,13 +1,8 @@
 "use client";
-import { Flex, Popover, Stack, Text } from "@mantine/core";
-import {
-  Checkbox,
-  IconButton,
-  Skeleton,
-  TextField,
-} from "@tapsioss/react-components";
-import { ListBullet } from "@tapsioss/react-icons";
-import React from "react";
+import { Flex } from "@mantine/core";
+import { IconButton, Skeleton, TextField } from "@tapsioss/react-components";
+import BaseBottomSheet from "../BaseBottomSheet/BaseBottomSheet";
+import { LineThreeHorizontalDecrease } from "@tapsioss/react-icons";
 
 type Props = {
   searchString: string;
@@ -34,14 +29,6 @@ const ListToolbar = ({
   };
   return (
     <Flex align="center" gap="sm">
-      {/*<TextInput*/}
-      {/*  flex={1}*/}
-      {/*  leftSection={<IconSearch size={15} />}*/}
-      {/*  value={searchString}*/}
-      {/*  placeholder="Search..."*/}
-      {/*  size="xs"*/}
-      {/*  onChange={(e) => setSearchString(e.target.value)}*/}
-      {/*/>*/}
       <TextField
         hideLabel
         label="جستجو..."
@@ -50,52 +37,25 @@ const ListToolbar = ({
         value={searchString}
         onChange={(e) => setSearchString(e.target.value)}
       />
-      {/* {filters && (
-        // <Select
-        //     label="Filters"
-        //     placeholder="Pick value"
-        //     data={filters}
-        //     w={200}
-        // />
 
-        // <Menu>
-        //   <Menu.Target>
-        //     <ActionIcon color={selectedFilters ? 'gray' : 'transparent'}><IconFilter size={20} /></ActionIcon>
-        //   </Menu.Target>
-        //   <Menu.Dropdown>
-        //     {filters?.map((filter) => (
-        //         <Menu.Item key={filter} onClick={() => alert(filter)}>
-        //           {filter}
-        //         </Menu.Item>
-        //     ))}
-        //   </Menu.Dropdown>
-        // </Menu>
-
-        <Popover trapFocus withArrow position="bottom" shadow="md" width={300}>
-          <Popover.Target>
-            <IconButton size="sm">
-              <ListBullet />
+      <BaseBottomSheet>
+        <BaseBottomSheet.Wrapper>
+          {({ show, isOpen }) => (
+            <IconButton onClick={show} variant={isOpen ? "primary" : "ghost"}>
+              <LineThreeHorizontalDecrease />
             </IconButton>
-          </Popover.Target>
-          <Popover.Dropdown>
-            <Stack>
-              {filters?.map((filter) => (
-                <Flex key={filter} align={"center"}>
-                  <Text component="span" id={`${filter}-label`}>
-                    {filter}
-                  </Text>
-                  <Checkbox
-                    key={filter}
-                    checked={!!selectedFilters?.includes(filter)}
-                    label={filter}
-                    onClick={() => handleSelectFilter(filter)}
-                  />
-                </Flex>
-              ))}
-            </Stack>
-          </Popover.Dropdown>
-        </Popover>
-      )} */}
+          )}
+        </BaseBottomSheet.Wrapper>
+
+        <BaseBottomSheet.Content>
+          <div
+            className="h-[calc(var(--height)*0.85)] flex items-center justify-center"
+            dir="ltr"
+          >
+            Content of filters goes here.
+          </div>
+        </BaseBottomSheet.Content>
+      </BaseBottomSheet>
     </Flex>
   );
 };
