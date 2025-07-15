@@ -30,7 +30,7 @@ const BorrowReturnBottom = ({ id }: Props) => {
   };
   return (
     <ConfirmationModal
-      acceptButtonTitle="خروج"
+      acceptButtonTitle="تایید"
       acceptButtonVariant="destructive"
       denyButtonTitle="انصراف"
       description={"آیا مطمئن هستید که کتاب را می‌خواهید پس بدهید"}
