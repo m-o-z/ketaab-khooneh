@@ -33,7 +33,7 @@ const BorrowReturnBottom = ({ id }: Props) => {
       acceptButtonTitle="تایید"
       acceptButtonVariant="destructive"
       denyButtonTitle="انصراف"
-      description={"آیا مطمئن هستید که کتاب را می‌خواهید پس بدهید"}
+      description={"آیا مطمئن هستید که کتاب را می‌خواهید پس بدهید؟"}
       heading="پس‌دادن کتاب"
       isPending={isPending}
       renderImage={() => (
