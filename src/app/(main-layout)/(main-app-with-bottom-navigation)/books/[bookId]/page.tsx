@@ -38,6 +38,22 @@ const Page = () => {
     router.push("/borrows");
   };
   const renderActionArea = () => {
+    if (book?.activeBorrow) {
+      return (
+        <Notice
+          visible
+          className="w-full"
+          color="info"
+          description="این کتاب را قبلا امانت گرفته‌اید"
+          priority="low"
+        >
+          <div slot={NoticeSlots.ACTION} className="flex content-end w-full">
+            <Button href={"/borrows/" + book.activeBorrow.id}>جزئیات</Button>
+          </div>
+        </Notice>
+      );
+    }
+
     if (userProfile?.activeBorrowsCount) {
       return (
         <Notice
@@ -56,21 +72,7 @@ const Page = () => {
         </Notice>
       );
     }
-    if (book?.activeBorrow) {
-      return (
-        <Notice
-          visible
-          className="w-full"
-          color="info"
-          description="این کتاب را قبلا امانت گرفته‌اید"
-          priority="low"
-        >
-          <div slot={NoticeSlots.ACTION} className="flex content-end w-full">
-            <Button href={"/borrows/" + book.activeBorrow.id}>جزئیات</Button>
-          </div>
-        </Notice>
-      );
-    }
+    
     if (book?.status === "UNAVAILABLE") {
       return (
         <Notice
