@@ -1,5 +1,5 @@
 "use client";
-import { Box, Flex, Image, Paper, Stack, Text, Title } from "@mantine/core";
+import { Box, Flex, Image, Stack, Text, Title } from "@mantine/core";
 import {
   BadgeWrapper,
   BadgeWrapperSlots,
@@ -10,7 +10,10 @@ import AuthorPreview from "@/components/author/AuthorPreview";
 import { BookDTO } from "@/schema/books";
 import { capitalizeName } from "@/utils/string";
 
+import Typography from "@/common/Typography/Typography";
 import BookStatus from "../BookStatus";
+import TextEllipses from "@/common/components/TextEllipses";
+import DirectionAwareText from "@/common/components/DirectionAwareText";
 
 type Props = {
   book: BookDTO;
@@ -120,17 +123,13 @@ BookPreview.List = function List({ book }: Partial<Props>) {
         </BadgeWrapper>
       </Box>
       <Stack style={{ width: `calc(100%-${listWidth}px)`, overflow: "hidden" }}>
-        <b
-          style={{
-            lineClamp: 2,
-            textOverflow: "ellipsis",
-            width: `calc(100%-${listWidth}px)`,
-          }}
-        >
-          کتاب {book.title}
-        </b>
+        <Typography.Label size="lg">
+          <TextEllipses lines={2}>
+            <DirectionAwareText>{book.title}</DirectionAwareText>
+          </TextEllipses>
+        </Typography.Label>
         <Flex gap="xs" wrap="wrap">
-          {book.authors.map((author) => (
+          {book.authors?.map((author) => (
             <AuthorPreview.Compact key={author.id} author={author} noLink />
           ))}
         </Flex>

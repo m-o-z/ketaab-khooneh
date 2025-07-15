@@ -3,8 +3,6 @@ import { Title } from "@mantine/core";
 import { Avatar } from "@tapsioss/react-components";
 import { useParams, useRouter } from "next/navigation";
 
-import AuthorPreview from "@/components/author/AuthorPreview";
-import ErrorSection from "@/components/ErrorSection";
 import { useAuthorGetApi } from "@/hooks/authors";
 import { PageLayout } from "@/providers/PageLayout";
 import { capitalizeName } from "@/utils/string";
