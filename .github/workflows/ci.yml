@@ -62,6 +62,8 @@ jobs:
           push: true
           build-args: |
             NEXT_PUBLIC_POCKETBASE_URL=${{ vars.ENV_POCKETBASE_URL }}
+            NEXT_PUBLIC_VAPID_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
+            VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-frontend:latest
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-frontend:${{ github.sha }}
@@ -91,6 +93,9 @@ jobs:
           context: ./backend
           file: ./docker-build/Dockerfile
           push: true
+          build-args: |
+            VAPID_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
+            VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:latest
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:${{ github.sha }}

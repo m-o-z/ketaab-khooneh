@@ -22,6 +22,8 @@ RUN CGO_ENABLED=0 go build -o /app/pocketbase-app ./main.go
 # ---- Final Stage ----
 # This stage creates the final, minimal image
 FROM alpine:latest
+ARG VAPID_PUBLIC_KEY
+ARG VAPID_PRIVATE_KEY
 
 WORKDIR /app
 
