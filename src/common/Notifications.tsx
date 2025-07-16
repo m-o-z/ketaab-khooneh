@@ -1,13 +1,15 @@
 "use client";
 
 import { Notifications as MantineNotifications } from "@mantine/notifications";
-import { CSSProperties } from "react";
+import { CSSProperties, useMemo } from "react";
 
 import { usePWA } from "@/providers/PWAProvider";
 
 import "@mantine/notifications/styles.css";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 const Notifications = () => {
+  const { maxWidth, width } = useWindowSize();
   const { safeAreaInsets, isStandalone, hasBottomNavigation } = usePWA();
 
   const cssProperties = () => {
@@ -26,13 +28,27 @@ const Notifications = () => {
     };
   };
 
+  const containerWidth = useMemo(() => {
+    if (width > maxWidth) {
+      return maxWidth - 32;
+    }
+    return width - 32;
+  }, [maxWidth, width]);
+
   return (
     <MantineNotifications
       withinPortal
       limit={3}
       position="bottom-center"
+      styles={{
+        root: {
+          minWidth: `${containerWidth}px`,
+          "--notifications-container-width": `${containerWidth - 32}px`,
+        },
+      }}
       style={
         {
+          "--notifications-container-width": `${containerWidth - 32}px`,
           ...cssProperties(),
         } as CSSProperties
       }

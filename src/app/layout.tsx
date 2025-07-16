@@ -316,37 +316,6 @@ export default function RootLayout({
         />
         <meta content="yes" name="apple-mobile-web-app-capable" />
 
-        {/* Favicon */}
-        <link
-          href="/icons/icon-192x192.png"
-          rel="icon"
-          sizes="192x192"
-          type="image/png"
-        />
-        <link
-          href="/icons/icon-48x48.png"
-          rel="icon"
-          sizes="48x48"
-          type="image/png"
-        />
-        <link
-          href="/icons/icon-128x128.png"
-          rel="icon"
-          sizes="128x128"
-          type="image/png"
-        />
-        <link
-          href="/icons/icon-256.png"
-          rel="icon"
-          sizes="256"
-          type="image/png"
-        />
-        <link
-          href="/icons/icon-512x512.png"
-          rel="icon"
-          sizes="512x512"
-          type="image/png"
-        />
         <meta content="#ffffff" name="msapplication-TileColor" />
         <meta content="#ffffff" name="theme-color" />
       </head>

@@ -37,7 +37,6 @@ export const useLoginApi = () => {
 
 export const useVerifyApi = () => {
   const router = useRouter();
-  console.log("here");
   return useMutation({
     ...auth.verify,
     onError: (e: Error) => {
