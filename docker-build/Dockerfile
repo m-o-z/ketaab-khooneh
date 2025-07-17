@@ -24,6 +24,8 @@ RUN CGO_ENABLED=0 go build -o /app/pocketbase-app ./main.go
 FROM alpine:latest
 ARG VAPID_PUBLIC_KEY
 ARG VAPID_PRIVATE_KEY
+ENV VAPID_PUBLIC_KEY
+ENV VAPID_PRIVATE_KEY
 
 WORKDIR /app
 
