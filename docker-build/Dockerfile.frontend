@@ -2,6 +2,7 @@
 FROM node:20-slim AS builder
 ARG NEXT_PUBLIC_VAPID_PUBLIC_KEY
 ARG VAPID_PRIVATE_KEY
+RUN env
 
 # Install dependencies for native modules (like sharp)
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -35,6 +36,7 @@ FROM node:20-slim AS runner
 ARG NEXT_PUBLIC_POCKETBASE_URL=https://pb.echa.ir
 ARG NEXT_PUBLIC_VAPID_PUBLIC_KEY
 ARG VAPID_PRIVATE_KEY
+RUN env
 
 # Set workdir
 WORKDIR /app
@@ -65,7 +67,7 @@ EXPOSE 3000
 
 # Healthcheck (optional)
 HEALTHCHECK --interval=30s --timeout=3s \
-  CMD curl -f http://localhost:${PORT}/ || exit 1
+  CMD curl -f http://localhost:${PORT}/ready || exit 1
 
 # Start the app
 CMD ["node", "node_modules/next/dist/bin/next", "start"]
