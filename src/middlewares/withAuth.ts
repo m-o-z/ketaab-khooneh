@@ -9,11 +9,9 @@ import { Context } from "@/@types/pocketbase";
 import { UserCoreSchema, UserDBSchema } from "@/schema/users";
 import { PocketBaseService } from "@/services/PocketBaseService";
 import setAccessToken from "@/utils/setAcessToken";
+import appConfig from "../../app.config";
 
-const DAYS_TO_REFRESH = parseInt(
-  process.env.NEXT_PUBLIC_DAYS_TO_REFRESH ?? "7",
-  10,
-);
+const DAYS_TO_REFRESH = parseInt(appConfig.auth.daysToRefresh ?? "7", 10);
 
 const decodeToken = (tokenString: string) => {
   try {

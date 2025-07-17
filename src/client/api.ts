@@ -3,6 +3,8 @@
  * Designed to work seamlessly with TanStack Query
  */
 
+import appConfig from "../../app.config";
+
 // Base configuration for API requests
 interface ApiConfig extends RequestInit {
   baseUrl: string;
@@ -11,7 +13,7 @@ interface ApiConfig extends RequestInit {
 
 // Default configuration
 const defaultConfig: ApiConfig = {
-  baseUrl: process.env.NEXT_PUBLIC_API_URL || "/api",
+  baseUrl: appConfig.apiURL || "/api",
   credentials: "include",
   headers: {
     "Content-Type": "application/json",

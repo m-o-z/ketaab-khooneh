@@ -1,16 +1,19 @@
 import PocketBase from "pocketbase";
+import privateConfig from "../../private.config";
+import appConfig from "../../app.config";
 
 export class PocketBaseService {
   private static adminToken: string | null = null;
 
   /** Initializes and caches admin token (called once at startup) */
   public static async Init() {
+    console.log({ privateConfig });
     if (this.adminToken) return;
 
-    const usr = process.env.POCKETBASE_ADMIN_USERNAME ?? "admin";
-    const pw = process.env.POCKETBASE_ADMIN_PASSWORD ?? "admin";
+    const usr = privateConfig.pocketbase.username ?? "admin";
+    const pw = privateConfig.pocketbase.password ?? "admin";
 
-    const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
+    const pb = new PocketBase(appConfig.pocketbase.baseURL);
     const authData = await pb
       .collection("_superusers")
       .authWithPassword(usr, pw);
@@ -30,13 +33,13 @@ export class PocketBaseService {
       await this.Init(); // Make sure token is initialized
     }
 
-    const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
+    const pb = new PocketBase(appConfig.pocketbase.baseURL);
     pb.authStore.save(this.adminToken!, null); // Restore the token
     return pb;
   }
 
   /** Create a fresh unauthenticated client */
   public static Client(): PocketBase {
-    return new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
+    return new PocketBase(appConfig.pocketbase.baseURL);
   }
 }

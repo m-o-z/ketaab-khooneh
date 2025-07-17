@@ -4,6 +4,8 @@ import { PushSubscriptionDB } from "@/schema/pushSubscription";
 import { BaseService } from "./BaseService";
 import { PushSubscriptionDBCreatePayload } from "@/schema/pushSubscription";
 import { PushSubscriptionPayload } from "@/app/api/push/subscribe/route.schema";
+import appConfig from "../../app.config";
+import privateConfig from "../../private.config";
 
 // --- Type Definitions ---
 
@@ -26,8 +28,8 @@ class PushSubscriptionService extends BaseService {
    * This only needs to be done once when the service is instantiated.
    */
   private configureWebPush() {
-    const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-    const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
+    const vapidPublicKey = appConfig.pushNotification.public;
+    const vapidPrivateKey = privateConfig.pushNotification.private;
     console.log({
       vapidPrivateKey,
       vapidPublicKey,

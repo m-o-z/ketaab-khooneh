@@ -12,6 +12,7 @@ const nextConfig = {
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.externals = config.externals.concat([
+        "fs",
         "dns",
         "net",
         "tls",

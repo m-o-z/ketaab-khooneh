@@ -1,4 +1,5 @@
 import { api } from "@/client"; // Assuming your api client is at this path
+import appConfig from "../../app.config";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -31,7 +32,7 @@ export async function createPushSubscription() {
   // Use .ready to wait for the PWA-registered service worker to be active
   const registration = await navigator.serviceWorker.ready;
 
-  const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+  const vapidPublicKey = appConfig.pushNotification.public;
   if (!vapidPublicKey) {
     throw new Error("VAPID public key not found.");
   }

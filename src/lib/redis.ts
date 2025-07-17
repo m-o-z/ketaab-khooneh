@@ -1,4 +1,5 @@
 import Redis from "ioredis";
+import privateConfig from "../../private.config";
 declare global {
   var redis: Redis | undefined;
 }
@@ -7,16 +8,16 @@ let redis: Redis; // Changed from `let redis;` to `let redis: Redis;` for type s
 
 if (process.env.NODE_ENV === "production") {
   redis = new Redis({
-    host: process.env.REDIS_HOST || "localhost",
-    port: parseInt(process.env.REDIS_PORT || "6379", 10),
+    host: privateConfig.redis.host || "localhost",
+    port: parseInt(privateConfig.redis.port || "6379", 10),
   });
 } else {
   // In development, use a global variable to avoid multiple instances
   // across hot-reloads in Next.js
   if (!global.redis) {
     global.redis = new Redis({
-      host: process.env.REDIS_HOST || "localhost",
-      port: parseInt(process.env.REDIS_PORT || "6379", 10),
+      host: privateConfig.redis.host || "localhost",
+      port: parseInt(privateConfig.redis.port || "6379", 10),
     });
   }
   redis = global.redis;
