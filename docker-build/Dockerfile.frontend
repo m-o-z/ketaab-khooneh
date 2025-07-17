@@ -63,7 +63,7 @@ RUN useradd -m appuser
 
 # Install dependencies for sharp runtime only (libvips)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libvips \
+    libvips curl \
  && rm -rf /var/lib/apt/lists/*
 
 # Only copy the built app and required files
