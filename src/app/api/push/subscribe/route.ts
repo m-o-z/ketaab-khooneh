@@ -14,9 +14,12 @@ const handler = async (req: NextRequest, context: AuthorizedContext) => {
   if (!client || !client.authStore.record?.id) {
     return errorBadRequest();
   }
+
   try {
     const user = context.user;
-    const body = pushSubscriptionPayloadSchema.parse(await req.json());
+    const rawBody = await req.json();
+    console.log({ rawBody });
+    const body = pushSubscriptionPayloadSchema.parse(rawBody);
 
     await PushSubscriptionService.createPushSubscription(body, user.id);
 

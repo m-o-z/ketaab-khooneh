@@ -7,7 +7,6 @@ export class PocketBaseService {
 
   /** Initializes and caches admin token (called once at startup) */
   public static async Init() {
-    console.log({ privateConfig });
     if (this.adminToken) return;
 
     const usr = privateConfig.pocketbase.username ?? "admin";

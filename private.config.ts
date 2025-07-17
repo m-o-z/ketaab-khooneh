@@ -1,7 +1,5 @@
 import "./envConfig.ts";
 
-console.log({ env: process.env });
-
 export default {
   pushNotification: {
     private: process.env.VAPID_PRIVATE_KEY,
