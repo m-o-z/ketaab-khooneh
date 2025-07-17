@@ -4,15 +4,14 @@ import {
   AuthorsListingRequestPayload,
   BookListingRequestPayload,
 } from "@/app/api/authors/route.schema";
-import { BorrowDetailsListDto } from "@/lib/dto/borrow";
 import { AuthorDTO } from "@/schema/authors";
 import { BookDTO } from "@/schema/books";
 import { BorrowBriefDTO, BorrowDTO } from "@/schema/borrows";
 import { ApiPagedResponse, ApiResponse } from "@/utils/response";
 
+import { UserDTO } from "@/schema/users";
 import { Author, BookCategory, ResponseWrap, UserInfo } from "./../types";
 import { api } from "./api";
-import { UserDTO } from "@/schema/users";
 
 // ===== Types =====
 

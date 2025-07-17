@@ -47,7 +47,6 @@ const handler = async (req: NextRequest, context: Context) => {
 
     const ruleEngine = new RuleEngineService(clientAdmin);
     const result = await ruleEngine.execute("ON_RETURN_LATE", initialContext);
-    console.log({ result });
 
     if (!result.allowed) {
       if (user.isPunished) {

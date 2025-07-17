@@ -107,7 +107,6 @@ export class RuleEngineService {
                   .add(lateInDaysMultiplied, "days")
                   .endOf("day")
                   .toISOString();
-                console.log({ punishmentEndAt });
                 result.modifiedContext.user.isPunished = true;
                 result.modifiedContext.user.punishmentEndAt = punishmentEndAt;
                 if (reason) {
