@@ -71,8 +71,7 @@ const AppShell = ({ children }: Props) => {
       state.init &&
       !state.isSubscribed &&
       !state.isSubscribing &&
-      state.isSupported &&
-      state.permissionStatus == "default"
+      state.isSupported
     ) {
       notifications.show({
         id: "notification-status",

@@ -135,6 +135,7 @@ export function usePushNotification() {
         return nextState;
       });
     } catch (error) {
+      console.log({ error });
       setState((prevState) => {
         let nextState = {
           ...prevState,
@@ -148,6 +149,7 @@ export function usePushNotification() {
         return nextState;
       });
     } finally {
+      console.log("done");
       await tick();
     }
   };
