@@ -110,7 +110,7 @@ const BorrowItem = ({ item }: Props) => {
     }
 
     return (
-      <div className="space-x-1 flex flex-wrap whitespace-pre-wrap">
+      <div className="space-x-1 flex flex-wrap whitespace-pre-wrap items-center">
         {content}
       </div>
     );
