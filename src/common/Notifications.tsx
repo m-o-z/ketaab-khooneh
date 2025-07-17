@@ -20,11 +20,11 @@ const Notifications = () => {
     }
     if (isStandalone && safeAreaInsets.bottom > 0) {
       return {
-        "--mantine-notification-bottom": "calc(5.5rem + 1rem)",
+        "--mantine-notification-bottom": "calc(4.5rem + 1rem)",
       };
     }
     return {
-      "--mantine-notification-bottom": "calc(4.5rem + 1rem)",
+      "--mantine-notification-bottom": "calc(3.5rem + 1rem)",
     };
   };
 
@@ -42,8 +42,11 @@ const Notifications = () => {
       position="bottom-center"
       styles={{
         root: {
+          marginBottom: "var(--mantine-notification-bottom)",
           minWidth: `${containerWidth}px`,
           "--notifications-container-width": `${containerWidth - 32}px`,
+          maxWidth: "calc(100%-2rem)",
+          transition: "all .3s ease-out",
         },
       }}
       style={

@@ -10,6 +10,7 @@ type TypographyVariantProps<K extends TypographyKeys> = PropsWithChildren<{
   size: keyof (typeof tokens.typography)[K];
   color?: TokenColorPath;
   className?: string;
+  id?: string;
   style?: CSSProperties;
 }>;
 
@@ -20,6 +21,7 @@ const createTypographyComponent = <K extends TypographyKeys>(type: K) => {
     className,
     style,
     children,
+    id,
   }: TypographyVariantProps<K>) => {
     const typeMap = tokens.typography[type];
     const variant = typeMap[size] as {
@@ -42,7 +44,7 @@ const createTypographyComponent = <K extends TypographyKeys>(type: K) => {
     };
 
     return (
-      <div className={clsx("", className)} style={styles}>
+      <div className={clsx("", className)} style={styles} id={id}>
         {children}
       </div>
     );

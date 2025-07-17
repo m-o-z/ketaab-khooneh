@@ -58,3 +58,13 @@ export async function createPushSubscription() {
 
   return subscription;
 }
+
+export async function unsubscribePushSubscriptions() {
+  const existingSubscription = await getPushSubscription();
+  if (existingSubscription) {
+    await existingSubscription.unsubscribe();
+    return existingSubscription;
+  }
+
+  return null;
+}
