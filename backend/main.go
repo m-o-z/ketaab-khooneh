@@ -19,7 +19,6 @@ func main() {
 
 	vapidPublicKey := os.Getenv("VAPID_PUBLIC_KEY")
 	vapidPrivateKey := os.Getenv("VAPID_PRIVATE_KEY")
-
 	log.Printf("VAPID KEYS %s - %s", vapidPublicKey, vapidPrivateKey)
 
 	app := pocketbase.New()
