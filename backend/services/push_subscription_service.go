@@ -3,6 +3,7 @@ package services
 import (
 	"encoding/json"
 	"fmt"
+	"ghafaseh-backend/util"
 	"log"
 	"net/http"
 	"os"
@@ -187,6 +188,8 @@ func (s *PushSubscriptionService) sendNotificationsToRecords(records []*core.Rec
 			VAPIDPrivateKey: vapidPrivateKey,
 			TTL:             30,
 		})
+
+		util.LogResponse(resp)
 		if err != nil {
 			log.Printf("ERROR sending notification to %s: %v\n", sub.Endpoint, err)
 		}
