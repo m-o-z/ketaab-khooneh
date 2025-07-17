@@ -28,6 +28,7 @@ const nextConfig = {
 
 export default withPWA({
   dest: "public",
+  disable: false, // ❗️ Important: forces SW registration even in dev
   register: true,
   cacheOnFrontEndNav: true,
   cacheStartUrl: true,

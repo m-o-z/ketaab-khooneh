@@ -47,6 +47,11 @@ export function usePushNotification() {
 
       const permission = isSupported ? Notification.permission : "default";
       const subscription = await getPushSubscription();
+      console.log({
+        notif: window.Notification,
+        sw: navigator.serviceWorker,
+        pm: window.PushManager,
+      });
 
       emitter.emit("init");
 

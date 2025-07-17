@@ -109,6 +109,7 @@ const AppShell = ({ children }: Props) => {
   };
 
   useEffect(() => {
+    console.log({ state });
     handleShowingSubscriptionNotification();
   }, [state]);
 
