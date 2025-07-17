@@ -29,6 +29,7 @@ const Page = () => {
             label="اعلان‌ها"
             isActive={state.init && state.isSubscribed}
             onChange={(value) => {
+              console.log({ value, state });
               if (value) {
                 subscribe();
               } else {

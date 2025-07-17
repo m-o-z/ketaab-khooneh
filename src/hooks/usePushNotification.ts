@@ -91,6 +91,7 @@ export function usePushNotification() {
         return nextState;
       });
     } catch (error) {
+      console.log("unsub error", { error });
       setState((prevState) => {
         let nextState = {
           ...prevState,
@@ -102,6 +103,7 @@ export function usePushNotification() {
         return nextState;
       });
     } finally {
+      console.log("unsub done");
       await tick();
     }
   }, [state]);
