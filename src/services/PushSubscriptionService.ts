@@ -30,10 +30,6 @@ class PushSubscriptionService extends BaseService {
   private configureWebPush() {
     const vapidPublicKey = appConfig.pushNotification.public;
     const vapidPrivateKey = privateConfig.pushNotification.private;
-    console.log({
-      vapidPrivateKey,
-      vapidPublicKey,
-    });
 
     if (vapidPublicKey && vapidPrivateKey) {
       webpush.setVapidDetails(

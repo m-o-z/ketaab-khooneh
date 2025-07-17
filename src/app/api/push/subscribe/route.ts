@@ -3,11 +3,10 @@ import { pushSubscriptionPayloadSchema } from "./route.schema";
 
 import { AuthorizedContext } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
-import { PushSubscriptionDBCreatePayload } from "@/schema/pushSubscription";
+import PushSubscriptionService from "@/services/PushSubscriptionService";
 import { errorBadRequest } from "@/utils/errors/errors";
 import { handleErrors } from "@/utils/handleErrors";
 import { createResponsePayload } from "@/utils/response";
-import PushSubscriptionService from "@/services/PushSubscriptionService";
 
 const handler = async (req: NextRequest, context: AuthorizedContext) => {
   const client = context.pb;
@@ -18,7 +17,6 @@ const handler = async (req: NextRequest, context: AuthorizedContext) => {
   try {
     const user = context.user;
     const rawBody = await req.json();
-    console.log({ rawBody });
     const body = pushSubscriptionPayloadSchema.parse(rawBody);
 
     await PushSubscriptionService.createPushSubscription(body, user.id);
