@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
 import BottomNavigation from "@/common/BottomNavigation/BottomNavigation";
 import Portal from "@/common/Portal/Portal";
@@ -9,12 +9,15 @@ import { usePushNotification } from "@/hooks/usePushNotification";
 import { usePWA } from "@/providers/PWAProvider";
 import { notifications } from "@mantine/notifications";
 import { Button } from "@tapsioss/react-components/Button";
+import { useDeviceInfo } from "@/hooks/useDeviceInfo";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const AppShell = ({ children }: Props) => {
+  const { browser, platform, pwaMode, isMobile, hasPlatform, hasBrowser } =
+    useDeviceInfo();
   const { subscribe, state, on, off } = usePushNotification();
 
   const { setHasBottomNavigation } = usePWA();
@@ -66,9 +69,21 @@ const AppShell = ({ children }: Props) => {
     };
   }, [on]);
 
+  const shouldAskForNotification = useMemo(() => {
+    if (isMobile) {
+      return platform === "android" && pwaMode === "standalone";
+    } else {
+      const isChromeVariationOrFirefox =
+        !hasBrowser("ie") &&
+        hasPlatform("android", "macos", "chromeos", "linux", "windows");
+      return isChromeVariationOrFirefox;
+    }
+  }, [pwaMode, browser, platform]);
+
   const handleShowingSubscriptionNotification = () => {
     if (
       state.init &&
+      shouldAskForNotification &&
       !state.isSubscribed &&
       !state.isSubscribing &&
       state.isSupported
