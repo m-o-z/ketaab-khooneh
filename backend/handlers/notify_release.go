@@ -42,6 +42,7 @@ func NotifyBookRelease(c *core.RequestEvent) error {
 		"bookId":    data.BookId,
 		"domain":    domain,
 	})
+
 	if err != nil {
 		return c.InternalServerError("Failed to render email template", err)
 	}

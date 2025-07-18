@@ -10,7 +10,7 @@ export type PushSubscriptionDB = {
   endpoint: string;
   p256dh: string;
   auth: string;
-  expirationTime: Date | string | null;
+  expirationTime?: Date | string | null;
   created: string | Date;
   updated: string | Date;
   expand?: {
@@ -28,6 +28,7 @@ export type PushSubscriptionCore = {
   endpoint: string;
   p256dh: string;
   auth: string;
+  expirationTime?: Date | string | null;
   user: UserCore | null;
 };
 
@@ -72,6 +73,7 @@ export const PushSubscriptionCoreSchema: z.ZodType<
     endpoint: data.endpoint,
     p256dh: data.p256dh,
     auth: data.auth,
+    expirationTime: data.expirationTime,
     user,
   };
 });

@@ -126,9 +126,7 @@ const BorrowItem = ({ item }: Props) => {
         <div className="grow overflow-hidden w-full space-y-2 flex flex-col">
           <Typography.Headline size="xs">
             <TextEllipses lines={2}>
-              <DirectionAwareText noAlignment className="text-right">
-                {item.book.title}
-              </DirectionAwareText>
+              <DirectionAwareText>{item.book.title}</DirectionAwareText>
             </TextEllipses>
           </Typography.Headline>
           <div>{renderCaption()}</div>

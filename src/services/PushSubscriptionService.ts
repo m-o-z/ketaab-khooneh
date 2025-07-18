@@ -1,8 +1,10 @@
 import Client from "pocketbase";
 import webpush, { PushSubscription } from "web-push";
-import { PushSubscriptionDB } from "@/schema/pushSubscription";
+import {
+  PushSubscriptionDB,
+  PushSubscriptionDBCreatePayload,
+} from "@/schema/pushSubscription";
 import { BaseService } from "./BaseService";
-import { PushSubscriptionDBCreatePayload } from "@/schema/pushSubscription";
 import { PushSubscriptionPayload } from "@/app/api/push/subscribe/route.schema";
 import appConfig from "../../app.config";
 import privateConfig from "../../private.config";
@@ -83,6 +85,42 @@ class PushSubscriptionService extends BaseService {
           .create(payload);
       }
       // Re-throw other unexpected errors
+      throw error;
+    }
+  }
+
+  /**
+   * Deletes a push subscription from the database using its endpoint.
+   * @param endpoint The unique endpoint of the push subscription to remove.
+   */
+  public async unsubscribe(endpoint: string): Promise<void> {
+    const client = await this._adminClient();
+    try {
+      // Find the subscription by its unique endpoint to get its ID
+      const subscriptionToDelete = await client
+        .collection<PushSubscriptionDB>("push_subscriptions")
+        .getFirstListItem(`endpoint = "${endpoint}"`);
+
+      // If a subscription is found, delete it
+      if (subscriptionToDelete) {
+        await client
+          .collection("push_subscriptions")
+          .delete(subscriptionToDelete.id);
+        console.log(`Successfully unsubscribed endpoint: ${endpoint}`);
+      }
+    } catch (error: any) {
+      // A 404 error means the subscription doesn't exist, so we can consider it unsubscribed.
+      if (error.status === 404) {
+        console.log(
+          `Attempted to unsubscribe an endpoint that was not found: ${endpoint}`,
+        );
+        return; // Exit gracefully
+      }
+      // For other errors, log them and re-throw
+      console.error(
+        `Error during unsubscribe for endpoint ${endpoint}:`,
+        error,
+      );
       throw error;
     }
   }

@@ -12,6 +12,7 @@ import { ApiPagedResponse, ApiResponse } from "@/utils/response";
 import { UserDTO } from "@/schema/users";
 import { Author, BookCategory, ResponseWrap, UserInfo } from "./../types";
 import { api } from "./api";
+import { SubscriptionDTO } from "@/schema/subscription";
 
 // ===== Types =====
 
@@ -75,6 +76,29 @@ export const authors = {
     api.query<ResponseWrap<AuthorDTO>>(() => `authors/${authorId}`, {
       queryKey: () => ["authors", authorId] as const,
     }),
+};
+
+export const subscriptions = {
+  book: {
+    availability: {
+      subscribe: api.mutation<SubscriptionDTO, string>(
+        (id) => `/subscriptions/book/${id}/subscribe`,
+        {
+          method: "POST",
+        },
+      ),
+      unsubscribe: api.mutation<{ result: boolean }, string>(
+        (id) => `/subscriptions/book/${id}/unsubscribe`,
+        {
+          method: "DELETE",
+        },
+      ),
+      isSubscribed: api.query<
+        ApiResponse<{ isSubscribed: boolean }>,
+        { id: string }
+      >(({ id }) => `/subscriptions/book/${id}/isSubscribed`),
+    },
+  },
 };
 
 export const auth = {

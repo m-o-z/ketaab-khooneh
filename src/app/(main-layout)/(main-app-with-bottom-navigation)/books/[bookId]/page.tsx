@@ -3,7 +3,6 @@ import { Flex, Title } from "@mantine/core";
 import {
   Button,
   ButtonSlots,
-  IconButton,
   Notice,
   NoticeSlots,
 } from "@tapsioss/react-components";
@@ -12,14 +11,16 @@ import { useParams, useRouter } from "next/navigation";
 
 import BookSummary from "@/components/book/BookSummary/BookSummary";
 import { useBooksGetApi } from "@/hooks/books";
-import { useGetProfile } from "@/hooks/profile";
-import { PageLayout } from "@/providers/PageLayout";
-import { detectTextLanguage } from "@/utils/text";
-import dayjs from "dayjs";
-import { toStandardJalaliDateTime } from "@/utils/prettifyDate";
 import { useBorrowBookMutation } from "@/hooks/borrow";
+import { useGetProfile } from "@/hooks/profile";
+import { useBookAvailability } from "@/hooks/subscriptions";
+import { PageLayout } from "@/providers/PageLayout";
+import { toStandardJalaliDateTime } from "@/utils/prettifyDate";
+import { detectTextLanguage } from "@/utils/text";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import z from "zod";
 
 // TODO: fix style
 const Page = () => {
@@ -32,8 +33,17 @@ const Page = () => {
   } = useGetProfile();
   const { mutateAsync: borrowBookMutateAsync, isPending } =
     useBorrowBookMutation();
+
   const router = useRouter();
   const { bookId } = useParams();
+
+  const {
+    isPending: isBookSubscriptionPending,
+    isLoading: isBookSubscriptionLoading,
+    isSubscribed,
+    toggleSubscription,
+  } = useBookAvailability(z.string().parse(bookId));
+
   const {
     isLoading,
     data: book,
@@ -103,6 +113,30 @@ const Page = () => {
       );
     }
 
+    if (book?.status === "UNAVAILABLE") {
+      return (
+        <Notice
+          visible
+          className="w-full"
+          color="error"
+          heading="این کتاب در حال حاضر در دسترس نیست."
+          description="برای اطلاع از لحظه در دسترس قرار گرفتن، می‌توانید از دکمه زیر استفاده کنید."
+          priority="low"
+        >
+          <div slot={NoticeSlots.ACTION} className="w-full justify-end flex">
+            <Button
+              loading={isBookSubscriptionLoading || isBookSubscriptionPending}
+              onClick={toggleSubscription}
+            >
+              {isSubscribed
+                ? "غیرفعال‌سازی اطلاع‌رسانی"
+                : "فعال‌سازی اطلاع‌رسانی"}
+            </Button>
+          </div>
+        </Notice>
+      );
+    }
+
     if (userProfile?.activeBorrowsCount) {
       return (
         <Notice
@@ -119,18 +153,6 @@ const Page = () => {
             </Button>
           </div>
         </Notice>
-      );
-    }
-
-    if (book?.status === "UNAVAILABLE") {
-      return (
-        <Notice
-          visible
-          className="w-full"
-          color="error"
-          description="این کتاب در حال حاضر در دسترس نیست."
-          priority="low"
-        />
       );
     }
     if (book?.status === "AVAILABLE" && book.availableCount > 0) {

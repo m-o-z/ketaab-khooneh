@@ -9,5 +9,6 @@ export const handleErrors = (error: any) => {
   if (isPocketBaseError(error)) {
     return createPocketBaseError(error);
   }
-  return errorBadRequest();
+  let message = "message" in error ? (error.message as string) : undefined;
+  return errorBadRequest(message);
 };
