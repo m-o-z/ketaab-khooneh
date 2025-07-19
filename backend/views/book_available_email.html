@@ -38,8 +38,15 @@
         text-decoration: none;
         border-radius: 5px;
         font-size: 16px;
-        margin-left: 0.5rem;
       }
+
+      div.box {
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem 0;
+      }
+
       a.button:hover {
         background-color: #0056b3;
       }
@@ -60,7 +67,9 @@
       </p>
       <p>
         Don’t miss out—reserve it now before someone else does:
-        <a href="{{.domain}}/books/{{.bookId}}" class="button">Borrow Now</a>
+        <div class="box">
+          <a href="{{.domain}}/books/{{.bookId}}" class="button">Borrow Now</a>
+        </div>
       </p>
       <p>Happy reading, and thank you for using our online library!</p>
       <div class="footer">
@@ -69,7 +78,7 @@
           reply directly to this email.
         </p>
         <p>
-          <a href="{{.domain}}">Visit <b>{{.appname}}</b></a> for more books and
+          <a href="{{.domain}}">Visit <b>{{.appName}}</b></a> for more books and
           resources.
         </p>
       </div>

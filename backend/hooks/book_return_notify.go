@@ -3,6 +3,7 @@ package hooks
 import (
 	"fmt"
 	"ghafaseh-backend/models"
+	"log"
 	"net/mail"
 
 	"github.com/pocketbase/pocketbase/core"
@@ -11,12 +12,12 @@ import (
 )
 
 func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, user *models.User, book *models.Book) error {
-	res := book.ExpandedBookWork()
-
 	registry := template.NewRegistry()
 
 	domain := re.App.Settings().Meta.AppURL
 	appName := re.App.Settings().Meta.AppName
+
+	log.Println("appName", appName)
 
 	html, err := registry.LoadFiles(
 		"views/book_available_email.html",

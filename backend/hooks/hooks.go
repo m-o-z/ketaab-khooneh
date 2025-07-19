@@ -13,9 +13,19 @@ func RegisterHooks(app *pocketbase.PocketBase) error {
 
 	app.OnRecordUpdateExecute("books").BindFunc(func(e *core.RecordEvent) error {
 		e.App.ExpandRecord(e.Record, []string{"bookWork"}, nil)
+
 		book := new(models.Book).LoadFromRecord(e.Record)
+		bookPrevStatus := e.Record.Original().GetString("status")
+		bookStatus := book.Status()
+
+		if bookStatus != "AVAILABLE" || bookStatus == bookPrevStatus {
+			return e.Next()
+		}
+
 		subscriptionService := services.NewSubscriptionService(e.App)
+
 		subscriptions, err := subscriptionService.FindSubscriptions("books", book.Id, "GOT_AVAILABLE")
+
 		if err != nil {
 			log.Println("can not fetch subscriptions for this book.")
 			return nil
