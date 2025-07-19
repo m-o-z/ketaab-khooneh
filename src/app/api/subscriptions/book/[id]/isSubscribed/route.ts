@@ -23,11 +23,10 @@ const handler = async (req: NextRequest, context: AuthorizedContext) => {
     const { id: bookId } = await context.params;
     z.string().parse(bookId);
 
-    const result = await SubscriptionService.findSubscription({
+    const result = await SubscriptionService.findSubscriptionForUser(user.id, {
       recordId: bookId,
       targetCollection: "books",
       type: "GOT_AVAILABLE",
-      user: user.id,
     });
 
     return Response.json(

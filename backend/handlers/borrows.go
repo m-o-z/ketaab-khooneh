@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"errors"
-	"fmt"
 	"ghafaseh-backend/models"
 	"net/http"
 	"time"
@@ -109,13 +108,11 @@ func DeleteBorrowHandler(c *core.RequestEvent) error {
 
 	var req models.ReturnBorrowRequest
 	if err := c.BindBody(&req); err != nil || req.BorrowId == "" || (req.ShouldPunished == true && req.PunishmentEndAt == "") {
-		fmt.Printf("error %s", err)
 		return c.JSON(http.StatusBadRequest, models.BorrowResponse{
 			Status:  "error",
 			Message: "Invalid data provided.",
 		})
 	}
-	fmt.Printf("req : %+v", req)
 
 	targetStatus := "RETURNED"
 	if req.ShouldPunished {
@@ -124,40 +121,42 @@ func DeleteBorrowHandler(c *core.RequestEvent) error {
 
 	var borrow *core.Record
 	err := c.App.RunInTransaction(func(txApp core.App) error {
-		var bookId *string
-		var userId *string
-		var status *string
-		err := txApp.DB().NewQuery("SELECT book, user, status from borrows where id={:id}").
-			Bind(dbx.Params{"id": req.BorrowId}).
-			Row(&bookId, &userId, &status)
+		//
+		borrowRecord, err := txApp.FindFirstRecordByFilter("borrows", "id = {:id}", dbx.Params{"id": req.BorrowId})
+
 		if err != nil {
 			return errors.New("can not get borrowId.")
 		}
 
-		if *status == "RETURNED" || *status == "RETURNED_LATE" {
+		if borrowRecord.GetString("status") == "RETURNED" || borrowRecord.GetString("status") == "RETURNED_LATE" {
 			return errors.New("the book is already is returned state.")
 		}
+		bookId := borrowRecord.GetString("book")
+		userId := borrowRecord.GetString("user")
 
 		returnDate := time.Now().Format(time.RFC3339Nano)
 		// check due date to now
-		result, err := txApp.DB().NewQuery("UPDATE borrows SET status={:status}, returnDate={:returnDate} where id={:id}").
-			Bind(dbx.Params{
-				"id":         req.BorrowId,
-				"status":     targetStatus,
-				"returnDate": returnDate,
-			}).Execute()
+		borrowRecord.Set("status", targetStatus)
+		borrowRecord.Set("returnDate", returnDate)
 
-		fmt.Println("result", result)
+		err = txApp.Save(borrowRecord)
 
 		if err != nil {
 			return errors.New("failed to persist state of borrow")
 		}
 
-		_, err = txApp.DB().NewQuery("UPDATE books SET availableCount=availableCount+1, status='AVAILABLE' WHERE id={:id}").
-			Bind(dbx.Params{"id": bookId}).
-			Execute()
+		bookRecord, err := txApp.FindRecordById("books", bookId, nil)
 		if err != nil {
-			return errors.New("error while updating book count")
+			return errors.New("can not fetch books")
+		}
+
+		bookRecord.Set("availableCount", bookRecord.GetInt("availableCount")+1)
+		bookRecord.Set("status", "AVAILABLE")
+
+		err = txApp.Save(bookRecord)
+
+		if err != nil {
+			return errors.New("failed to persist state of book")
 		}
 
 		if req.ShouldPunished {

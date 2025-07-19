@@ -12,6 +12,7 @@ import (
 func RegisterHooks(app *pocketbase.PocketBase) error {
 
 	app.OnRecordUpdateExecute("books").BindFunc(func(e *core.RecordEvent) error {
+
 		e.App.ExpandRecord(e.Record, []string{"bookWork"}, nil)
 
 		book := new(models.Book).LoadFromRecord(e.Record)
@@ -35,7 +36,8 @@ func RegisterHooks(app *pocketbase.PocketBase) error {
 			user := subscription.ExpandedUser()
 			userModel := models.User{}
 			userModel.LoadFromRecord(user)
-			SendEmailOfSuccessNotificationOfBook(e, &userModel, book)
+			go SendEmailOfSuccessNotificationOfBook(e, &userModel, book)
+			e.App.Delete(subscription)
 		}
 
 		return e.Next()

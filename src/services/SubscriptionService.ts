@@ -16,6 +16,7 @@ type FindSubscriptionsParams = {
   recordId: string;
   type: string | string[];
   expand?: string;
+  userId?: string;
 } & ListQueryPageOptions;
 
 class SubscriptionService extends BaseService {
@@ -39,6 +40,7 @@ class SubscriptionService extends BaseService {
     targetCollection,
     recordId,
     type,
+    userId,
     page,
     perPage,
     expand = "user,actor",
@@ -51,6 +53,7 @@ class SubscriptionService extends BaseService {
       `targetCollection = "${targetCollection}"`,
       `recordId = "${recordId}"`,
       typeFilter,
+      userId && `user = "${userId}"`,
     ]
       .filter(Boolean) // Remove empty strings from the array
       .join(" && ");
@@ -83,7 +86,7 @@ class SubscriptionService extends BaseService {
   public async createSubscription(payload: CreateSubscriptionPayload) {
     const client = await this._adminClient();
 
-    const result = await this.findSubscription(payload);
+    const result = await this.findSubscriptionForUser(payload.user, payload);
 
     if (result != null) {
       throw new Error("You have subscribed already");
@@ -108,6 +111,7 @@ class SubscriptionService extends BaseService {
       payload.targetCollection,
       payload.recordId,
       payload.type,
+      undefined,
       {
         page: 1,
         perPage: 1,
@@ -132,12 +136,44 @@ class SubscriptionService extends BaseService {
     payload: FindSubscriptionPayload,
     throwOnExtraRecords: boolean = false,
   ) {
-    const client = await this._adminClient();
-
     const { subscriptionsCore: records } = await this.findSubscriptions(
       payload.targetCollection,
       payload.recordId,
       payload.type,
+      undefined,
+      {
+        page: 1,
+        perPage: 999,
+      },
+    );
+
+    if (records.length === 1) {
+      return records[0];
+    } else if (
+      records.length === 0 ||
+      (!throwOnExtraRecords && records.length > 1)
+    ) {
+      return null;
+    } else {
+      throw new Error(`Found extra records in "${payload.targetCollection}"`);
+    }
+  }
+
+  /**
+   * Finds a record of subscriptions for specific user
+   * @param payload - The data needed to create the subscription.
+   * @returns The result of end result in boolean
+   */
+  public async findSubscriptionForUser(
+    userId: string,
+    payload: Omit<FindSubscriptionPayload, "user">,
+    throwOnExtraRecords: boolean = false,
+  ) {
+    const { subscriptionsCore: records } = await this.findSubscriptions(
+      payload.targetCollection,
+      payload.recordId,
+      payload.type,
+      userId,
       {
         page: 1,
         perPage: 999,
@@ -168,12 +204,14 @@ class SubscriptionService extends BaseService {
     targetCollection: string,
     recordId: string,
     type: string | string[],
-    options: ListQueryPageOptions,
+    userId?: string,
+    options: ListQueryPageOptions = { page: 1, perPage: 10 },
   ) {
     return this.findSubscriptionsByFilter({
       targetCollection,
       recordId,
       type,
+      userId,
       ...options,
     });
   }
