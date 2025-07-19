@@ -3,37 +3,46 @@ package hooks
 import (
 	"fmt"
 	"ghafaseh-backend/models"
-	"log"
-	"os"
+	"net/mail"
 
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/tools/mailer"
+	"github.com/pocketbase/pocketbase/tools/template"
 )
 
-func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, userId string, book *models.Book) error {
+func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, user *models.User, book *models.Book) error {
 	res := book.ExpandedBookWork()
-	log.Println("res", res)
 
-	// registry := template.NewRegistry()
+	registry := template.NewRegistry()
 
-	domain := os.Getenv("APP_DOMAIN")
-	if domain == "" {
-		domain = "https://ketab.echa.ir"
+	domain := re.App.Settings().Meta.AppURL
+	appName := re.App.Settings().Meta.AppName
+
+	html, err := registry.LoadFiles(
+		"views/book_available_email.html",
+	).Render(map[string]any{
+		"bookTitle": book.ExpandedBookWork().Title(),
+		"bookId":    book.Id,
+		"domain":    domain,
+		"appName":   appName,
+	})
+
+	if err != nil {
+		return fmt.Errorf("Failed to render email template", err)
+	}
+	message := &mailer.Message{
+		From: mail.Address{
+			Address: re.App.Settings().Meta.SenderAddress,
+			Name:    re.App.Settings().Meta.SenderName,
+		},
+		To:      []mail.Address{{Address: user.Email()}},
+		Subject: "Book Available to Borrow Now!",
+		HTML:    html,
 	}
 
-	_domain := re.App.Settings().Meta.AppURL
-	fmt.Println("_domain", _domain)
-
-	// html, err := registry.LoadFiles(
-	// 	"views/book_release_email.html",
-	// ).Render(map[string]any{
-	// 	"bookTitle": data.BookTitle,
-	// 	"bookId":    data.BookId,
-	// 	"domain":    domain,
-	// })
-
-	// if err != nil {
-	// 	return req.InternalServerError("Failed to render email template", err)
-	// }
+	if err := re.App.NewMailClient().Send(message); err != nil {
+		return fmt.Errorf("failed to send email to %s: %w", user.Email(), err)
+	}
 
 	return nil
 }

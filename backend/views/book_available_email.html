@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Available Notification</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333333;
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      p {
+        color: #555555;
+        font-size: 16px;
+        line-height: 1.5;
+        margin: 0 0 15px;
+      }
+      a.button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-left: 0.5rem;
+      }
+      a.button:hover {
+        background-color: #0056b3;
+      }
+      .footer {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #777777;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Your Book Is Available!</h1>
+      <p>
+        Great news! The book "<strong>{{.bookTitle}}</strong>" you were waiting
+        for has been returned and is now available to borrow from our library.
+      </p>
+      <p>
+        Don’t miss out—reserve it now before someone else does:
+        <a href="{{.domain}}/books/{{.bookId}}" class="button">Borrow Now</a>
+      </p>
+      <p>Happy reading, and thank you for using our online library!</p>
+      <div class="footer">
+        <p>
+          This is an automated message from your online library. Please do not
+          reply directly to this email.
+        </p>
+        <p>
+          <a href="{{.domain}}">Visit <b>{{.appname}}</b></a> for more books and
+          resources.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
