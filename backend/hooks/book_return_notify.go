@@ -3,21 +3,23 @@ package hooks
 import (
 	"fmt"
 	"ghafaseh-backend/models"
-	"log"
 	"net/mail"
+	"os"
 
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tools/mailer"
 	"github.com/pocketbase/pocketbase/tools/template"
 )
 
+const (
+	APP_FRONTEND_URL = "APP_FRONTEND_URL"
+)
+
 func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, user *models.User, book *models.Book) error {
 	registry := template.NewRegistry()
 
-	domain := re.App.Settings().Meta.AppURL
+	domain := os.Getenv(APP_FRONTEND_URL)
 	appName := re.App.Settings().Meta.AppName
-
-	log.Println("appName", appName)
 
 	html, err := registry.LoadFiles(
 		"views/book_available_email.html",

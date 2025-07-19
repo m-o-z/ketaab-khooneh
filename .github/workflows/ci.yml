@@ -102,6 +102,7 @@ jobs:
           build-args: |
             VAPID_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
             VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
+            APP_FRONTEND_URL=${{ vars.APP_FRONTEND_URL }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:latest
             ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:${{ github.sha }}
