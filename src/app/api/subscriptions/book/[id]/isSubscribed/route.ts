@@ -25,7 +25,7 @@ const handler = async (req: NextRequest, context: AuthorizedContext) => {
 
     const result = await SubscriptionService.findSubscription({
       recordId: bookId,
-      targetCollection: "subscriptions",
+      targetCollection: "books",
       type: "GOT_AVAILABLE",
       user: user.id,
     });

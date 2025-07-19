@@ -22,7 +22,7 @@ const handler = async (req: NextRequest, context: AuthorizedContext) => {
 
     const result = await SubscriptionService.createSubscription({
       recordId: bookId,
-      targetCollection: "subscriptions",
+      targetCollection: "books",
       type: "GOT_AVAILABLE",
       user: user.id,
     });

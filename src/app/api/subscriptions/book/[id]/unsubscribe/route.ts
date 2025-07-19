@@ -21,7 +21,7 @@ const handler = async (req: NextRequest, context: AuthorizedContext) => {
 
     const result = await SubscriptionService.deleteSubscription({
       recordId: bookId,
-      targetCollection: "subscriptions",
+      targetCollection: "books",
       type: "GOT_AVAILABLE",
       user: user.id,
     });
