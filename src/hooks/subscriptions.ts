@@ -1,6 +1,7 @@
 import { subscriptions } from "@/client";
 import { tick } from "@/utils/eventQueue";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 const useBookAvailabilityIsSubscribedQuery = (bookId: string) => {
   return useQuery({
@@ -24,6 +25,7 @@ const useUnsubscribeBookAvailabilityMutation = () => {
 };
 
 export const useBookAvailability = (bookId: string) => {
+  const [isInvalidating, setIsInvalidating] = useState(false);
   const queryClient = useQueryClient();
   const {
     data: isSubscribed,
@@ -55,18 +57,19 @@ export const useBookAvailability = (bookId: string) => {
     return mutateUnsubscribeAsync(bookId);
   };
 
-  const isPending = isSubscribing || isUnsubscribing;
+  const isPending = isSubscribing || isUnsubscribing || isInvalidating;
 
   const toggleSubscription = async () => {
+    setIsInvalidating(true);
     if (!showBookAvailabilitySubscriptionButton || isPending) {
       return;
     }
 
     try {
       if (isSubscribed) {
-        return unsubscribe();
+        return await unsubscribe();
       } else {
-        return subscribe();
+        return await subscribe();
       }
     } finally {
       await tick();
@@ -75,6 +78,7 @@ export const useBookAvailability = (bookId: string) => {
         exact: false,
         queryKey: ["-subscriptions-book-" + bookId + "-isSubscribed"],
       });
+      setIsInvalidating(false);
     }
   };
 

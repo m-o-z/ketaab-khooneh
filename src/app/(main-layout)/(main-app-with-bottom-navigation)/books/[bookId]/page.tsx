@@ -126,6 +126,7 @@ const Page = () => {
           <div slot={NoticeSlots.ACTION} className="w-full justify-end flex">
             <Button
               loading={isBookSubscriptionLoading || isBookSubscriptionPending}
+              disabled={isBookSubscriptionLoading || isBookSubscriptionPending}
               onClick={toggleSubscription}
             >
               {isSubscribed
