@@ -13,6 +13,7 @@ import BorrowStatusBadge from "./components/BorrowStatusBadge";
 import BorrowReturnBottom from "./components/BorrowReturnBottom";
 import TextEllipses from "../TextEllipses";
 import DirectionAwareText from "../DirectionAwareText";
+import BorrowExtendBottom from "./components/BorrowExtendBottom";
 
 type Props = {
   item: BorrowBriefDTO;
@@ -140,7 +141,7 @@ const BorrowItem = ({ item }: Props) => {
 
         {!isReturned ? (
           <div className="space-x-2">
-            <Button variant="ghost">تمدید</Button>
+            <BorrowExtendBottom id={item.id} />
             <BorrowReturnBottom id={item.id} />
           </div>
         ) : null}

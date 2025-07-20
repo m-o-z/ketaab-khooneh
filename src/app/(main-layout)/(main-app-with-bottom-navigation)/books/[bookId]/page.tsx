@@ -107,7 +107,13 @@ const Page = () => {
           priority="low"
         >
           <div slot={NoticeSlots.ACTION} className="flex content-end w-full">
-            <Button href={"/borrows"}>جزئیات</Button>
+            <Button
+              onClick={() => {
+                router.push("/borrows");
+              }}
+            >
+              جزئیات
+            </Button>
           </div>
         </Notice>
       );

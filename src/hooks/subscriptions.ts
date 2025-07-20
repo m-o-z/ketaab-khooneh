@@ -75,7 +75,6 @@ export const useBookAvailability = (bookId: string) => {
       await tick();
       await tick();
       await queryClient.invalidateQueries({
-        exact: false,
         queryKey: ["-subscriptions-book-" + bookId + "-isSubscribed"],
       });
       setIsInvalidating(false);

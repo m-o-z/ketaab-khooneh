@@ -46,8 +46,12 @@ export class RuleEngineService {
         return contextValue !== ruleValue;
       case "GREATER_THAN":
         return contextValue > ruleValue;
+      case "GREATER_THAN_OR_EQUAL":
+        return contextValue >= ruleValue;
       case "LESS_THAN":
         return contextValue < ruleValue;
+      case "LESS_THAN_OR_EQUAL":
+        return contextValue <= ruleValue;
       case "IS_EMPTY":
         return contextValue == null || contextValue === "";
       // Add more operators as needed...

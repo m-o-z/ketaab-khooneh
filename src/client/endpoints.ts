@@ -143,6 +143,13 @@ export const borrows = {
       method: "DELETE",
     },
   ),
+
+  extendBook: api.mutation<null, string>(
+    (borrowId: string) => `borrows/${borrowId}/extend`,
+    {
+      method: "POST",
+    },
+  ),
 };
 // ===== Categories API =====
 export const categories = {

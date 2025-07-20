@@ -19,12 +19,14 @@ const Page = () => {
   const router = useRouter();
 
   const shouldShowNotification = useMemo(() => {
+    console.log({ isMobile, browser, platform });
     if (isMobile) {
       return platform === "android" && pwaMode === "standalone";
     } else {
       const isChromeVariationOrFirefox =
         !hasBrowser("ie") &&
         hasPlatform("android", "macos", "chromeos", "linux", "windows");
+      console.log({ isChromeVariationOrFirefox });
       return isChromeVariationOrFirefox;
     }
   }, [pwaMode, browser, platform]);

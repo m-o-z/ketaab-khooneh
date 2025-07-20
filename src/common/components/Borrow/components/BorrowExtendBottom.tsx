@@ -1,4 +1,4 @@
-import { useReturnBookMutation } from "@/hooks/borrow";
+import { useExtendBookMutation, useReturnBookMutation } from "@/hooks/borrow";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@tapsioss/react-components/Button";
@@ -8,30 +8,28 @@ type Props = {
   id: string;
 };
 
-const BorrowReturnBottom = ({ id }: Props) => {
+const BorrowExtendBottom = ({ id }: Props) => {
   const queryClient = useQueryClient();
-  const { mutateAsync: returnBookMutateAsync, isPending } =
-    useReturnBookMutation();
+  const { mutateAsync: extendBookMutateAsync, isPending } =
+    useExtendBookMutation();
   const onHandleReturn = async () => {
     try {
-      await returnBookMutateAsync(id);
+      await extendBookMutateAsync(id);
       notifications.show({
         title: "عملیات موفقیت آمیز",
-        message: "کتاب مورد نظر با موفقیت پس‌داده شد",
+        message: "کتاب مورد نظر با موفقیت تمدید شد",
         color: "green",
       });
     } catch (err) {
       notifications.show({
-        message: "خطا در پس‌دادن کتاب",
+        message: "خطا در تمدید کتاب",
         color: "red",
       });
     } finally {
       queryClient.invalidateQueries({
-        refetchType: "all",
         queryKey: ["borrows"],
       });
       queryClient.invalidateQueries({
-        refetchType: "all",
         queryKey: ["books"],
       });
       queryClient.invalidateQueries({
@@ -44,8 +42,8 @@ const BorrowReturnBottom = ({ id }: Props) => {
       acceptButtonTitle="تایید"
       acceptButtonVariant="destructive"
       denyButtonTitle="انصراف"
-      description={"آیا مطمئن هستید که کتاب را می‌خواهید پس بدهید؟"}
-      heading="پس‌دادن کتاب"
+      description={"آیا مطمئن هستید که می‌خواهید کتاب‌ را تمدید کنید؟"}
+      heading="تمدید کتاب"
       isPending={isPending}
       renderImage={() => (
         <svg
@@ -68,9 +66,13 @@ const BorrowReturnBottom = ({ id }: Props) => {
       )}
       onConfirm={onHandleReturn}
     >
-      {({ show }) => <Button onClick={show}>پس دادن</Button>}
+      {({ show }) => (
+        <Button variant="ghost" onClick={show}>
+          تمدید کتاب
+        </Button>
+      )}
     </ConfirmationModal>
   );
 };
 
-export default BorrowReturnBottom;
+export default BorrowExtendBottom;

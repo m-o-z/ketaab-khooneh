@@ -8,16 +8,10 @@ import { errorBadRequest } from "@/utils/errors/errors";
 import { toStandardGeorgianDateTime } from "@/utils/prettifyDate";
 import { createResponsePayload } from "@/utils/response";
 
-import { BookDB } from "@/schema/books";
-import { BorrowCoreSchema, BorrowDTOSchema } from "@/schema/borrows";
+import { BorrowCoreSchema, BorrowDB, BorrowDTOSchema } from "@/schema/borrows";
 import { UserDB } from "@/schema/users";
 import { handleErrors } from "@/utils/handleErrors";
-import dayjs from "dayjs";
-import {
-  borrowingNotAllowed,
-  errorUserIsPunished,
-  wrongDueDate,
-} from "./errors";
+import { borrowingNotAllowed, errorUserIsPunished } from "./errors";
 
 const handler = async (req: NextRequest, context: Context) => {
   const params = await context.params;
@@ -28,25 +22,33 @@ const handler = async (req: NextRequest, context: Context) => {
   }
 
   try {
+    const borrowId = params.id;
     const user = await client
       .collection<UserDB>("users")
       .getOne(client.authStore.record.id);
-    const book = await client.collection<BookDB>("books").getOne(params.id);
+    const borrowDb = await client
+      .collection<BorrowDB>("borrows")
+      .getOne(borrowId, {
+        expand: "book",
+      });
 
-    const userBorrows = await client.collection<Borrow>("borrows").getFullList({
-      filter: `user = "${user.id}" && status = "ACTIVE"`,
-    });
+    const userBorrows = await clientAdmin
+      .collection<Borrow>("borrows")
+      .getFullList({
+        filter: `user = "${user.id}" && status = "ACTIVE"`,
+      });
 
     const initialContext = {
       user,
-      book,
+      book: borrowDb.expand?.book!,
+      borrow: borrowDb,
       borrows: {
         count: userBorrows.length,
       },
     };
 
     const ruleEngine = new RuleEngineService(clientAdmin);
-    const result = await ruleEngine.execute("BEFORE_BORROW", initialContext);
+    const result = await ruleEngine.execute("BEFORE_EXTEND", initialContext);
 
     if (!result.allowed) {
       if (user.isPunished) {
@@ -57,26 +59,18 @@ const handler = async (req: NextRequest, context: Context) => {
       return borrowingNotAllowed(result.message);
     }
 
-    const { dueDate } = result.modifiedContext.borrows;
+    const updatedBorrow = await clientAdmin
+      .collection<BorrowDB>("borrows")
+      .update(borrowDb.id, {
+        extendedCount: (borrowDb.extendedCount ?? 0) + 1,
+        status: "EXTENDED",
+      });
 
-    if (!dueDate) {
-      return wrongDueDate();
-    }
-
-    const response = await clientAdmin.send("/api/borrows", {
-      method: "POST",
-      body: JSON.stringify({
-        bookId: book.id,
-        userId: user.id,
-        duration: dayjs(dueDate).diff(dayjs(), "days"),
-      }),
-    });
-
-    const borrowCore = BorrowCoreSchema.parse(response.data);
+    const borrowCore = BorrowCoreSchema.parse(updatedBorrow);
     const borrowDto = BorrowDTOSchema.parse(borrowCore);
 
     return Response.json(
-      createResponsePayload(borrowDto, "Book borrowed successfully!"),
+      createResponsePayload(borrowDto, "Your borrow is extended successfully!"),
     );
   } catch (err) {
     console.log({ err });

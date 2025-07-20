@@ -52,10 +52,8 @@ func RegisterHooks(app *pocketbase.PocketBase) error {
 				TemplateRenderer: *templateRenderer,
 			}
 
-			clonedRequest := *e
-
 			logger.Debug("Before calling send email")
-			go SendEmailOfSuccessNotificationOfBook(&clonedRequest, payload)
+			go SendEmailOfSuccessNotificationOfBook(e, payload)
 			err = e.App.Delete(subscription)
 
 			logger.Info("deleting subscription", "userID", subscription.UserId(), "bookId", subscription.RecordId(), "status", err != nil)

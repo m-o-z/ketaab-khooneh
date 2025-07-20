@@ -31,3 +31,9 @@ export const useReturnBookMutation = () => {
     ...borrows.returnBook,
   });
 };
+
+export const useExtendBookMutation = () => {
+  return useMutation({
+    ...borrows.extendBook,
+  });
+};
