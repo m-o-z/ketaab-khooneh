@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"log"
 	"strings"
 
 	"github.com/pocketbase/pocketbase/core"
@@ -76,7 +75,6 @@ func (b *Book) LoadFromRecord(rec *core.Record) *Book {
 		b.expanded = make(map[string]interface{})
 	}
 	if result := rec.ExpandedOne("bookWork"); result != nil {
-		log.Println("result", result)
 		b.expanded["bookWork"] = result
 	}
 	return b

@@ -2,7 +2,7 @@ package hooks
 
 import (
 	"fmt"
-	"ghafaseh-backend/models"
+	"log"
 	"net/mail"
 	"os"
 
@@ -15,17 +15,21 @@ const (
 	APP_FRONTEND_URL = "APP_FRONTEND_URL"
 )
 
-func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, user *models.User, book *models.Book) error {
-	registry := template.NewRegistry()
+type SendEmailPayload struct {
+	BookId           string
+	BookTitle        string
+	UserEmail        string
+	TemplateRenderer template.Renderer
+}
+
+func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, payload SendEmailPayload) error {
 
 	domain := os.Getenv(APP_FRONTEND_URL)
 	appName := re.App.Settings().Meta.AppName
 
-	html, err := registry.LoadFiles(
-		"views/book_available_email.html",
-	).Render(map[string]any{
-		"bookTitle": book.ExpandedBookWork().Title(),
-		"bookId":    book.Id,
+	html, err := payload.TemplateRenderer.Render(map[string]any{
+		"bookTitle": payload.BookTitle,
+		"bookId":    payload.BookId,
 		"domain":    domain,
 		"appName":   appName,
 	})
@@ -33,19 +37,22 @@ func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, user *models.Use
 	if err != nil {
 		return fmt.Errorf("Failed to render email template", err)
 	}
+
 	message := &mailer.Message{
 		From: mail.Address{
 			Address: re.App.Settings().Meta.SenderAddress,
 			Name:    re.App.Settings().Meta.SenderName,
 		},
-		To:      []mail.Address{{Address: user.Email()}},
+		To:      []mail.Address{{Address: payload.UserEmail}},
 		Subject: "Book Available to Borrow Now!",
 		HTML:    html,
 	}
 
 	if err := re.App.NewMailClient().Send(message); err != nil {
-		return fmt.Errorf("failed to send email to %s: %w", user.Email(), err)
+		return fmt.Errorf("failed to send email to %s: %w", payload.UserEmail, err)
 	}
+
+	log.Printf("successfully send email to %s", payload.UserEmail)
 
 	return nil
 }

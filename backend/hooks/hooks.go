@@ -7,6 +7,7 @@ import (
 
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/tools/template"
 )
 
 func RegisterHooks(app *pocketbase.PocketBase) error {
@@ -32,11 +33,27 @@ func RegisterHooks(app *pocketbase.PocketBase) error {
 			return nil
 		}
 
+		registry := template.NewRegistry()
+
+		templateRenderer := registry.LoadFiles(
+			"views/book_available_email.html",
+		)
+
 		for _, subscription := range subscriptions {
 			user := subscription.ExpandedUser()
 			userModel := models.User{}
 			userModel.LoadFromRecord(user)
-			go SendEmailOfSuccessNotificationOfBook(e, &userModel, book)
+
+			payload := SendEmailPayload{
+				BookId:           book.Id,
+				BookTitle:        book.ExpandedBookWork().Title(),
+				UserEmail:        user.Email(),
+				TemplateRenderer: *templateRenderer,
+			}
+
+			clonedRequest := *e
+
+			go SendEmailOfSuccessNotificationOfBook(&clonedRequest, payload)
 			e.App.Delete(subscription)
 		}
 
