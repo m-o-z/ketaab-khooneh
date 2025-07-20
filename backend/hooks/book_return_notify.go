@@ -1,8 +1,6 @@
 package hooks
 
 import (
-	"fmt"
-	"log"
 	"net/mail"
 	"os"
 
@@ -22,7 +20,9 @@ type SendEmailPayload struct {
 	TemplateRenderer template.Renderer
 }
 
-func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, payload SendEmailPayload) error {
+func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, payload SendEmailPayload) {
+	logger := re.App.Logger()
+	logger.Info("starting to send email", "email", payload.UserEmail)
 
 	domain := os.Getenv(APP_FRONTEND_URL)
 	appName := re.App.Settings().Meta.AppName
@@ -35,7 +35,8 @@ func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, payload SendEmai
 	})
 
 	if err != nil {
-		return fmt.Errorf("Failed to render email template", err)
+		logger.Error("Failed to render email template,", "err", err)
+		return
 	}
 
 	message := &mailer.Message{
@@ -49,10 +50,10 @@ func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, payload SendEmai
 	}
 
 	if err := re.App.NewMailClient().Send(message); err != nil {
-		return fmt.Errorf("failed to send email to %s: %w", payload.UserEmail, err)
+		logger.Error("failed to send email", "email", payload.UserEmail, "err", err)
 	}
 
-	log.Printf("successfully send email to %s", payload.UserEmail)
+	logger.Info("successfully send email", "email", payload.UserEmail)
 
-	return nil
+	return
 }

@@ -39,6 +39,7 @@ func RegisterHooks(app *pocketbase.PocketBase) error {
 			"views/book_available_email.html",
 		)
 
+		logger := app.Logger()
 		for _, subscription := range subscriptions {
 			user := subscription.ExpandedUser()
 			userModel := models.User{}
@@ -53,8 +54,13 @@ func RegisterHooks(app *pocketbase.PocketBase) error {
 
 			clonedRequest := *e
 
+			logger.Debug("Before calling send email")
 			go SendEmailOfSuccessNotificationOfBook(&clonedRequest, payload)
-			e.App.Delete(subscription)
+			err = e.App.Delete(subscription)
+
+			logger.Info("deleting subscription", "userID", subscription.UserId(), "bookId", subscription.RecordId(), "status", err != nil)
+
+			logger.Debug("After calling send email")
 		}
 
 		return e.Next()
