@@ -38,6 +38,7 @@ COPY --from=builder /app/pocketbase-app .
 # Ensure 'pb_migrations' and 'pb_public' folders are in your 'backend' directory.
 COPY ./pb_migrations ./pb_migrations
 COPY ./pb_public ./pb_public
+COPY ./views ./views
 
 # Expose the default PocketBase port
 EXPOSE 8090
