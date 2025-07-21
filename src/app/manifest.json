@@ -11,9 +11,8 @@
   "dir": "rtl",
   "orientation": "portrait",
   "prefer_related_applications": false,
-  "author": "Petos Team",
-  "version": "0.0.1",
-  "manifest_version": "0.2",
+  "version": "0.0.3",
+  "manifest_version": "0.3",
   "icons": [
     {
       "src": "/icons/manifest-icon-192.maskable.png",
