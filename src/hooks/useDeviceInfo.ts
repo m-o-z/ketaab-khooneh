@@ -13,6 +13,7 @@ export type Browser =
   | "chrome"
   | "firefox"
   | "safari"
+  | "safari-ios"
   | "edge"
   | "opera"
   | "brave"
@@ -38,41 +39,65 @@ function getPlatform(ua: string): Platform {
 }
 
 function getBrowser(ua: string): Browser {
+  // Check Edge first (before Chrome, as Edge contains "chrome" in UA)
   if (/edg\//i.test(ua)) return "edge";
+
+  // Check Chrome-based browsers
   if (/chrome/i.test(ua)) {
     if (/brave\//i.test(ua)) return "brave";
     if (/opr\//i.test(ua)) return "opera";
     return "chrome";
   }
+
+  // Check Firefox
   if (/firefox/i.test(ua)) return "firefox";
-  if (/safari/i.test(ua) && !/chrome/i.test(ua)) return "safari";
+
+  // Check Safari (make sure it's not Chrome-based)
+  if (/safari/i.test(ua) && !/chrome/i.test(ua)) {
+    // Distinguish iOS Safari from macOS Safari
+    if (/iphone|ipad|ipod/i.test(ua)) {
+      return "safari-ios";
+    }
+    return "safari"; // macOS Safari
+  }
+
+  // Check Internet Explorer
   if (/msie|trident/i.test(ua)) return "ie";
+
   return "unknown";
 }
 
 function getPWAMode(): PWAMode {
+  // Check if running in browser environment
+  if (typeof window === "undefined") return "unknown";
+
+  // Check standalone mode (both standard and iOS)
   if (
     (window.matchMedia &&
       window.matchMedia("(display-mode: standalone)").matches) ||
-    (navigator as any).standalone
+    (navigator as any).standalone === true
   ) {
     return "standalone";
   }
 
+  // Check minimal-ui mode
   if (
     window.matchMedia &&
     window.matchMedia("(display-mode: minimal-ui)").matches
   ) {
     return "minimal-ui";
   }
+
   return "browser";
 }
 
 export function useDeviceInfo() {
   const deviceInfo = useMemo<DeviceInfo>(() => {
+    // Server-side rendering or non-browser environment
     if (typeof window === "undefined" || typeof navigator === "undefined") {
       return { platform: "unknown", browser: "unknown", pwaMode: "unknown" };
     }
+
     const ua = navigator.userAgent;
     return {
       platform: getPlatform(ua),
@@ -83,30 +108,43 @@ export function useDeviceInfo() {
 
   const hasPlatform = useCallback(
     (...values: Platform[]) => {
-      return (
-        values.findIndex((item) => deviceInfo.platform.includes(item)) >= 0
-      );
+      return values.some((value) => deviceInfo.platform === value);
     },
-    [deviceInfo],
+    [deviceInfo.platform], // More specific dependency
   );
 
   const hasBrowser = useCallback(
     (...values: Browser[]) => {
-      return values.findIndex((item) => deviceInfo.browser.includes(item)) >= 0;
+      return values.some((value) => deviceInfo.browser === value);
     },
-    [deviceInfo],
+    [deviceInfo.browser], // More specific dependency
   );
 
   const hasPwaMode = useCallback(
     (...values: PWAMode[]) => {
-      return values.findIndex((item) => deviceInfo.pwaMode.includes(item)) >= 0;
+      return values.some((value) => deviceInfo.pwaMode === value);
     },
-    [deviceInfo],
+    [deviceInfo.pwaMode], // More specific dependency
   );
 
   const isMobile = useMemo(() => {
-    return hasPlatform("android", "ios");
-  }, [deviceInfo]);
+    return deviceInfo.platform === "android" || deviceInfo.platform === "ios";
+  }, [deviceInfo.platform]); // Direct dependency instead of using hasPlatform
+
+  // Additional helpful computed properties
+  const isDesktop = useMemo(() => {
+    return ["windows", "macos", "linux", "chromeos"].includes(
+      deviceInfo.platform,
+    );
+  }, [deviceInfo.platform]);
+
+  const isApple = useMemo(() => {
+    return deviceInfo.platform === "macos" || deviceInfo.platform === "ios";
+  }, [deviceInfo.platform]);
+
+  const isChromeBased = useMemo(() => {
+    return ["chrome", "edge", "opera", "brave"].includes(deviceInfo.browser);
+  }, [deviceInfo.browser]);
 
   return {
     ...deviceInfo,
@@ -114,5 +152,8 @@ export function useDeviceInfo() {
     hasBrowser,
     hasPwaMode,
     isMobile,
+    isDesktop,
+    isApple,
+    isChromeBased,
   };
 }
