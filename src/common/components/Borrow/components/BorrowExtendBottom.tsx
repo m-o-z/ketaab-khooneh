@@ -68,7 +68,7 @@ const BorrowExtendBottom = ({ id }: Props) => {
     >
       {({ show }) => (
         <Button variant="ghost" onClick={show}>
-          تمدید کتاب
+          تمدید
         </Button>
       )}
     </ConfirmationModal>
