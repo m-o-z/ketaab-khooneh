@@ -186,7 +186,8 @@ func (s *PushSubscriptionService) sendNotificationsToRecords(records []*core.Rec
 			Subscriber:      "mailto:hossein.nasiri.sovari@gmail.com",
 			VAPIDPublicKey:  vapidPublicKey,
 			VAPIDPrivateKey: vapidPrivateKey,
-			TTL:             30,
+			TTL:             86400,
+			Urgency:         "normal",
 		})
 
 		util.LogResponse(resp)
