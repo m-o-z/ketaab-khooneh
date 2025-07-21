@@ -183,7 +183,7 @@ func (s *PushSubscriptionService) sendNotificationsToRecords(records []*core.Rec
 		}
 		// The web-push-go library expects the payload as a byte slice.
 		resp, err := webpush.SendNotification(body, sub, &webpush.Options{
-			Subscriber:      "mailto:hossein.nasiri.sovari@gmail.com",
+			Subscriber:      "mailto: <hossein.nasiri.sovari@gmail.com>",
 			VAPIDPublicKey:  vapidPublicKey,
 			VAPIDPrivateKey: vapidPrivateKey,
 			TTL:             30,
