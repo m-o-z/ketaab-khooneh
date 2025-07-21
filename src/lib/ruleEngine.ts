@@ -121,12 +121,27 @@ export class RuleEngineService {
             break;
 
           case "SET_VALUE":
-            const { fact, value, unit } = rule.actionParams;
+            const { fact, value, unit, basedOn } = rule.actionParams;
 
             if (fact === "borrows.dueDate" && unit === "days") {
-              const newDueDate = new Date();
-              newDueDate.setDate(newDueDate.getDate() + value);
-              result.modifiedContext.borrows.dueDate = newDueDate;
+              let startingPoint = new Date();
+
+              /* 
+                 basedOn is important field here. In rule table and fact column 
+                 you can put `basedOn` field which can relate to any context 
+                 objects, so, starting point to calculate duration can start from
+                 that point.
+              */
+              if (basedOn) {
+                const rawValue = this.getValueFromContext(
+                  basedOn,
+                  result.modifiedContext,
+                );
+                const value = rawValue ?? new Date().toISOString;
+                startingPoint = new Date(value);
+              }
+              startingPoint.setDate(startingPoint.getDate() + value);
+              result.modifiedContext.borrows.dueDate = startingPoint;
             }
             // Add more SET_VALUE logic here for other facts
             break;

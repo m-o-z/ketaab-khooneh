@@ -1,3 +1,4 @@
+"use client";
 import { useCallback, useMemo } from "react";
 
 export type Platform =

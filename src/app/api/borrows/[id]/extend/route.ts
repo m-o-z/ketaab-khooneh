@@ -11,7 +11,13 @@ import { createResponsePayload } from "@/utils/response";
 import { BorrowCoreSchema, BorrowDB, BorrowDTOSchema } from "@/schema/borrows";
 import { UserDB } from "@/schema/users";
 import { handleErrors } from "@/utils/handleErrors";
-import { borrowingNotAllowed, errorUserIsPunished } from "./errors";
+import {
+  borrowingNotAllowed,
+  errorUserIsPunished,
+  wrongDueDate,
+} from "./errors";
+import dayjs from "dayjs";
+import { log } from "console";
 
 const handler = async (req: NextRequest, context: Context) => {
   const params = await context.params;
@@ -58,12 +64,18 @@ const handler = async (req: NextRequest, context: Context) => {
       }
       return borrowingNotAllowed(result.message);
     }
+    const { dueDate } = result.modifiedContext.borrows;
+
+    if (!dueDate) {
+      return wrongDueDate();
+    }
 
     const updatedBorrow = await clientAdmin
       .collection<BorrowDB>("borrows")
       .update(borrowDb.id, {
         extendedCount: (borrowDb.extendedCount ?? 0) + 1,
         status: "EXTENDED",
+        dueDate: dayjs(dueDate).toISOString(),
       });
 
     const borrowCore = BorrowCoreSchema.parse(updatedBorrow);

@@ -47,6 +47,14 @@ const BorrowItem = ({ item }: Props) => {
     return dayjs(item.dueDate).isBefore(dayjs());
   }, [item]);
 
+  const isExtendButtonVisible = useMemo(() => {
+    const remainingDays = dayjs(item.dueDate).diff(dayjs(), "days");
+    if (remainingDays > 0 && remainingDays <= 3) {
+      return true;
+    }
+    return false;
+  }, [item.dueDate]);
+
   const calcStatus = (item: BorrowBriefDTO) => {
     if (
       isDueDatePassed &&
@@ -141,7 +149,7 @@ const BorrowItem = ({ item }: Props) => {
 
         {!isReturned ? (
           <div className="space-x-2">
-            <BorrowExtendBottom id={item.id} />
+            {isExtendButtonVisible ? <BorrowExtendBottom id={item.id} /> : null}
             <BorrowReturnBottom id={item.id} />
           </div>
         ) : null}

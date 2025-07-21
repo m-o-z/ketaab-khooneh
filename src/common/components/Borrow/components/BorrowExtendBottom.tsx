@@ -20,9 +20,15 @@ const BorrowExtendBottom = ({ id }: Props) => {
         message: "کتاب مورد نظر با موفقیت تمدید شد",
         color: "green",
       });
-    } catch (err) {
+    } catch (err: unknown) {
+      let message =
+        typeof err === "object" && err && "message" in err
+          ? (err.message as string)
+          : "";
+
       notifications.show({
-        message: "خطا در تمدید کتاب",
+        title: "خطا در تمدید کتاب",
+        message: message,
         color: "red",
       });
     } finally {
