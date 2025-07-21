@@ -33,6 +33,13 @@ export default withPWA({
   cacheOnFrontEndNav: true,
   cacheStartUrl: true,
   workboxOptions: {
+    swDest: "sw.js",
+    additionalManifestEntries: [
+      {
+        url: "/sw-version",
+        revision: Date.now().toString(),
+      },
+    ],
     runtimeCaching: [
       {
         urlPattern: ({ url: { pathname } }) => {
