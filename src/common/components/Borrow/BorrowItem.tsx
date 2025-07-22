@@ -6,7 +6,7 @@ import { BorrowBriefDTO } from "@/schema/borrows";
 import Typography from "@/common/Typography/Typography";
 import { useReturnBookMutation } from "@/hooks/borrow";
 import { BorrowStatusEnum } from "@/types";
-import { toStandardJalaliDate } from "@/utils/prettifyDate";
+import { toSimpleJalaliDate, toStandardJalaliDate } from "@/utils/prettifyDate";
 import { Button } from "@tapsioss/react-components/Button";
 import { ArrowLeft } from "@tapsioss/react-icons";
 import BorrowStatusBadge from "./components/BorrowStatusBadge";
@@ -22,10 +22,11 @@ const BorrowItem = ({ item }: Props) => {
   const remaining = useMemo(() => {
     const hours = dayjs(dayjs()).diff(item.dueDate, "hours");
 
-    if (hours < 0 && Math.abs(hours) < 24) {
+    if (Math.abs(hours) < 24) {
+      const value = Math.abs(hours);
       return {
-        display: [hours, "ساعت"].join(" "),
-        value: hours,
+        display: [value, "ساعت"].join(" "),
+        value: value,
         unit: "hour",
       };
     }
@@ -73,13 +74,13 @@ const BorrowItem = ({ item }: Props) => {
     if (isReturned) {
       const content = [
         <Typography.Label size="sm" color="color.content.tertiary">
-          {toStandardJalaliDate(item.borrowDate)}
+          {toSimpleJalaliDate(item.borrowDate)}
         </Typography.Label>,
         <Typography.Label size="sm" color="color.content.tertiary">
           <ArrowLeft size={16} />
         </Typography.Label>,
         <Typography.Label size="sm" color="color.content.tertiary">
-          {toStandardJalaliDate(item.returnDate!)}
+          {toSimpleJalaliDate(item.returnDate!)}
         </Typography.Label>,
       ];
       return <div className="flex items-center space-x-1">{content}</div>;
@@ -90,7 +91,7 @@ const BorrowItem = ({ item }: Props) => {
         امانت گرفته‌شده از
       </Typography.Body>,
       <Typography.Label size="xs" color="color.content.secondary">
-        {toStandardJalaliDate(item.borrowDate)}
+        {toSimpleJalaliDate(item.borrowDate)}
       </Typography.Label>,
       <div className="px-1">
         <Typography.Body size="sm" color="color.content.tertiary">
@@ -149,7 +150,10 @@ const BorrowItem = ({ item }: Props) => {
 
         {!isReturned ? (
           <div className="space-x-2">
-            {isExtendButtonVisible ? <BorrowExtendBottom id={item.id} /> : null}
+            <BorrowExtendBottom
+              disabled={!isExtendButtonVisible}
+              id={item.id}
+            />
             <BorrowReturnBottom id={item.id} />
           </div>
         ) : null}

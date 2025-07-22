@@ -6,9 +6,10 @@ import ConfirmationModal from "../../ConfirmationModal";
 
 type Props = {
   id: string;
+  disabled: boolean;
 };
 
-const BorrowExtendBottom = ({ id }: Props) => {
+const BorrowExtendBottom = ({ id, disabled = false }: Props) => {
   const queryClient = useQueryClient();
   const { mutateAsync: extendBookMutateAsync, isPending } =
     useExtendBookMutation();
@@ -73,7 +74,7 @@ const BorrowExtendBottom = ({ id }: Props) => {
       onConfirm={onHandleReturn}
     >
       {({ show }) => (
-        <Button variant="ghost" onClick={show}>
+        <Button variant="ghost" onClick={show} disabled={disabled}>
           تمدید
         </Button>
       )}

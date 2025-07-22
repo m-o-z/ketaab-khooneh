@@ -20,3 +20,12 @@ export const toStandardJalaliDate = (date: Dayjs | Date | string) => {
   const _dayjs = dayjs(date);
   return _dayjs.calendar("jalali").format("YYYY/MM/DD");
 };
+
+export const toSimpleJalaliDate = (date: Dayjs | Date | string) => {
+  const _dayjs = dayjs(date).calendar("jalali").locale("fa");
+  const dayName = _dayjs.format("D");
+  const month = _dayjs.format("MMMM");
+  const year = _dayjs.format("YYYY");
+  const isYearDiffer = dayjs().year != _dayjs.year;
+  return [dayName, month, isYearDiffer && year].filter(Boolean).join(" ");
+};
