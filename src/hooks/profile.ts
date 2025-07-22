@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { users } from "@/client";
 
@@ -11,5 +11,11 @@ export const useGetProfile = () => {
       }
       return result;
     },
+  });
+};
+
+export const useCompleteProfileMutation = () => {
+  return useMutation({
+    ...users.completeProfile,
   });
 };

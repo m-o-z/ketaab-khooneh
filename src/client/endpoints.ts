@@ -9,40 +9,21 @@ import { BookDTO } from "@/schema/books";
 import { BorrowBriefDTO, BorrowDTO } from "@/schema/borrows";
 import { ApiPagedResponse, ApiResponse } from "@/utils/response";
 
-import { UserDTO } from "@/schema/users";
+import { SubscriptionDTO } from "@/schema/subscription";
+import { UserDB, UserDTO } from "@/schema/users";
 import { Author, BookCategory, ResponseWrap, UserInfo } from "./../types";
 import { api } from "./api";
-import { SubscriptionDTO } from "@/schema/subscription";
-
-// ===== Types =====
 
 // User types
 export const users = {
   me: api.query<ResponseWrap<UserDTO>>("users/me"),
-  // Get all users
-  // getAll: api.query<User[]>("users"),
-  // // Get user by ID
-  // getById: api.query<User, { id: number }>((params) => `users/${params.id}`, {
-  //   queryKey: (params) => ["users", params.id] as const,
-  // }),
-  // // Get users with filters
-  // getFiltered: api.query<User[], UserFilters>("users", {
-  //   queryKey: (params) => ["users", "filtered", params] as const,
-  // }),
-  // // Create a user
-  // create: api.mutation<User, Omit<User, "id">>("users"),
-  // // Update a user
-  // update: api.mutation<User, Partial<User> & { id: number }>(
-  //   (params) => `users/${params.id}`,
-  //   {
-  //     method: "PUT",
-  //     transformVariables: ({ id, ...data }) => data,
-  //   },
-  // ),
-  // // Delete a user
-  // delete: api.mutation<void, { id: number }>((params) => `users/${params.id}`, {
-  //   method: "DELETE",
-  // }),
+  completeProfile: api.mutation<UserDB, FormData>("/users/profile/complete", {
+    isFormData: true,
+    method: "POST",
+    headers: {
+      "Content-Type": "",
+    },
+  }),
 };
 
 // ===== Books API =====

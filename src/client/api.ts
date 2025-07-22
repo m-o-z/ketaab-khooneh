@@ -3,7 +3,9 @@
  * Designed to work seamlessly with TanStack Query
  */
 
+import { deepMerge } from "@mantine/core";
 import appConfig from "../../app.config";
+import { ApiError } from "./apiError";
 
 // Base configuration for API requests
 interface ApiConfig extends RequestInit {
@@ -43,15 +45,19 @@ export function createApi(_config: ApiConfig = defaultConfig) {
     options: RequestInit = {},
   ): Promise<T> {
     const url = getUrl(endpoint);
-    const mergedHeaders = {
-      ...defaultHeaders,
+    let mergedHeaders = deepMerge(defaultHeaders!, {
       ...options.headers,
-    };
+    });
+
+    // Remove nulled headers
+    mergedHeaders = Object.fromEntries(
+      Object.entries(mergedHeaders).filter(([key, value]) => value),
+    );
 
     const finalOptions = {
       ...config,
       ...options,
-      headers: mergedHeaders,
+      headers: mergedHeaders!,
     };
     try {
       const response = await fetch(url, finalOptions);
@@ -68,18 +74,7 @@ export function createApi(_config: ApiConfig = defaultConfig) {
         if (response.status === 401) {
           window.location.href = "/auth/login";
         }
-        const error = new Error(
-          typeof errorData === "object"
-            ? JSON.stringify(errorData)
-            : String(errorData),
-        );
-        (error as any).status = response.status;
-        (error as any).statusText = response.statusText;
-        (error as any).data = errorData;
-        if ("message" in errorData) {
-          error.message = errorData.message;
-        }
-        throw error;
+        throw new ApiError(response.status, response.statusText, errorData);
       }
 
       // Handle empty responses
@@ -164,6 +159,7 @@ export function createApi(_config: ApiConfig = defaultConfig) {
       method?: "POST" | "PUT" | "PATCH" | "DELETE";
       headers?: HeadersInit;
       transformVariables?: (variables: TVariables) => any;
+      isFormData?: boolean;
     } = {},
   ) {
     return {
@@ -176,13 +172,19 @@ export function createApi(_config: ApiConfig = defaultConfig) {
           ? options.transformVariables(variables)
           : variables;
 
+        let body: string | undefined | FormData =
+          transformedVariables !== undefined
+            ? JSON.stringify(transformedVariables)
+            : undefined;
+
+        if (options.isFormData) {
+          body = variables as FormData;
+        }
+
         return fetchApi<TData>(finalEndpoint, {
           method,
           headers: options.headers,
-          body:
-            transformedVariables !== undefined
-              ? JSON.stringify(transformedVariables)
-              : undefined,
+          body: body,
         });
       },
     };
