@@ -1,5 +1,7 @@
 "use client";
 import { Stack } from "@mantine/core";
+import { outline, Scanner } from "@yudiel/react-qr-scanner";
+
 import {
   Button,
   ButtonGroup,
@@ -171,8 +173,23 @@ export default function BooksListing() {
             )}
           </BaseBottomSheet.Wrapper>
           <BaseBottomSheet.Content>
-            <div className="w-full flex items-center justify-center h-[calc(var(--height)*0.7)] ">
-              QR Code Scanner Goes here
+            <div className="w-full justify-center h-[calc(var(--height)*0.7)] ">
+              <div className="aspect-square">
+                <Scanner
+                  onScan={(result) => console.log(result)}
+                  allowMultiple={false}
+                  formats={["qr_code"]}
+                  scanDelay={2000}
+                  sound={false}
+                  components={{
+                    finder: true,
+                    torch: true,
+                    onOff: true,
+                    tracker: outline,
+                  }}
+                />
+                ;
+              </div>
             </div>
           </BaseBottomSheet.Content>
         </BaseBottomSheet>

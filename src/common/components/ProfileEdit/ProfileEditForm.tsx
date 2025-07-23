@@ -94,7 +94,6 @@ export default memo(function ProfileEditForm({
     }
   };
 
-  console.log({ isLoading, isValid, isDirty });
   return (
     <div className="w-full p-4">
       <form
