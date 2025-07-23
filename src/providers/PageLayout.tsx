@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUp } from "@tapsioss/react-icons";
 import clsx from "clsx";
 import {
   CSSProperties,
+  PropsWithChildren,
   ReactNode,
   UIEventHandler,
   useCallback,
@@ -21,8 +22,16 @@ import { useStableHeightObserver } from "@/hooks/useStableHeightObserver";
 import styles from "./PageLayout.module.scss";
 import { PageLayoutContext } from "./PageLayoutContext";
 import { usePWA } from "./PWAProvider";
+import { Overlay } from "@mantine/core";
+
+function ContentLayoutDefault<T = {}>({ children }: PropsWithChildren<T>) {
+  return children;
+}
+
+export type ContentLayout = typeof ContentLayoutDefault;
 
 type PageLayoutProps = {
+  ContentLayout?: ContentLayout;
   showBackButton?: boolean;
   onBackClick?: () => void;
   initialTitle?: ReactNode;
@@ -44,6 +53,7 @@ export function PageLayout({
   isLoading = false,
   isError = false,
   noContent = false,
+  ContentLayout = ContentLayoutDefault,
   retry,
   children,
 }: PageLayoutProps) {
@@ -173,14 +183,7 @@ export function PageLayout({
     scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const hasContentToShow = () => {
-    if (!isLoading && !isError) {
-      return true;
-    }
-    return false;
-  };
-
-  const renderAlternativeContent = () => {
+  const renderContent = () => {
     if (isError) {
       return (
         <div className="h-full flex items-center">
@@ -191,8 +194,6 @@ export function PageLayout({
     if (isLoading) {
       return <Spinner />;
     }
-  };
-  const renderContent = () => {
     if (noContent) {
       return (
         <div className="h-full flex items-center">
@@ -210,10 +211,6 @@ export function PageLayout({
     }
     return "1rem";
   }, [safeAreaInsets, hasBottomNavigation]);
-
-  if (!hasContentToShow()) {
-    return renderAlternativeContent();
-  }
 
   return (
     <PageLayoutContext.Provider
@@ -250,8 +247,11 @@ export function PageLayout({
             </h2>
           )}
           {!!actions && (
-            <div className="flex items-center gap-2 shrink-0 max-h-full">
+            <div className="flex items-center gap-2 shrink-0 max-h-full relative">
               {actions}
+              {isLoading || isError ? (
+                <Overlay color="#fff" backgroundOpacity={0.85} blur={10} />
+              ) : null}
             </div>
           )}
         </header>
@@ -263,7 +263,7 @@ export function PageLayout({
           )}
           onScroll={handleScroll}
         >
-          {renderContent()}
+          <ContentLayout key="layout">{renderContent()}</ContentLayout>
         </main>
 
         {/* Sticky Button */}

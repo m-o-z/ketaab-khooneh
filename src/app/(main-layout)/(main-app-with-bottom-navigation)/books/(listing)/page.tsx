@@ -6,24 +6,27 @@ import {
   Checkbox,
   Divider,
   IconButton,
-  Switch,
-  TextField,
 } from "@tapsioss/react-components";
 import { LineThreeHorizontalDecrease, Scan } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
-import { Fragment, useMemo, useState } from "react";
+import {
+  Fragment,
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import { useDebounce } from "use-debounce";
 
+import BaseBottomSheet from "@/common/BaseBottomSheet/BaseBottomSheet";
 import ListToolbar from "@/common/components/ListToolbar";
+import { MultiSelect } from "@/common/MultiSelect";
+import Typography from "@/common/Typography/Typography";
 import BookPreview from "@/components/book/BookPreview";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
 import { PageLayout } from "@/providers/PageLayout";
 import Link from "next/link";
-import BaseBottomSheet from "@/common/BaseBottomSheet/BaseBottomSheet";
-import Text from "@/common/Text/Text";
-import { MultiSelect } from "@/common/MultiSelect";
-import Typography from "@/common/Typography/Typography";
 
 export default function Books() {
   const router = useRouter();
@@ -58,6 +61,7 @@ export default function Books() {
   const handleClick = (bookId: string) => {
     router.push(`books/${bookId}`);
   };
+
   const renderBooksSection = () => {
     return (
       <Stack>
@@ -75,13 +79,10 @@ export default function Books() {
 
   const renderToolbar = () => {
     return (
-      <div className="flex items-center space-x-2 w-full">
+      <div className="flex items-center space-x-2 w-full" key={"toolbar"}>
         <ListToolbar
-          filters={categories?.map((cat) => cat.label)}
           searchString={searchString}
-          selectedFilters={filters}
           setSearchString={setSearchString}
-          setSelectedFilters={setFilters}
         />
         <BaseBottomSheet>
           <BaseBottomSheet.Wrapper>
@@ -142,6 +143,14 @@ export default function Books() {
       </div>
     );
   };
+  const ContentLayout = useCallback(({ children }: PropsWithChildren) => {
+    return (
+      <div className="space-y-8 flex flex-col h-full">
+        <div className="shrink-0">{renderToolbar()}</div>
+        <div className="grow">{children}</div>
+      </div>
+    );
+  }, []);
 
   return (
     <PageLayout
@@ -173,11 +182,9 @@ export default function Books() {
       retry={() => {
         void refetch();
       }}
+      ContentLayout={ContentLayout}
     >
-      <div className="space-y-8">
-        {renderToolbar()}
-        {renderBooksSection()}
-      </div>
+      {renderBooksSection()}
     </PageLayout>
   );
 }

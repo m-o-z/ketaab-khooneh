@@ -13,7 +13,11 @@ export const useBooksGetAllApi = ({
   const filter = useMemo(
     () =>
       [
-        ...(search ? [`title~'${search}'`] : []),
+        ...(search
+          ? [
+              `bookWork.title:lower ~ '${search.toLowerCase()}' || bookWork.authors.name:lower ~ '${search.toLowerCase()}'`,
+            ]
+          : []),
         // TODO: add category filter
       ].join(" & "),
     [search],

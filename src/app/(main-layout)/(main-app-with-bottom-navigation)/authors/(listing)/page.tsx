@@ -1,13 +1,13 @@
 "use client";
 import { Stack } from "@mantine/core";
-import { useState } from "react";
+import { PropsWithChildren, useCallback, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 import ListToolbar from "@/common/components/ListToolbar";
 import AuthorPreview from "@/components/author/AuthorPreview";
 import { useAuthorsGetAllApi } from "@/hooks/authors";
 import { PageLayout } from "@/providers/PageLayout";
-import type { Author } from "@/types";
+import { AuthorDTO } from "@/schema/authors";
 
 export default function Home() {
   // TODO: refactor
@@ -26,7 +26,7 @@ export default function Home() {
   const renderAuthorsListSection = () => {
     return (
       <Stack>
-        {authors?.map((author: Author) => (
+        {authors?.map((author: AuthorDTO) => (
           <AuthorPreview.List key={author.id} author={author} />
         ))}
       </Stack>
@@ -44,6 +44,15 @@ export default function Home() {
 
   const hasNoContent = isSuccess && authors.length === 0;
 
+  const ContentLayout = useCallback(({ children }: PropsWithChildren) => {
+    return (
+      <div className="space-y-8 flex flex-col h-full">
+        <div className="shrink-0">{renderToolbar()}</div>
+        <div className="grow">{children}</div>
+      </div>
+    );
+  }, []);
+
   return (
     <PageLayout
       goToTopEnabled
@@ -54,11 +63,9 @@ export default function Home() {
       retry={() => {
         void refetch();
       }}
+      ContentLayout={ContentLayout}
     >
-      <div className="space-y-8">
-        {renderToolbar()}
-        {renderAuthorsListSection()}
-      </div>
+      <div>{renderAuthorsListSection()}</div>
     </PageLayout>
   );
 }

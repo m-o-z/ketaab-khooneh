@@ -47,7 +47,7 @@ export const books = {
 
 export const authors = {
   // Get all books
-  getAll: api.query<ResponseWrap<Author[]>, AuthorsListingRequestPayload>(
+  getAll: api.query<ResponseWrap<AuthorDTO[]>, AuthorsListingRequestPayload>(
     "authors",
     {
       queryKey: (params) => ["authors", "filtered", params],
