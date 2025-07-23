@@ -9,15 +9,24 @@ import { BookDTO } from "@/schema/books";
 import { BorrowBriefDTO, BorrowDTO } from "@/schema/borrows";
 import { ApiPagedResponse, ApiResponse } from "@/utils/response";
 
+import { ProfileEditRequestPayload } from "@/app/api/users/profile/(patch)/route.schema";
 import { SubscriptionDTO } from "@/schema/subscription";
-import { UserDB, UserDTO } from "@/schema/users";
-import { Author, BookCategory, ResponseWrap, UserInfo } from "./../types";
+import { UserDTO } from "@/schema/users";
+import { BookCategory, ResponseWrap, UserInfo } from "./../types";
 import { api } from "./api";
 
 // User types
 export const users = {
   me: api.query<ResponseWrap<UserDTO>>("users/me"),
-  completeProfile: api.mutation<UserDB, FormData>("/users/profile/complete", {
+
+  editProfile: api.mutation<UserDTO, FormData>("/users/profile", {
+    isFormData: true,
+    method: "PATCH",
+    headers: {
+      "Content-Type": "",
+    },
+  }),
+  completeProfile: api.mutation<UserDTO, FormData>("/users/profile/complete", {
     isFormData: true,
     method: "POST",
     headers: {
@@ -91,7 +100,7 @@ export const auth = {
   }),
 
   verify: api.mutation<
-    { token: string; record: UserInfo },
+    { token: string; record: UserDTO },
     VerifyOTPRequestPayload
   >("auth/verify", {
     method: "POST",

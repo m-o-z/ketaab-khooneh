@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { AuthorizedContext } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
+import { UserDB } from "@/schema/users";
 import { handleErrors } from "@/utils/handleErrors";
 import { createResponsePayload } from "@/utils/response";
-import { profileCompleteSchema } from "./route.schema";
-import { UserDB } from "@/schema/users";
-import { errorProfileCompletedAlready } from "./errors";
+import { ProfileEditRequestPayload, profileEditSchema } from "./route.schema";
+
 export const config = {
   api: {
     bodyParser: false,
@@ -14,31 +14,26 @@ export const config = {
 };
 
 const handler = async (req: NextRequest, context: AuthorizedContext) => {
-  // Get the raw request
   try {
     const formData = await req.formData();
     const rawData = {
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
-      avatar: formData.get("avatar"),
+      firstName: formData.get("firstName") ?? undefined,
+      lastName: formData.get("lastName") ?? undefined,
+      avatar: formData.get("avatar") ?? undefined,
     };
-
-    if (context.user.isProfileCompleted) {
-      return errorProfileCompletedAlready();
-    }
-
-    profileCompleteSchema.parse(rawData);
-    formData.set("verified", true);
-    formData.set("isProfileCompleted", true);
+    const validatedPayload = profileEditSchema.parse(rawData);
 
     const modifiedUser = await context.admin
       .collection<UserDB>("users")
-      .update(context.user.id, formData);
+      .update(context.user.id, validatedPayload);
 
     return NextResponse.json(
-      createResponsePayload({
-        modifiedUser,
-      }),
+      createResponsePayload(
+        {
+          modifiedUser,
+        },
+        "user edited successfully",
+      ),
       {
         status: 200,
       },
@@ -49,4 +44,4 @@ const handler = async (req: NextRequest, context: AuthorizedContext) => {
   }
 };
 
-export const POST = withAuth(handler);
+export const PATCH = withAuth(handler);

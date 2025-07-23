@@ -5,10 +5,11 @@ import {
   Badge,
   Button,
   Divider,
+  IconButton,
   Notice,
   NoticeSlots,
 } from "@tapsioss/react-components";
-import { FactCheck, Gear } from "@tapsioss/react-icons";
+import { ChevronLeft, FactCheck, Gear } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
 
 import ProfileItem from "@/common/components/Profile/ProfileItem";
@@ -54,14 +55,14 @@ const Page = () => {
         );
       } else if (profile.isProfileCompleted)
         return (
-          <Flex
-            align="center"
-            gap={10}
-            style={{ cursor: "pointer" }}
+          <div
+            className="flex items-center space-x-3 cursor-pointer w-full"
             onClick={() => router.push("/profile/edit")}
           >
-            <Avatar image={profile.avatar} />
-            <Stack gap={0}>
+            <div className="shrink-0">
+              <Avatar image={profile.avatar} size="lg" />
+            </div>
+            <div className="grow">
               <h2 className="space-x-2 m-0">
                 <span>{profile.displayName}</span>
                 {profile.isPunished ? (
@@ -74,8 +75,13 @@ const Page = () => {
                 ) : null}
               </h2>
               <p>{profile.email}</p>
-            </Stack>
-          </Flex>
+            </div>
+            <div className="shrink-0 flex items-center">
+              <IconButton variant="naked">
+                <ChevronLeft />
+              </IconButton>
+            </div>
+          </div>
         );
     }
   };

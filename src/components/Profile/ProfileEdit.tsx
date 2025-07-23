@@ -3,24 +3,45 @@ import { isApiError } from "@/client/apiError";
 import ProfileEditForm, {
   ProfileEditHandler,
 } from "@/common/components/ProfileEdit/ProfileEditForm";
-import { useCompleteProfileMutation } from "@/hooks/profile";
+import { useEditProfileMutation } from "@/hooks/profile";
+import { UserDTO } from "@/schema/users";
 import { tick } from "@/utils/eventQueue";
 import { objectToFormData } from "@/utils/formData";
+import { getDirtyValues } from "@/utils/formSubmit";
 import { notifications } from "@mantine/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { memo, useMemo } from "react";
 
-export default function ProfileCompletionForm() {
+type Props = {
+  user: UserDTO;
+  avatar?: File;
+};
+
+const ProfileEdit = ({ user, avatar }: Props) => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { mutateAsync: completeProfileMutateAsync, isPending } =
-    useCompleteProfileMutation();
+  const { mutateAsync: editProfileMutateAsync, isPending } =
+    useEditProfileMutation();
 
-  const onSubmit: ProfileEditHandler = async ({ payload, setError }) => {
-    const formData = objectToFormData(payload);
+  const defaultValues = useMemo<ProfileCompleteRequestPayload>(() => {
+    return {
+      firstName: user.firstName!,
+      lastName: user.lastName!,
+      avatar,
+    };
+  }, [user]);
+
+  const onSubmit: ProfileEditHandler = async ({
+    payload,
+    setError,
+    dirtyFields,
+  }) => {
+    const dirtyPayload = getDirtyValues(payload, dirtyFields);
+    const formData = objectToFormData(dirtyPayload);
     if (formData && formData instanceof FormData) {
       try {
-        await completeProfileMutateAsync(formData);
+        await editProfileMutateAsync(formData);
         notifications.show({
           message: "با موفقیت ثبت شد",
           color: "green",
@@ -59,9 +80,13 @@ export default function ProfileCompletionForm() {
 
   return (
     <ProfileEditForm
-      onSubmit={onSubmit}
-      submitButtonText="ثبت"
+      noAvatarField
       isLoading={isPending}
+      onSubmit={onSubmit}
+      submitButtonText="اعمال تغییرات"
+      defaultValues={defaultValues}
     />
   );
-}
+};
+
+export default memo(ProfileEdit);

@@ -19,3 +19,9 @@ export const useCompleteProfileMutation = () => {
     ...users.completeProfile,
   });
 };
+
+export const useEditProfileMutation = () => {
+  return useMutation({
+    ...users.editProfile,
+  });
+};
