@@ -42,18 +42,16 @@ export default withPWA({
     runtimeCaching: [
       {
         urlPattern: ({ url: { pathname } }) => {
-          console.log({ pathname });
           if (pathname.startsWith("/api/")) {
+            console.log({ matched: true, pathname });
             return true;
           }
 
           return false;
         },
         handler: "NetworkOnly", // Always go to network, never cache
-        method: "GET",
         options: {
           cacheName: "apis", // You can keep or remove, but no caching will happen with NetworkOnly
-          // Remove cacheableResponse and expiration to disable caching completely
         },
       },
       {
