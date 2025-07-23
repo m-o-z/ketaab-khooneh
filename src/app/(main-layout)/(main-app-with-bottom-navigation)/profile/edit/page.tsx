@@ -39,7 +39,7 @@ const Edit = () => {
   };
   return (
     <PageLayout
-      isLoading={isLoading}
+      isLoading={isLoading || (!isAvatarError && !avatar)}
       isError={isError || isAvatarError}
       noContent={!user && isSuccess}
     >
