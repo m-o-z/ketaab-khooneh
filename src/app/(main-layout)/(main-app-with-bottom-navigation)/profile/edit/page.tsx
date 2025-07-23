@@ -2,7 +2,7 @@
 import ProfileEdit from "@/components/Profile/ProfileEdit";
 import { useGetProfile } from "@/hooks/profile";
 import { PageLayout } from "@/providers/PageLayout";
-import { urlToFileImage } from "@/utils/urlToFile";
+import { urlToFile } from "@/utils/urlToFile";
 import React, { useCallback, useEffect, useState } from "react";
 
 const Edit = () => {
@@ -12,7 +12,7 @@ const Edit = () => {
 
   const fetchAvatar = useCallback(() => {
     if (user) {
-      return urlToFileImage(user.avatar, user.email);
+      return urlToFile(user.avatar, user.email);
     }
   }, [user]);
 
