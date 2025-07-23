@@ -68,6 +68,15 @@ const Content = ({ children }: PropsWithChildren) => {
         <Drawer.Content
           style={{ "--max-width": `${maxWidth}px` } as CSSProperties}
           className="bg-white flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 w-full max-w-[var(--max-width)] right-[50%] translate-x-[50%] outline-none isolate z-50 p-4 pt-8"
+          onPointerDownOutside={(event) => {
+            // Check if the click target or its parent has the Mantine dropdown attribute.
+            // Using a data-attribute is more stable than a class name.
+            if (
+              (event.target as HTMLElement).closest("[data-mantine-dropdown]")
+            ) {
+              event.preventDefault();
+            }
+          }}
         >
           <div
             aria-hidden
