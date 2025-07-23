@@ -25,15 +25,22 @@ import Typography from "@/common/Typography/Typography";
 import BookPreview from "@/components/book/BookPreview";
 import { useBooksGetAllApi } from "@/hooks/books";
 import { useCategoriesQuery } from "@/hooks/categories";
+import useBookListingFilters from "@/hooks/useBookListingFilters";
 import { PageLayout } from "@/providers/PageLayout";
 import Link from "next/link";
 
 export default function Books() {
+  const { state, setState } = useBookListingFilters();
   const router = useRouter();
-  const [page, setPage] = useState(1);
-  const [searchString, setSearchString] = useState<string>("");
-  const [filters, setFilters] = useState<string[]>([]);
-  const [debouncedSearch] = useDebounce(searchString, 1000, {
+
+  const setSearch = (str: string) => {
+    if (str != null) {
+      setState({
+        search: str,
+      });
+    }
+  };
+  const [debouncedSearch] = useDebounce(state.search, 1000, {
     leading: false,
     trailing: true,
   });
@@ -41,10 +48,10 @@ export default function Books() {
   const payload = useMemo(
     () => ({
       search: debouncedSearch,
-      page,
+      page: state.page,
       perPage: 10,
     }),
-    [page, debouncedSearch],
+    [state.page, debouncedSearch],
   );
 
   const {
@@ -80,10 +87,7 @@ export default function Books() {
   const renderToolbar = () => {
     return (
       <div className="flex items-center space-x-2 w-full" key={"toolbar"}>
-        <ListToolbar
-          searchString={searchString}
-          setSearchString={setSearchString}
-        />
+        <ListToolbar searchString={state.search} setSearchString={setSearch} />
         <BaseBottomSheet>
           <BaseBottomSheet.Wrapper>
             {({ show, isOpen }) => (
@@ -117,11 +121,15 @@ export default function Books() {
                 </div>
                 <MultiSelect
                   placeholder="انتخاب دسته‌بندی"
-                  data={categories?.map((c) => c.label)}
+                  data={categories?.map((c) => ({
+                    label: c.label,
+                    value: c.slug,
+                  }))}
+                  searchable
                   label="بر اساس دسته‌بندی کتاب"
                 />
 
-                <MultiSelect
+                {/* <MultiSelect
                   placeholder="انتخاب وضعیت کتاب"
                   data={["React", "Angular", "Vue", "Svelte"]}
                   label="بر اساس وضعیت"
@@ -131,7 +139,7 @@ export default function Books() {
                   placeholder="انتخاب نویسنده..."
                   data={["React", "Angular", "Vue", "Svelte"]}
                   label="بر اساس نویسنده"
-                />
+                /> */}
 
                 <ButtonGroup fluidItems>
                   <Button>اعمال فیلتر</Button>
@@ -143,14 +151,18 @@ export default function Books() {
       </div>
     );
   };
-  const ContentLayout = useCallback(({ children }: PropsWithChildren) => {
-    return (
-      <div className="space-y-8 flex flex-col h-full">
-        <div className="shrink-0">{renderToolbar()}</div>
-        <div className="grow">{children}</div>
-      </div>
-    );
-  }, []);
+
+  const ContentLayout = useCallback(
+    ({ children }: PropsWithChildren) => {
+      return (
+        <div className="space-y-8 flex flex-col h-full">
+          <div className="shrink-0">{renderToolbar()}</div>
+          <div className="grow">{children}</div>
+        </div>
+      );
+    },
+    [categories],
+  );
 
   return (
     <PageLayout

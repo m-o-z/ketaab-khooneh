@@ -9,10 +9,10 @@ import { BookDTO } from "@/schema/books";
 import { BorrowBriefDTO, BorrowDTO } from "@/schema/borrows";
 import { ApiPagedResponse, ApiResponse } from "@/utils/response";
 
-import { ProfileEditRequestPayload } from "@/app/api/users/profile/(patch)/route.schema";
+import { CategoryDTO } from "@/schema/categories";
 import { SubscriptionDTO } from "@/schema/subscription";
 import { UserDTO } from "@/schema/users";
-import { BookCategory, ResponseWrap, UserInfo } from "./../types";
+import { ResponseWrap } from "./../types";
 import { api } from "./api";
 
 // User types
@@ -143,5 +143,5 @@ export const borrows = {
 };
 // ===== Categories API =====
 export const categories = {
-  getAll: api.query<ResponseWrap<BookCategory[]>>("categories"),
+  getAll: api.query<ResponseWrap<CategoryDTO[]>>("categories"),
 };

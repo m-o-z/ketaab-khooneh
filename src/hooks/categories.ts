@@ -5,7 +5,7 @@ import { categories } from "@/client";
 export const useCategoriesQuery = () =>
   useQuery({
     ...categories.getAll(),
-    select(data) {
-      return data.data;
+    select(response) {
+      return response.data;
     },
   });

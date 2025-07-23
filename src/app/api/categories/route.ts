@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { Context } from "@/@types/pocketbase";
 import { withAuth } from "@/middlewares/withAuth";
-import { categoriesSchema } from "@/schema/categories";
-import { BookCategory } from "@/types";
-import { errorBadRequest } from "@/utils/errors/errors";
+import {
+  categoriesSchema,
+  CategoryCoreSchema,
+  CategoryDB,
+  CategoryDTOSchema,
+} from "@/schema/categories";
+import { handleErrors } from "@/utils/handleErrors";
 import { createResponsePayload } from "@/utils/response";
 import { withTimeout } from "@/utils/withTimeout";
 
@@ -20,7 +24,7 @@ const handler = async (req: NextRequest, context: Context) => {
     const query = withTimeout(() => {
       const result = context.pb
         .collection("categories")
-        .getFullList<BookCategory>({
+        .getFullList<CategoryDB>({
           page,
           perPage,
           skipTotal,
@@ -30,11 +34,14 @@ const handler = async (req: NextRequest, context: Context) => {
 
     const result = await query;
 
-    return NextResponse.json(createResponsePayload(result), {
+    const categoriesCore = CategoryCoreSchema.array().parse(result);
+    const categoriesDto = CategoryDTOSchema.array().parse(categoriesCore);
+
+    return NextResponse.json(createResponsePayload(categoriesDto), {
       status: 200,
     });
   } catch (err) {
-    return errorBadRequest();
+    return handleErrors(err);
   }
 };
 
