@@ -35,14 +35,14 @@ export default withPWA({
   workboxOptions: {
     swDest: "sw.js",
     additionalManifestEntries: [
-      {
-        url: "/sw-version",
-        revision: Date.now().toString(),
-      },
+      { url: "/manifest.json", revision: Date.now().toString() },
+      { url: "/icons/favicon-196.png", revision: Date.now().toString() },
+      { url: "/icons/apple-icon-180.png", revision: Date.now().toString() },
     ],
     runtimeCaching: [
       {
         urlPattern: ({ url: { pathname } }) => {
+          console.log({ pathname });
           if (pathname.startsWith("/api/")) {
             return true;
           }
@@ -65,6 +65,20 @@ export default withPWA({
           expiration: {
             maxEntries: 64,
             maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+          },
+        },
+      },
+      {
+        urlPattern: /^https:\/\/media-cdn\.tapsi\.cab\/fonts\//,
+        handler: "CacheFirst",
+        options: {
+          cacheName: "external-fonts",
+          expiration: {
+            maxEntries: 32,
+            maxAgeSeconds: 365 * 24 * 60 * 60, // 1 year
+          },
+          cacheableResponse: {
+            statuses: [0, 200], // Typical for fonts
           },
         },
       },
