@@ -10,7 +10,7 @@ export async function urlToFile(
   url: string,
   fileName?: string,
 ): Promise<File | undefined> {
-  console.log({ url });
+  console.log({ url, appConfig });
   try {
     const urlToFetch = url.startsWith("/")
       ? url

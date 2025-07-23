@@ -62,6 +62,7 @@ jobs:
           push: true
           build-args: |
             NEXT_PUBLIC_POCKETBASE_URL=${{ vars.ENV_POCKETBASE_URL }} 
+            NEXT_PUBLIC_API_URL=${{ vars.PUBLIC_API_URL }} 
             NEXT_PUBLIC_DAYS_TO_REFRESH=${{ vars.NEXT_PUBLIC_DAYS_TO_REFRESH }} 
             REDIS_HOST=${{ vars.REDIS_HOST }}
             REDIS_PORT=${{ vars.REDIS_PORT }}
