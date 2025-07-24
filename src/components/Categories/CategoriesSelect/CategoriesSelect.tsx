@@ -151,25 +151,34 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
 
       <div>
         {value ? (
-          <div className="overflow-y-auto px-4 -mx-4">
-            <ChipGroup>
-              {value.map((item) => {
-                const categoryItem = getCategoryFromSlug(item);
-                console.log({ item, categoryItem });
-                return (
-                  <Chip selected onClick={() => handleRemoveItemSelect(item)}>
-                    <div slot={ChipSlots.LEADING_ICON}>
-                      <Avatar
-                        size="xs"
-                        image={categoryItem.categoryIcon}
-                        alt={categoryItem.label}
-                      />
-                    </div>
-                    {categoryItem.label}
-                  </Chip>
-                );
-              })}
-            </ChipGroup>
+          <div className="-mx-4">
+            <ScrollArea maw={"100%"}>
+              <div className="flex">
+                <div className="w-4 shrink-0"></div>
+                <ChipGroup>
+                  {value.map((item) => {
+                    const categoryItem = getCategoryFromSlug(item);
+                    console.log({ item, categoryItem });
+                    return (
+                      <Chip
+                        selected
+                        onClick={() => handleRemoveItemSelect(item)}
+                      >
+                        <div slot={ChipSlots.LEADING_ICON}>
+                          <Avatar
+                            size="xs"
+                            image={categoryItem.categoryIcon}
+                            alt={categoryItem.label}
+                          />
+                        </div>
+                        {categoryItem.label}
+                      </Chip>
+                    );
+                  })}
+                </ChipGroup>
+                <div className="w-4 shrink-0"></div>
+              </div>
+            </ScrollArea>
           </div>
         ) : (
           <Input.Placeholder>Pick value</Input.Placeholder>
