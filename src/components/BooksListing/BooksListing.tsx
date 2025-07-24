@@ -16,14 +16,13 @@ import { useDebounce } from "use-debounce";
 
 import BaseBottomSheet from "@/common/BaseBottomSheet/BaseBottomSheet";
 import ListToolbar from "@/common/components/ListToolbar";
-import { MultiSelect } from "@/common/MultiSelect";
 import Typography from "@/common/Typography/Typography";
 import BookPreview from "@/components/book/BookPreview";
 import { useBooksGetAllApi } from "@/hooks/books";
-import { useCategoriesQuery } from "@/hooks/categories";
 import useBookListingFilters from "@/hooks/useBookListingFilters";
 import { PageLayout } from "@/providers/PageLayout";
 import Link from "next/link";
+import { CategoriesSelect } from "../Categories/CategoriesSelect/CategoriesSelect";
 
 export default function BooksListing() {
   const { state, setState } = useBookListingFilters();
@@ -57,9 +56,6 @@ export default function BooksListing() {
     isSuccess,
     refetch,
   } = useBooksGetAllApi(payload);
-
-  const { isLoading: isCategoryLoading, data: categories } =
-    useCategoriesQuery();
 
   const renderBooksSection = () => {
     return (
@@ -111,14 +107,13 @@ export default function BooksListing() {
                     </label>
                   </span>
                 </div>
-                <MultiSelect
-                  placeholder="انتخاب دسته‌بندی"
-                  data={categories?.map((c) => ({
-                    label: c.label,
-                    value: c.slug,
-                  }))}
-                  searchable
-                  label="بر اساس دسته‌بندی کتاب"
+                <CategoriesSelect
+                  defaultSelected={state.categories}
+                  onChange={(values) => {
+                    setState({
+                      categories: values,
+                    });
+                  }}
                 />
 
                 {/* <MultiSelect
@@ -144,17 +139,14 @@ export default function BooksListing() {
     );
   };
 
-  const ContentLayout = useCallback(
-    ({ children }: PropsWithChildren) => {
-      return (
-        <div className="space-y-8 flex flex-col h-full">
-          <div className="shrink-0">{renderToolbar()}</div>
-          <div className="grow">{children}</div>
-        </div>
-      );
-    },
-    [categories],
-  );
+  const ContentLayout = useCallback(({ children }: PropsWithChildren) => {
+    return (
+      <div className="space-y-8 flex flex-col h-full">
+        <div className="shrink-0">{renderToolbar()}</div>
+        <div className="grow">{children}</div>
+      </div>
+    );
+  }, []);
 
   return (
     <PageLayout
@@ -196,7 +188,7 @@ export default function BooksListing() {
       }
       initialTitle="کتاب‌ها"
       isError={isError}
-      isLoading={isLoading || isCategoryLoading}
+      isLoading={isLoading}
       noContent={isSuccess && books.length === 0}
       retry={() => {
         void refetch();

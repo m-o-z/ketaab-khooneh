@@ -156,7 +156,7 @@ export function createApi(_config: ApiConfig = defaultConfig) {
   function createMutation<TData = unknown, TVariables = unknown>(
     endpoint: string | ((variables: TVariables) => string),
     options: {
-      method?: "POST" | "PUT" | "PATCH" | "DELETE";
+      method?: "POST" | "PUT" | "PATCH" | "DELETE" | "GET";
       headers?: HeadersInit;
       transformVariables?: (variables: TVariables) => any;
       isFormData?: boolean;
