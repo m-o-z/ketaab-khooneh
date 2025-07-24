@@ -1,6 +1,7 @@
 "use client";
 import {
   IconButton,
+  Spinner,
   TextField,
   TextFieldElement,
   TextFieldSlots,
@@ -9,6 +10,7 @@ import { Cross } from "@tapsioss/react-icons";
 import { memo } from "react";
 
 type Props = {
+  isLoading?: boolean;
   searchString: string;
   setSearchString: (s: string) => void;
   selectedFilters?: string[];
@@ -21,6 +23,7 @@ const ListToolbar = ({
   setSearchString,
   label,
   placeholder = "جستجو ...",
+  isLoading = false,
 }: Props) => {
   const handleOnChange = (e: Event) => {
     const target = e.target as TextFieldElement;
@@ -36,7 +39,12 @@ const ListToolbar = ({
       value={searchString}
       onChange={handleOnChange}
     >
-      {searchString && searchString.length > 0 ? (
+      {isLoading ? (
+        <div className="-translate-x-1" slot={TextFieldSlots.TRAILING}>
+          <Spinner size={28} />
+        </div>
+      ) : null}
+      {!isLoading && searchString && searchString.length > 0 ? (
         <div className="-ml-2" slot={TextFieldSlots.TRAILING}>
           <IconButton
             variant="naked"

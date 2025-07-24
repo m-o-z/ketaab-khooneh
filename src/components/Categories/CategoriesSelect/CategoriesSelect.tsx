@@ -152,7 +152,7 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
       <div>
         {value ? (
           <div className="-mx-4">
-            <ScrollArea maw={"100%"}>
+            <ScrollArea maw={"100%"} className="no-scrollbar">
               <div className="flex">
                 <div className="w-4 shrink-0"></div>
                 <ChipGroup>

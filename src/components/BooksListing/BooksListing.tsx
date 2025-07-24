@@ -55,6 +55,7 @@ export default function BooksListing() {
 
   const {
     isLoading,
+    isFetching,
     data: books,
     isError,
     isSuccess,
@@ -126,6 +127,7 @@ export default function BooksListing() {
     return (
       <div className="flex items-center space-x-2 w-full">
         <ListToolbar
+          isLoading={isLoading}
           label="جستجو"
           placeholder="جستجو در عنوان کتاب و نام نویسنده ..."
           searchString={state.search}
@@ -151,7 +153,7 @@ export default function BooksListing() {
         </BaseBottomSheet>
       </div>
     );
-  }, [state]);
+  }, [state, isLoading]);
 
   return (
     <PageLayout
