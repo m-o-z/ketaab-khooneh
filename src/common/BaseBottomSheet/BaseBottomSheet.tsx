@@ -6,6 +6,8 @@ import React, {
   PropsWithChildren,
   useCallback,
   CSSProperties,
+  ReactElement,
+  isValidElement,
 } from "react";
 import { Drawer } from "vaul";
 import Container from "../Container/Container";
@@ -49,13 +51,31 @@ const Wrapper = ({
 };
 
 // Content: renders the Drawer UI
-const Content = ({ children }: PropsWithChildren) => {
+type ChildrenProvider = (_: { hide: () => void; isOpen: boolean }) => ReactNode;
+type ContentProps =
+  | PropsWithChildren
+  | {
+      children: ChildrenProvider;
+    };
+const Content = ({ children }: ContentProps) => {
   const { maxWidth } = useWindowSize();
   const ctx = useContext(BottomSheetContext);
   if (!ctx)
     throw new Error(
       "BaseBottomSheet.Content must be used inside BaseBottomSheet",
     );
+
+  const childrenProvider = () => {
+    if (typeof children === "function") {
+      return children({
+        isOpen: ctx.isOpen,
+        hide: () => ctx.hide(),
+      });
+    } else if (isValidElement(children)) {
+      return children;
+    }
+    return null;
+  };
 
   return (
     <Drawer.Root
@@ -83,7 +103,7 @@ const Content = ({ children }: PropsWithChildren) => {
             className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 absolute top-3 right-[50%] translate-x-[50%]"
           />
 
-          {children}
+          {childrenProvider()}
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>

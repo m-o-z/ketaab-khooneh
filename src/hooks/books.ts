@@ -9,6 +9,7 @@ export const useBooksGetAllApi = ({
   search,
   page = 1,
   perPage = 5,
+  filters,
 }: ListFetchingParams) => {
   const filter = useMemo(
     () =>

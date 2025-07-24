@@ -10,7 +10,6 @@ import {
   IconButton,
 } from "@tapsioss/react-components";
 import { LineThreeHorizontalDecrease, Scan } from "@tapsioss/react-icons";
-import { useRouter } from "next/navigation";
 import { Fragment, PropsWithChildren, useCallback, useMemo } from "react";
 import { useDebounce } from "use-debounce";
 
@@ -26,7 +25,6 @@ import { CategoriesSelect } from "../Categories/CategoriesSelect/CategoriesSelec
 
 export default function BooksListing() {
   const { state, setState } = useBookListingFilters();
-  const router = useRouter();
 
   const setSearch = (str: string) => {
     if (str != null) {
@@ -90,33 +88,36 @@ export default function BooksListing() {
           </BaseBottomSheet.Wrapper>
 
           <BaseBottomSheet.Content>
-            <div className="h-[calc(var(--height)*0.85)] ">
-              <Typography.Headline size="sm">فیلتر‌ها</Typography.Headline>
-              <Stack>
-                <div className="flex items-center">
-                  <Checkbox
-                    id="show-only-available-books-input"
-                    labelledBy="show-only-available-books-label"
+            {({ hide }) => (
+              <div className="h-[calc(var(--height)*0.85)] flex flex-col items-stretch justify-stretch">
+                <Typography.Headline className="shrink-0" size="sm">
+                  فیلتر‌ها
+                </Typography.Headline>
+                <div className="space-y-4 grow">
+                  <div className="flex items-center">
+                    <Checkbox
+                      id="show-only-available-books-input"
+                      labelledBy="show-only-available-books-label"
+                    />
+                    <span>
+                      <label
+                        htmlFor="show-only-available-books-input"
+                        id="show-only-available-books-label"
+                      >
+                        نمایش کتاب موجود
+                      </label>
+                    </span>
+                  </div>
+                  <CategoriesSelect
+                    defaultSelected={state.categories}
+                    onChange={(values) => {
+                      setState({
+                        categories: values,
+                      });
+                    }}
                   />
-                  <span>
-                    <label
-                      htmlFor="show-only-available-books-input"
-                      id="show-only-available-books-label"
-                    >
-                      نمایش کتاب موجود
-                    </label>
-                  </span>
-                </div>
-                <CategoriesSelect
-                  defaultSelected={state.categories}
-                  onChange={(values) => {
-                    setState({
-                      categories: values,
-                    });
-                  }}
-                />
 
-                {/* <MultiSelect
+                  {/* <MultiSelect
                   placeholder="انتخاب وضعیت کتاب"
                   data={["React", "Angular", "Vue", "Svelte"]}
                   label="بر اساس وضعیت"
@@ -127,12 +128,16 @@ export default function BooksListing() {
                   data={["React", "Angular", "Vue", "Svelte"]}
                   label="بر اساس نویسنده"
                 /> */}
-
-                <ButtonGroup fluidItems>
-                  <Button>اعمال فیلتر</Button>
-                </ButtonGroup>
-              </Stack>
-            </div>
+                </div>
+                <div className="shrink-0 pb-[env(safe-area-inset-bottom)]">
+                  <ButtonGroup fluidItems className="pb-4 w-full">
+                    <Button onClick={hide} size="lg" variant="ghost">
+                      بستن
+                    </Button>
+                  </ButtonGroup>
+                </div>
+              </div>
+            )}
           </BaseBottomSheet.Content>
         </BaseBottomSheet>
       </div>

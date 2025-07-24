@@ -1,9 +1,12 @@
+import Typography from "@/common/Typography/Typography";
 import { useCategoriesQuery } from "@/hooks/categories";
-import { Combobox, Input, InputBase, Loader, useCombobox } from "@mantine/core";
+import { Combobox, Input, ScrollArea, useCombobox } from "@mantine/core";
+import { Avatar } from "@tapsioss/react-components/Avatar";
 import {
   TextField,
   TextFieldElement,
 } from "@tapsioss/react-components/TextField";
+import { CircleCheckFill } from "@tapsioss/react-icons";
 import { useEffect, useState } from "react";
 type Props = {
   defaultSelected?: string[];
@@ -54,12 +57,29 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
     .map((item) => {
       const isInList = checkIsInList(value, item.slug);
       return (
-        <Combobox.Option value={item.slug} key={item.id} active={isInList}>
-          <div className="space-x-2 flex items-center">
-            <span>
-              {isInList ? "✅" : <span className="w-4 block"></span>}{" "}
-            </span>
-            <span>{item.label}</span>
+        <Combobox.Option
+          value={item.slug}
+          key={item.id}
+          active={isInList}
+          mah={200}
+        >
+          <div className="space-x-4 flex items-center w-full">
+            <Avatar
+              alt={item.label}
+              image={item.categoryIcon}
+              size="sm"
+              className="shrink-0"
+            />
+            <Typography.Body size="md" className="grow text-ellipsis">
+              {item.label}
+            </Typography.Body>
+            <div className="shrink-0">
+              {isInList ? (
+                <span className="text-green-700/80">
+                  <CircleCheckFill size={20} />
+                </span>
+              ) : null}
+            </div>
           </div>
         </Combobox.Option>
       );
@@ -91,7 +111,13 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
 
         <Combobox.Dropdown>
           <Combobox.Options>
-            {isLoading ? <Combobox.Empty>Loading....</Combobox.Empty> : options}
+            <ScrollArea.Autosize mah={200} type="scroll">
+              {isLoading ? (
+                <Combobox.Empty>Loading....</Combobox.Empty>
+              ) : (
+                options
+              )}
+            </ScrollArea.Autosize>
           </Combobox.Options>
         </Combobox.Dropdown>
       </Combobox>
