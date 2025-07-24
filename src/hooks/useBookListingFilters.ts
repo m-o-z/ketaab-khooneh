@@ -1,8 +1,9 @@
+import { BookDB } from "@/schema/books";
 import {
   parseAsArrayOf,
   parseAsInteger,
   parseAsString,
-  parseAsStringEnum,
+  parseAsStringLiteral,
   useQueryStates,
 } from "nuqs";
 
@@ -12,9 +13,10 @@ const useBookListingFilters = () => {
       search: parseAsString.withDefault(""),
       page: parseAsInteger.withDefault(1),
       categories: parseAsArrayOf(parseAsString).withDefault([]),
-      state: parseAsStringEnum(["AVAILABLE", "UNAVAILABLE"]).withDefault(
+      status: parseAsStringLiteral([
         "AVAILABLE",
-      ),
+        "UNAVAILABLE",
+      ] as BookDB["status"][]),
     },
     {
       history: "push",

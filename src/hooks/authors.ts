@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { authors } from "@/client";
-import { Author, ListFetchingParams } from "@/types";
+import { Author, AuthorListFetchingParams } from "@/types";
 
 export const useAuthorsGetAllApi = ({
   search,
   page = 1,
   perPage = 5,
-  filters,
-}: ListFetchingParams) => {
+}: AuthorListFetchingParams) => {
   const filter = [...(search ? [`name~'${search}'`] : [])].join(" & ");
   return useQuery({
     ...authors.getAll({

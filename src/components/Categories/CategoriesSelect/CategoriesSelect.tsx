@@ -17,10 +17,11 @@ type Props = {
 };
 
 export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
+  console.log("cats", { defaultSelected });
   const [shouldFetchCategories, setShouldFetchCategories] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const { data, isLoading, isError, isFetched } = useCategoriesQuery({
-    enabled: true,
+    enabled: shouldFetchCategories,
   });
   const [value, setValue] = useState<string[]>(defaultSelected);
 
@@ -35,14 +36,12 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
   };
 
   const handleRemoveItemSelect = (val: string) => {
-    return setValue((current) => {
-      return current.filter((v) => v !== val);
+    setValue((current) => {
+      const newValue = current.filter((v) => v !== val);
+      onChange?.(newValue);
+      return newValue;
     });
   };
-
-  useEffect(() => {
-    onChange?.(value);
-  }, [value]);
 
   useEffect(() => {
     if (defaultSelected.length > 0) {
@@ -51,7 +50,10 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
   }, []);
 
   const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
+    onDropdownClose: () => {
+      onChange?.(value);
+      return combobox.resetSelectedOption();
+    },
     onDropdownOpen: async () => {
       if (!data && !isFetched && !isLoading) {
         setShouldFetchCategories(true);

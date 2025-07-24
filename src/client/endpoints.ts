@@ -41,7 +41,11 @@ export const books = {
   getAll: api.query<ApiPagedResponse<BookDTO>, BookListingRequestPayload>(
     "books",
     {
-      queryKey: (params) => ["books", "filtered", params],
+      queryKey: (params) => [
+        "books",
+        "filtered",
+        Object.values(params).toString(),
+      ],
     },
   ),
 
