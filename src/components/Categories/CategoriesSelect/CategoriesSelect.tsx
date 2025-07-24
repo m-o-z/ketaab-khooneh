@@ -1,13 +1,16 @@
 import Typography from "@/common/Typography/Typography";
 import { useCategoriesQuery } from "@/hooks/categories";
+import { CategoryDTO } from "@/schema/categories";
 import { Combobox, Input, ScrollArea, useCombobox } from "@mantine/core";
 import { Avatar } from "@tapsioss/react-components/Avatar";
+import { Chip, ChipSlots } from "@tapsioss/react-components/Chip";
+import { ChipGroup } from "@tapsioss/react-components/ChipGroup";
 import {
   TextField,
   TextFieldElement,
 } from "@tapsioss/react-components/TextField";
 import { CircleCheckFill } from "@tapsioss/react-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 type Props = {
   defaultSelected?: string[];
   onChange?: (_: string[]) => void;
@@ -17,7 +20,7 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
   const [shouldFetchCategories, setShouldFetchCategories] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const { data, isLoading, isError, isFetched } = useCategoriesQuery({
-    enabled: shouldFetchCategories,
+    enabled: true,
   });
   const [value, setValue] = useState<string[]>(defaultSelected);
 
@@ -41,6 +44,12 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
     onChange?.(value);
   }, [value]);
 
+  useEffect(() => {
+    if (defaultSelected.length > 0) {
+      setShouldFetchCategories(true);
+    }
+  }, []);
+
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: async () => {
@@ -49,6 +58,22 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
       }
     },
   });
+
+  const categoriesObj = useMemo(() => {
+    console.log({ data });
+    const obj: Record<string, CategoryDTO> = {};
+    data?.forEach((item) => {
+      obj[item.slug] = item;
+    });
+    return obj;
+  }, [data, isLoading, isFetched]);
+
+  const getCategoryFromSlug = (slugValue: string) => {
+    const result = categoriesObj?.[slugValue];
+    console.log({ categoriesObj, result });
+
+    return result ?? "";
+  };
 
   const options = data
     ?.filter((item) => {
@@ -124,9 +149,26 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
 
       <div>
         {value ? (
-          value.map((item) => (
-            <div onClick={() => handleRemoveItemSelect(item)}>{item}</div>
-          ))
+          <div className="overflow-y-auto px-4 -mx-4">
+            <ChipGroup>
+              {value.map((item) => {
+                const categoryItem = getCategoryFromSlug(item);
+                console.log({ item, categoryItem });
+                return (
+                  <Chip selected onClick={() => handleRemoveItemSelect(item)}>
+                    <div slot={ChipSlots.LEADING_ICON}>
+                      <Avatar
+                        size="xs"
+                        image={categoryItem.categoryIcon}
+                        alt={categoryItem.label}
+                      />
+                    </div>
+                    {categoryItem.label}
+                  </Chip>
+                );
+              })}
+            </ChipGroup>
+          </div>
         ) : (
           <Input.Placeholder>Pick value</Input.Placeholder>
         )}
