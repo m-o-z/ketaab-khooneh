@@ -90,37 +90,39 @@ const Page = () => {
     <PageLayout
       initialTitle="پروفایل"
       isError={isError}
-      isLoading={isLoading}
+      isLoading={isLoading && !isFetched}
       retry={() => {
         void refetch();
       }}
     >
-      <div className="space-y-4">
-        {renderProfileHeader()}
-        <Divider className="-mr-4 w-[calc(100%+2rem)]" variant="thick" />
-        <div className="space-y-6 py-4">
-          <ProfileItem
-            onClick={() => {
-              router.push("/user/settings");
-            }}
-            renderIcon={<Gear />}
-          >
-            تنظیمات
-          </ProfileItem>
-          <ProfileItem
-            onClick={() => {
-              router.push("/tac");
-            }}
-            renderIcon={<FactCheck />}
-          >
-            قوانین و شرایط
-          </ProfileItem>
-          <ProfileLogoutRowItem
-            isPending={isPending}
-            logoutMutationAsync={logout}
-          />
+      <PageLayout.Content>
+        <div className="space-y-4">
+          {renderProfileHeader()}
+          <Divider className="-mr-4 w-[calc(100%+2rem)]" variant="thick" />
+          <div className="space-y-6 py-4">
+            <ProfileItem
+              onClick={() => {
+                router.push("/user/settings");
+              }}
+              renderIcon={<Gear />}
+            >
+              تنظیمات
+            </ProfileItem>
+            <ProfileItem
+              onClick={() => {
+                router.push("/tac");
+              }}
+              renderIcon={<FactCheck />}
+            >
+              قوانین و شرایط
+            </ProfileItem>
+            <ProfileLogoutRowItem
+              isPending={isPending}
+              logoutMutationAsync={logout}
+            />
+          </div>
         </div>
-      </div>
+      </PageLayout.Content>
     </PageLayout>
   );
 };

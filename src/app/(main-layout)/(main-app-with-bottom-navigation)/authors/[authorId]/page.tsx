@@ -13,6 +13,7 @@ const Page = () => {
   const {
     data: author,
     isLoading,
+    isFetched,
     isError,
     isSuccess,
     refetch,
@@ -42,14 +43,17 @@ const Page = () => {
       showBackButton
       initialTitle="اطلاعات نویسنده"
       isError={isError}
+      isInitialLoading={isLoading && !isFetched}
       isLoading={isLoading}
-      noContent={!author}
+      noContent={!author && isSuccess}
       retry={() => {
         void refetch();
       }}
       onBackClick={onBackClick}
     >
-      <div className="space-y-4">{renderAuthorPreview()}</div>
+      <PageLayout.Content>
+        <div className="space-y-4">{renderAuthorPreview()}</div>
+      </PageLayout.Content>
     </PageLayout>
   );
 };

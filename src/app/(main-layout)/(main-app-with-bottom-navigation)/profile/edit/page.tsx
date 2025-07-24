@@ -3,10 +3,18 @@ import ProfileEdit from "@/components/Profile/ProfileEdit";
 import { useGetProfile } from "@/hooks/profile";
 import { PageLayout } from "@/providers/PageLayout";
 import { urlToFile } from "@/utils/urlToFile";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 
 const Edit = () => {
-  const { data: user, isLoading, isError, isSuccess } = useGetProfile();
+  const router = useRouter();
+  const {
+    data: user,
+    isFetched,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useGetProfile();
   const [avatar, setAvatar] = useState<File | null>(null);
   const [isAvatarError, setIsAvatarError] = useState(false);
 
@@ -39,11 +47,18 @@ const Edit = () => {
   };
   return (
     <PageLayout
-      isLoading={isLoading || (!isAvatarError && !avatar)}
+      showBackButton
+      initialTitle="ویرایش پروفایل"
+      onBackClick={() => {
+        router.back();
+      }}
+      isInitialLoading={
+        (isLoading && !isFetched) || (!isAvatarError && !avatar)
+      }
       isError={isError || isAvatarError}
       noContent={!user && isSuccess}
     >
-      {renderContent()}
+      <PageLayout.Content>{renderContent()}</PageLayout.Content>
     </PageLayout>
   );
 };

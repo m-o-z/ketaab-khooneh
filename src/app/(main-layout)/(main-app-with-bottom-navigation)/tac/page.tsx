@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import React from "react";
 
 const Page = () => {
-  const { data: profile, isLoading, isError, isSuccess } = useGetProfile();
   const router = useRouter();
   return (
     <PageLayout
@@ -14,9 +13,6 @@ const Page = () => {
       onBackClick={() => {
         router.back();
       }}
-      isLoading={isLoading}
-      isError={isError}
-      noContent={!profile && isSuccess}
     >
       <div className="h-full w-full flex items-center justify-center">
         Terms and Conditions

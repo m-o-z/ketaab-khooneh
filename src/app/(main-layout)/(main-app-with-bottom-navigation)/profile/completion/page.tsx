@@ -14,9 +14,7 @@ const Page = () => {
       }}
       initialTitle="تکمیل پروفایل"
     >
-      <div className="h-full w-full flex items-center justify-center">
-        <ProfileCompletionForm />
-      </div>
+      <ProfileCompletionForm />
     </PageLayout>
   );
 };

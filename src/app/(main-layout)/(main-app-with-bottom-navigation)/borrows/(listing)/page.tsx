@@ -12,6 +12,7 @@ export default function Home() {
   const {
     data: borrows,
     isError,
+    isFetched,
     isLoading,
     isSuccess,
   } = useGetAllBorrowsQuery();
@@ -30,10 +31,12 @@ export default function Home() {
       }
       initialTitle={"امانت‌ها"}
       isError={isError}
-      isLoading={isLoading}
+      isInitialLoading={isLoading && !isFetched}
       noContent={isSuccess && borrows.length == 0}
     >
-      <BorrowList items={borrows!} />
+      <PageLayout.Content>
+        <BorrowList items={borrows!} />
+      </PageLayout.Content>
     </PageLayout>
   );
 }

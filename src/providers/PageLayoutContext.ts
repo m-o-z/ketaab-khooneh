@@ -5,6 +5,11 @@ type LayoutContextValue = {
   resetTitle: () => void;
   setActions: (actions: React.ReactNode) => void;
   resetActions: () => void;
+  isLoading: boolean;
+  isInitialLoading: boolean;
+  isError: boolean;
+  noContent: boolean;
+  retry?: () => void;
 };
 
 export const PageLayoutContext = createContext<LayoutContextValue | null>(null);

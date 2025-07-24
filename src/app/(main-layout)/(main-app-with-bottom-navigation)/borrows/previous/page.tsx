@@ -11,6 +11,7 @@ const Page = () => {
     refetch,
     isError,
     isLoading,
+    isFetched,
     isSuccess,
   } = useGetAllPreviousBorrowsQuery();
   const router = useRouter();
@@ -24,14 +25,16 @@ const Page = () => {
         showBackButton
         initialTitle={"امانت‌های پیشین"}
         isError={isError}
-        isLoading={isLoading}
+        isInitialLoading={isLoading && !isFetched}
         noContent={borrows.length === 0 && isSuccess}
         retry={() => {
           void refetch();
         }}
         onBackClick={onGoBack}
       >
-        <BorrowList items={borrows} />
+        <PageLayout.Content>
+          <BorrowList items={borrows} />
+        </PageLayout.Content>
       </PageLayout>
     );
   }

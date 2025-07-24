@@ -15,6 +15,7 @@ export default function Home() {
   const [debouncedSearch] = useDebounce(searchString, 300);
   const {
     isLoading,
+    isFetched,
     isError,
     isSuccess,
     refetch,
@@ -44,28 +45,24 @@ export default function Home() {
 
   const hasNoContent = isSuccess && authors.length === 0;
 
-  const ContentLayout = useCallback(({ children }: PropsWithChildren) => {
-    return (
-      <div className="space-y-8 flex flex-col h-full">
-        <div className="shrink-0">{renderToolbar()}</div>
-        <div className="grow">{children}</div>
-      </div>
-    );
-  }, []);
-
   return (
     <PageLayout
       goToTopEnabled
       initialTitle="نویسندگان"
       isError={isError}
+      isInitialLoading={isLoading && !isFetched}
       isLoading={isLoading}
       noContent={hasNoContent}
       retry={() => {
         void refetch();
       }}
-      ContentLayout={ContentLayout}
     >
-      <div>{renderAuthorsListSection()}</div>
+      <div className="space-y-8 flex flex-col h-full">
+        <div className="shrink-0">{renderToolbar()}</div>
+        <PageLayout.Content>
+          <div>{renderAuthorsListSection()}</div>
+        </PageLayout.Content>
+      </div>
     </PageLayout>
   );
 }

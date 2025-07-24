@@ -12,7 +12,13 @@ const Page = () => {
   const { browser, platform, pwaMode, isMobile, hasPlatform, hasBrowser } =
     useDeviceInfo();
 
-  const { data: profile, isLoading, isError, isSuccess } = useGetProfile();
+  const {
+    data: profile,
+    isLoading,
+    isFetched,
+    isError,
+    isSuccess,
+  } = useGetProfile();
 
   const { state, unsubscribe, subscribe } = usePushNotification();
 
@@ -62,13 +68,13 @@ const Page = () => {
       onBackClick={() => {
         router.back();
       }}
-      isLoading={isLoading || !state.init}
+      isLoading={(isLoading || !state.init) && !isFetched}
       isError={isError}
       noContent={!profile && isSuccess}
     >
-      <div className="h-full w-full flex">
+      <PageLayout.Content>
         {isNotificationGroupVisible ? renderNotificationSettingItem() : null}
-      </div>
+      </PageLayout.Content>
     </PageLayout>
   );
 };
