@@ -243,7 +243,7 @@ const PageLayout = ({
         <main
           ref={scrollRef}
           className={clsx(
-            "flex-1 overflow-y-auto -mx-4 px-4 pb-4 overscroll-none",
+            "flex-1 overflow-y-auto -mx-4 px-4 pb-4 overscroll-none h-full",
           )}
           onScroll={handleScroll}
         >

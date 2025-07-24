@@ -28,7 +28,7 @@ const PageLayoutContent = ({ children }: Props) => {
       );
     }
 
-    return children;
+    return <div className="pb-4">{children}</div>;
   }, [isError, isInitialLoading, isLoading, noContent, children]);
 
   return <div className="h-full">{content}</div>;

@@ -202,7 +202,7 @@ export default function BooksListing() {
         void refetch();
       }}
     >
-      <div className="space-y-8 flex flex-col" key="layout">
+      <div className="space-y-8 flex flex-col h-full" key="layout">
         <div className="shrink-0">{renderToolbar}</div>
         <PageLayout.Content>
           <Stack>
