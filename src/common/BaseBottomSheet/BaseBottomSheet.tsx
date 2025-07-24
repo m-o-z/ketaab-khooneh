@@ -84,6 +84,7 @@ const Content = ({ children }: ContentProps) => {
     <Drawer.Root
       open={ctx.isOpen}
       onOpenChange={(open) => (open ? ctx.show() : ctx.hide())}
+      fixed
     >
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
