@@ -172,7 +172,7 @@ export default function BooksListing() {
             )}
           </BaseBottomSheet.Wrapper>
           <BaseBottomSheet.Content>
-            <div className="w-full justify-center h-[calc(var(--height)*0.7)] ">
+            <div className="w-full justify-center h-[70dvh] ">
               <div className="aspect-square">
                 <Scanner
                   onScan={(result) => console.log(result)}
