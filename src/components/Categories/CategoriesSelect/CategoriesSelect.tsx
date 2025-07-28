@@ -62,7 +62,6 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
   });
 
   const categoriesObj = useMemo(() => {
-    console.log({ data });
     const obj: Record<string, CategoryDTO> = {};
     data?.forEach((item) => {
       obj[item.slug] = item;
@@ -72,8 +71,6 @@ export function CategoriesSelect({ defaultSelected = [], onChange }: Props) {
 
   const getCategoryFromSlug = (slugValue: string) => {
     const result = categoriesObj?.[slugValue];
-    console.log({ categoriesObj, result });
-
     return result ?? "";
   };
 
