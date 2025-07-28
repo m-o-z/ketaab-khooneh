@@ -80,7 +80,7 @@ export default function BooksListing() {
     () =>
       ({ hide }) => {
         return (
-          <div className="h-[calc(var(--height)*0.85)] flex flex-col items-stretch justify-stretch">
+          <div className="h-full min-h-[75dvh] flex flex-col items-stretch justify-stretch">
             <Typography.Headline className="shrink-0" size="sm">
               فیلتر‌ها
             </Typography.Headline>
