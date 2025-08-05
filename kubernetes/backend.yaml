@@ -1,0 +1,119 @@
+# kubernetes/backend.yaml
+# This file contains all necessary resources for the stateful backend application.
+
+# ==============================================================================
+#   PersistentVolume (PV): Defines available storage in the cluster.
+# ==============================================================================
+# NOTE: In a managed cloud environment (GKE, EKS, AKS), you would typically use a
+# StorageClass, and the cloud provider would create the PV for you automatically
+# when the PVC is created. This manifest is for demonstration or for environments
+# without dynamic provisioning.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: backend-pv
+  labels:
+    type: local
+spec:
+  storageClassName: standard # This name must match the PVC's storageClassName
+  capacity:
+    storage: 5Gi # The total size of the storage volume
+  accessModes:
+    # ReadWriteOnce means the volume can be mounted as read-write by a single Node.
+    # This is required for SQLite.
+    - ReadWriteOnce
+  hostPath:
+    # For local testing (like Minikube/Docker Desktop). In production, this would
+    # be a cloud disk like an AWS EBS volume or a GCE Persistent Disk.
+    path: "/mnt/data/backend"
+
+---
+# ==============================================================================
+#   PersistentVolumeClaim (PVC): Requests storage for the application.
+# ==============================================================================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backend-pvc
+  namespace: ghafaseh-staging
+spec:
+  storageClassName: standard # Must match the PV's storageClassName
+  accessModes:
+    - ReadWriteOnce # Must match the PV's access mode
+  resources:
+    requests:
+      storage: 5Gi # The amount of storage requested
+
+---
+# ==============================================================================
+#   Deployment: Manages the pod for the backend application.
+# ==============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: ghafaseh-staging
+  labels:
+    app: backend
+spec:
+  # IMPORTANT: For a stateful app with a single database file like SQLite,
+  # you MUST use only 1 replica to prevent database corruption.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend-deployment # Must match the deployment name for `kubectl set image`
+          image: ghcr.io/m-o-z/ketaab-khooneh:backend-development-12345 # <- CI/CD replaces this
+          ports:
+            # The port your PocketBase application listens on.
+            - containerPort: 8090
+
+          # --- Environment Variables ---
+          env:
+            - name: APP_FRONTEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config # A ConfigMap you will create
+                  key: app_frontend_url
+            - name: VAPID_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets # A Secret you will create
+                  key: vapid_private_key
+
+          # --- Volume Mount ---
+          # This mounts the persistent storage into the container at the specified path.
+          volumeMounts:
+            - mountPath: "/app/pb_data" # The path inside the container for PocketBase data
+              name: backend-storage
+
+      # --- Volume Definition ---
+      # This defines the volume that the container will use, linking it to our PVC.
+      volumes:
+        - name: backend-storage
+          persistentVolumeClaim:
+            claimName: backend-pvc # This must match the name of the PVC above
+
+---
+# ==============================================================================
+#   Service: Exposes the backend pods at a stable internal network address.
+# ==============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: ghafaseh-staging
+spec:
+  type: ClusterIP # Only accessible from within the cluster
+  selector:
+    app: backend # Must match the labels on the pods
+  ports:
+    - protocol: TCP
+      port: 8090 # The port the service exposes
+      targetPort: 8090 # The port on the container to forward traffic to
