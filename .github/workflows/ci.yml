@@ -166,7 +166,7 @@ jobs:
     needs: [build-frontend, build-backend]
     if: github.ref == 'refs/heads/development'
     environment:
-      name: staging
+      name: production
     steps:
       - name: 🛠️ Configure kubectl and Deploy
         run: |
