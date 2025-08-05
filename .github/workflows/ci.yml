@@ -146,7 +146,7 @@ jobs:
       - name: 🏗️ Build and push backend image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./backend
           file: ./docker-build/Dockerfile.backend
           push: true
           tags: ${{ steps.image_meta.outputs.image_name }}
