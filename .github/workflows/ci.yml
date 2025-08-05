@@ -1,132 +1,223 @@
-name: Ghafaseh CI/CD
+name: Build and Deploy Application
 
 on:
   push:
     branches:
       - main
+      - development
+  workflow_dispatch:
 
+env:
+  REGISTRY: registry.hamdocker.ir/myselfmyself
+  REPO_NAME: ghafaseh # TODO: Change to your actual repo name
+
+# ======================================================================================
+# JOBS
+# ======================================================================================
 jobs:
-  # This job runs first to check for file changes
-  check_changes:
+  # ======================================================================================
+  # FRONTEND STAGE 1: Install Next.js Dependencies
+  # - Builds an image containing OS dependencies (for sharp) and all node_modules.
+  # - This image is cached and only rebuilt if package files or OS dependencies change.
+  # ======================================================================================
+  install-frontend-dependencies:
+    name: 📦 Install Frontend Dependencies
     runs-on: ubuntu-latest
     outputs:
-      backend_changed: ${{ steps.check_backend.outputs.backend_changed }}
+      package_image: ${{ steps.image_meta.outputs.image_name }}
     steps:
-      - name: Checkout code with full history
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Show git diff range for debug
-        run: |
-          echo "Before: ${{ github.event.before }}"
-          echo "After:  ${{ github.sha }}"
-
-      - name: Check for backend changes manually (excluding pb_data/)
-        id: check_backend
-        run: |
-          echo "Checking for changes in backend excluding pb_data/..."
-          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^backend/' | grep -v '^backend/pb_data/' || echo "")
-          echo "Changed files:"
-          echo "$CHANGED"
-
-          if [[ -n "$CHANGED" ]]; then
-            echo "backend_changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "backend_changed=false" >> $GITHUB_OUTPUT
-          fi
-
-  # Job to build and push the frontend image
-  build_and_push_frontend:
-    runs-on: ubuntu-latest
-    environment: production
-    needs: check_changes
-    steps:
-      - name: Checkout code
+      - name: ⬇️ Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to Docker Hub
+      - name: 🔑 Log in to Docker Registry
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.REGISTRY }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push frontend
+      - name: 🛠️ Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🏷️ Generate Frontend Package Image Tag
+        id: image_meta
+        run: |
+          TAG="frontend-deps-$(cat package.json pnpm-lock.yaml | sha1sum | cut -d' ' -f1)"
+          IMAGE_NAME="${{ env.REGISTRY }}/${{ env.REPO_NAME }}:${TAG}"
+          echo "image_name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
+          echo "Generated package image name: ${IMAGE_NAME}"
+
+      - name: 📦 Build and push frontend package image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker-build/Dockerfile.frontend-packages
+          push: true
+          tags: ${{ steps.image_meta.outputs.image_name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ======================================================================================
+  # FRONTEND STAGE 2: Build Next.js Application
+  # - Uses the dependency image from the previous stage for a much faster build.
+  # - Creates the final, runnable Next.js application image.
+  # ======================================================================================
+  build-frontend:
+    name: 🏗️ Build Frontend
+    runs-on: ubuntu-latest
+    needs: install-frontend-dependencies
+    outputs:
+      image_name: ${{ steps.image_meta.outputs.image_name }}
+    steps:
+      - name: ⬇️ Check out repository
+        uses: actions/checkout@v4
+
+      - name: 🔑 Log in to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.REGISTRY }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: 🛠️ Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🏷️ Generate Frontend Image Tag
+        id: image_meta
+        run: |
+          TAG="frontend-${{ github.ref_name }}-${{ github.run_id }}"
+          IMAGE_NAME="${{ env.REGISTRY }}/${{ env.REPO_NAME }}:${TAG}"
+          echo "image_name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
+
+      - name: 🏗️ Build and push frontend image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./docker-build/Dockerfile.frontend
           push: true
+          tags: ${{ steps.image_meta.outputs.image_name }}
           build-args: |
-            NEXT_PUBLIC_POCKETBASE_URL=${{ vars.ENV_POCKETBASE_URL }} 
-            NEXT_PUBLIC_DAYS_TO_REFRESH=${{ vars.NEXT_PUBLIC_DAYS_TO_REFRESH }} 
+            PACKAGE_IMAGE=${{ needs.install-frontend-dependencies.outputs.package_image }}
+            # Pass all build-time and run-time args to the Docker build
+            NEXT_PUBLIC_POCKETBASE_URL=${{ vars.NEXT_PUBLIC_POCKETBASE_URL }}
+            NEXT_PUBLIC_DAYS_TO_REFRESH=${{ vars.NEXT_PUBLIC_DAYS_TO_REFRESH }}
             REDIS_HOST=${{ vars.REDIS_HOST }}
             REDIS_PORT=${{ vars.REDIS_PORT }}
-            APP_ENV="production"
-            POCKETBASE_ADMIN_USERNAME=${{ vars.POCKETBASE_ADMIN_USERNAME }}
-            POCKETBASE_ADMIN_PASSWORD=${{ vars.POCKETBASE_ADMIN_PASSWORD }}
-            NEXT_PUBLIC_VAPID_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
+            APP_ENV=${{ vars.APP_ENV }}
+            POCKETBASE_ADMIN_USERNAME=${{ secrets.POCKETBASE_ADMIN_USERNAME }}
+            POCKETBASE_ADMIN_PASSWORD=${{ secrets.POCKETBASE_ADMIN_PASSWORD }}
+            NEXT_PUBLIC_VAPID_PUBLIC_KEY=${{ vars.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
             VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-frontend:latest
-            ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-frontend:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-  # Job to build and push the backend image
-  build_and_push_backend:
+  # ======================================================================================
+  # BACKEND STAGE: Build Go (PocketBase) Application
+  # - Builds the Go binary in a single, efficient multi-stage Docker build.
+  # - Runs in parallel with the frontend dependency installation.
+  # ======================================================================================
+  build-backend:
+    name: 🏗️ Build Backend
     runs-on: ubuntu-latest
-    environment: production
-    needs: check_changes
-    if: needs.check_changes.outputs.backend_changed == 'true'
+    outputs:
+      image_name: ${{ steps.image_meta.outputs.image_name }}
     steps:
-      - name: Checkout code
+      - name: ⬇️ Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to Docker Hub
+      - name: 🔑 Log in to Docker Registry
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.REGISTRY }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push backend
+      - name: 🛠️ Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🏷️ Generate Backend Image Tag
+        id: image_meta
+        run: |
+          TAG="backend-${{ github.ref_name }}-${{ github.run_id }}"
+          IMAGE_NAME="${{ env.REGISTRY }}/${{ env.REPO_NAME }}:${TAG}"
+          echo "image_name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
+
+      - name: 🏗️ Build and push backend image
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
-          file: ./docker-build/Dockerfile
+          context: .
+          file: ./docker-build/Dockerfile.backend
           push: true
+          tags: ${{ steps.image_meta.outputs.image_name }}
           build-args: |
-            VAPID_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
-            VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
             APP_FRONTEND_URL=${{ vars.APP_FRONTEND_URL }}
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:latest
-            ${{ secrets.DOCKER_USERNAME }}/ketaab-khooneh-backend:${{ github.sha }}
+            VAPID_PUBLIC_KEY=${{ vars.NEXT_PUBLIC_VAPID_PUBLIC_KEY }}
+            VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-  # This job waits for both build jobs to complete successfully
-  deploy:
+  # ======================================================================================
+  # DEPLOY STAGE: Deploy to Kubernetes
+  # - This stage runs after BOTH frontend and backend builds are successful.
+  # ======================================================================================
+  deploy-staging:
+    name: 🚀 Deploy to Staging
     runs-on: ubuntu-latest
-    environment: production
-    needs: [build_and_push_frontend, build_and_push_backend]
-    # Run only if dependent jobs succeeded or were skipped, but NOT if they failed.
-    if: ${{ !failure() && !cancelled() }}
+    needs: [build-frontend, build-backend]
+    if: github.ref == 'refs/heads/development'
+    environment:
+      name: staging
     steps:
-      - name: Deploy to VPS via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: 22
-          script: |
-            netplan apply
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            cd ./docker
-            docker compose pull
-            docker compose down
-            docker compose up -d --build
-            docker image prune -f -a
+      - name: 🛠️ Configure kubectl and Deploy
+        run: |
+          echo "${{ secrets.K8S_STAGING_KUBECONFIG }}" > kubeconfig.yaml
+          export KUBECONFIG=kubeconfig.yaml
+
+          # TODO: Fill in your actual deployment names and namespace
+          FRONTEND_DEPLOYMENT=my-frontend-deployment
+          BACKEND_DEPLOYMENT=my-backend-deployment
+          NAMESPACE=staging
+
+          echo "Deploying frontend image: ${{ needs.build-frontend.outputs.image_name }}"
+          kubectl set image deployment/$FRONTEND_DEPLOYMENT "$FRONTEND_DEPLOYMENT=${{ needs.build-frontend.outputs.image_name }}" -n $NAMESPACE --record=true
+
+          echo "Deploying backend image: ${{ needs.build-backend.outputs.image_name }}"
+          kubectl set image deployment/$BACKEND_DEPLOYMENT "$BACKEND_DEPLOYMENT=${{ needs.build-backend.outputs.image_name }}" -n $NAMESPACE --record=true
+
+      - name: ⌚ Wait for rollout to complete
+        run: |
+          export KUBECONFIG=kubeconfig.yaml
+          NAMESPACE=staging # TODO: Fill in your namespace
+          kubectl rollout status deployment/$FRONTEND_DEPLOYMENT -n $NAMESPACE --timeout=5m
+          kubectl rollout status deployment/$BACKEND_DEPLOYMENT -n $NAMESPACE --timeout=5m
+
+  deploy-production:
+    name: 🚀 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build-frontend, build-backend]
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production # This can be configured to require manual approval
+    steps:
+      - name: 🛠️ Configure kubectl and Deploy
+        run: |
+          echo "${{ secrets.K8S_PROD_KUBECONFIG }}" > kubeconfig.yaml
+          export KUBECONFIG=kubeconfig.yaml
+
+          # TODO: Fill in your actual deployment names and namespace
+          FRONTEND_DEPLOYMENT=my-frontend-deployment
+          BACKEND_DEPLOYMENT=my-backend-deployment
+          NAMESPACE=production
+
+          echo "Deploying frontend image: ${{ needs.build-frontend.outputs.image_name }}"
+          kubectl set image deployment/$FRONTEND_DEPLOYMENT "$FRONTEND_DEPLOYMENT=${{ needs.build-frontend.outputs.image_name }}" -n $NAMESPACE --record=true
+
+          echo "Deploying backend image: ${{ needs.build-backend.outputs.image_name }}"
+          kubectl set image deployment/$BACKEND_DEPLOYMENT "$BACKEND_DEPLOYMENT=${{ needs.build-backend.outputs.image_name }}" -n $NAMESPACE --record=true
+
+      - name: ⌚ Wait for rollout to complete
+        run: |
+          export KUBECONFIG=kubeconfig.yaml
+          NAMESPACE=production # TODO: Fill in your namespace
+          kubectl rollout status deployment/$FRONTEND_DEPLOYMENT -n $NAMESPACE --timeout=5m
+          kubectl rollout status deployment/$BACKEND_DEPLOYMENT -n $NAMESPACE --timeout=5m

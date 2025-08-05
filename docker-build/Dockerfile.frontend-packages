@@ -1,0 +1,22 @@
+# This image contains the OS dependencies and node_modules for the frontend.
+# It's built in a separate CI step to be cached aggressively.
+FROM node:20-slim
+
+# Install OS-level dependencies for native modules (like sharp)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    python3 \
+    pkg-config \
+    libvips-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Copy only the files needed for package installation to leverage caching
+COPY package.json pnpm-lock.yaml ./
+
+# Install all dependencies (including devDependencies needed for `pnpm build`)
+RUN pnpm install --frozen-lockfile

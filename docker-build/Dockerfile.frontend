@@ -1,38 +1,25 @@
-# ---------- Base image for building ----------
-FROM node:20-slim AS builder
-ARG NEXT_PUBLIC_VAPID_PUBLIC_KEY
-ARG VAPID_PRIVATE_KEY
-RUN env
+# ARG that receives the name of the dependency image from the CI pipeline
+ARG PACKAGE_IMAGE
 
-# Install dependencies for native modules (like sharp)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    python3 \
-    pkg-config \
-    libvips-dev \
- && rm -rf /var/lib/apt/lists/*
+# ---- Builder Stage ----
+# This stage starts from our pre-built dependency image and builds the Next.js app.
+FROM ${PACKAGE_IMAGE} AS builder
 
-# Set workdir
 WORKDIR /app
 
-# Copy lockfile and package.json first to leverage caching
-COPY package.json pnpm-lock.yaml ./
-
-# Install pnpm
-RUN npm install -g pnpm
-
-# Install deps for build (includes devDependencies)
-RUN pnpm install --frozen-lockfile
-
-# Copy rest of the project files
+# Copy the rest of the project source code
 COPY . .
 
-# Build the app
+# Build the Next.js application.
+# The slow 'apt-get' and 'pnpm install' steps are skipped because they are in the base image.
 RUN pnpm build
 
-# ---------- Runtime-only image ----------
+
+# ---- Final Stage ----
+# This stage creates a lean, production-ready image.
 FROM node:20-slim AS runner
 
+# Pass all run-time environment variables
 ARG NEXT_PUBLIC_POCKETBASE_URL
 ARG NEXT_PUBLIC_DAYS_TO_REFRESH
 ARG REDIS_HOST
@@ -52,39 +39,41 @@ ENV POCKETBASE_ADMIN_USERNAME=$POCKETBASE_ADMIN_USERNAME
 ENV POCKETBASE_ADMIN_PASSWORD=$POCKETBASE_ADMIN_PASSWORD
 ENV NEXT_PUBLIC_VAPID_PUBLIC_KEY=$NEXT_PUBLIC_VAPID_PUBLIC_KEY
 ENV VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY
+ENV NODE_ENV=production
+ENV PORT=3000
 
-RUN env
-
-# Set workdir
 WORKDIR /app
 
-# Create non-root user
+# Create a non-root user for security
 RUN useradd -m appuser
 
-# Install dependencies for sharp runtime only (libvips)
+# Install only the RUNTIME OS dependencies for sharp
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libvips curl \
  && rm -rf /var/lib/apt/lists/*
 
-# Only copy the built app and required files
+# Install pnpm
+RUN npm install -g pnpm
+
+# Copy package files to install only production dependencies
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN pnpm install --prod --frozen-lockfile
+
+# Copy the built application files from the builder stage
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
 
-# Set env vars
-ENV NODE_ENV=production
-ENV PORT=3000
+# Change ownership of app files to the non-root user
+RUN chown -R appuser:appuser /app
 
-# Use non-root user
+# Switch to the non-root user
 USER appuser
 
-# Expose Next.js port
 EXPOSE 3000
 
-# Healthcheck (optional)
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:${PORT}/ready || exit 1
 
-# Start the app
-CMD ["node", "node_modules/next/dist/bin/next", "start"]
+# Start the Next.js application
+CMD ["pnpm", "start"]
