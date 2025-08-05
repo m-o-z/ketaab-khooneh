@@ -27,6 +27,8 @@ spec:
       labels:
         app: frontend
     spec:
+      imagePullSecrets:
+        - name: ghcr-credentials
       containers:
         - # The name of the container. This should match the deployment name
           # for the `kubectl set image` command to work seamlessly.
@@ -57,12 +59,12 @@ spec:
               value: "production"
             - name: PORT
               value: "3000"
-            - name: NEXT_PUBLIC_POCKETBASE_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: common-config # A ConfigMap you will create
-                  key: NEXT_PUBLIC_POCKETBASE_URL
 
+          envFrom:
+            - configMapRef:
+                name: common-config # A ConfigMap you will create
+            - secretRef:
+                name: ghafaseh-secrets # A ConfigMap you will create
 ---
 # ==============================================================================
 #   Service: Exposes the frontend pods at a stable network address.
