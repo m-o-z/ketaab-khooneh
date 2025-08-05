@@ -1,0 +1,92 @@
+# kubernetes/frontend.yaml
+# This file contains the Deployment and Service for the frontend application.
+
+# ==============================================================================
+#   Deployment: Manages the pods for the frontend application.
+# ==============================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # The name of the deployment. Your CI/CD pipeline will use this name.
+  name: frontend-deployment
+  # The namespace where this deployment will be created.
+  namespace: ghafaseh-staging
+  labels:
+    app: frontend
+spec:
+  # The number of pod replicas to run. Running 2 provides basic high availability.
+  replicas: 2
+  selector:
+    # This selector tells the Deployment which pods to manage.
+    # It must match the labels in the pod template below.
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      # Labels applied to each pod created by this Deployment.
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - # The name of the container. This should match the deployment name
+          # for the `kubectl set image` command to work seamlessly.
+          name: frontend-deployment
+          # IMPORTANT: The image tag will be set by your CI/CD pipeline.
+          # This is an example based on your provided URL.
+          image: ghcr.io/m-o-z/ketaab-khooneh:frontend-development-16756451536 # <- CI/CD replaces this
+          ports:
+            # The port your Next.js application listens on inside the container.
+            # This matches the EXPOSE 3000 in your Dockerfile.
+            - containerPort: 3000
+
+          # --- Probes ---
+          # Kubernetes uses probes to check the health of your application.
+          # This is based on the HEALTHCHECK in your Dockerfile.
+          readinessProbe:
+            httpGet:
+              path: /ready # The health check endpoint from your Dockerfile
+              port: 3000
+            initialDelaySeconds: 15 # Wait 15s before first probe
+            periodSeconds: 10 # Probe every 10s
+
+          # --- Environment Variables ---
+          # It's best practice to manage configuration with ConfigMaps and Secrets.
+          # Your CI/CD pipeline should create these resources before deploying.
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3000"
+            - name: NEXT_PUBLIC_POCKETBASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: common-config # A ConfigMap you will create
+                  key: NEXT_PUBLIC_POCKETBASE_URL
+
+---
+# ==============================================================================
+#   Service: Exposes the frontend pods at a stable network address.
+# ==============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  # The name of the service.
+  name: frontend-service
+  # The namespace where this service will be created.
+  namespace: ghafaseh-staging
+spec:
+  # Type ClusterIP means this service is only reachable from within the Kubernetes cluster.
+  # An Ingress controller will forward external traffic to this internal service.
+  type: ClusterIP
+  selector:
+    # This selector tells the Service which pods to send traffic to.
+    # It must match the labels on the pods (app: frontend).
+    app: frontend
+  ports:
+    - protocol: TCP
+      # The port that the Service will expose. Other services in the cluster
+      # will connect to this port.
+      port: 80
+      # The port on the container that traffic should be forwarded to.
+      # This must match the containerPort in the Deployment above (3000).
+      targetPort: 3000
