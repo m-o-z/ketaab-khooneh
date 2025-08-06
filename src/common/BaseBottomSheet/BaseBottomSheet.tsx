@@ -6,6 +6,8 @@ import React, {
   PropsWithChildren,
   useCallback,
   CSSProperties,
+  ReactElement,
+  isValidElement,
 } from "react";
 import { Drawer } from "vaul";
 import Container from "../Container/Container";
@@ -49,13 +51,34 @@ const Wrapper = ({
 };
 
 // Content: renders the Drawer UI
-const Content = ({ children }: PropsWithChildren) => {
+export type ChildrenProvider = (_: {
+  hide: () => void;
+  isOpen: boolean;
+}) => ReactNode;
+type ContentProps =
+  | PropsWithChildren
+  | {
+      children: ChildrenProvider;
+    };
+const Content = ({ children }: ContentProps) => {
   const { maxWidth } = useWindowSize();
   const ctx = useContext(BottomSheetContext);
   if (!ctx)
     throw new Error(
       "BaseBottomSheet.Content must be used inside BaseBottomSheet",
     );
+
+  const childrenProvider = () => {
+    if (typeof children === "function") {
+      return children({
+        isOpen: ctx.isOpen,
+        hide: () => ctx.hide(),
+      });
+    } else if (isValidElement(children)) {
+      return children;
+    }
+    return null;
+  };
 
   return (
     <Drawer.Root
@@ -67,14 +90,13 @@ const Content = ({ children }: PropsWithChildren) => {
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
         <Drawer.Content
           style={{ "--max-width": `${maxWidth}px` } as CSSProperties}
-          className="bg-white flex flex-col rounded-t-[10px] mt-24 h-fit fixed bottom-0 w-full max-w-[var(--max-width)] right-[50%] translate-x-[50%] outline-none isolate z-50 p-4 pt-8"
+          className="box-border bg-white flex flex-col fixed bottom-0 max-h-[82vh] rounded-t-[10px]  w-full max-w-[var(--max-width)] right-[50%] translate-x-[50%] outline-none z-50"
         >
-          <div
-            aria-hidden
-            className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 absolute top-3 right-[50%] translate-x-[50%]"
-          />
+          <div className=" relative max-w-md w-full mx-auto overflow-auto p-4 rounded-t-[10px]">
+            <Drawer.Handle className="absolute top-4" />
 
-          {children}
+            {childrenProvider()}
+          </div>
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>

@@ -1,4 +1,5 @@
 "use client";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { createTheme, MantineProvider } from "@mantine/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -47,14 +48,16 @@ export default function RootLayout({
   });
 
   return (
-    <PWAProvider>
-      <QueryClientProvider client={queryClient}>
-        <MantineProvider defaultColorScheme="light" theme={theme}>
-          <Container>{children}</Container>
-          {isLocal && <ReactQueryDevtools />}
-          <Notifications />
-        </MantineProvider>
-      </QueryClientProvider>
-    </PWAProvider>
+    <NuqsAdapter>
+      <PWAProvider>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider defaultColorScheme="light" theme={theme}>
+            <Container>{children}</Container>
+            {isLocal && <ReactQueryDevtools />}
+            <Notifications />
+          </MantineProvider>
+        </QueryClientProvider>
+      </PWAProvider>
+    </NuqsAdapter>
   );
 }

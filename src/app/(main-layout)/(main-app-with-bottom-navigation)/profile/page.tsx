@@ -5,10 +5,11 @@ import {
   Badge,
   Button,
   Divider,
+  IconButton,
   Notice,
   NoticeSlots,
 } from "@tapsioss/react-components";
-import { FactCheck, Gear } from "@tapsioss/react-icons";
+import { ChevronLeft, FactCheck, Gear } from "@tapsioss/react-icons";
 import { useRouter } from "next/navigation";
 
 import ProfileItem from "@/common/components/Profile/ProfileItem";
@@ -39,7 +40,7 @@ const Page = () => {
               color="warning"
               priority="low"
               heading="پروفایل شما تکمیل نشده است!"
-              description="جهت فعال‌سازی امکانت امانت‌گیری لازم است ابتدا پروفایل خود را تکمیل کنید."
+              description="برای فعال شدن قابلیت امانت‌گیری کتاب‌ها، لازم است ابتدا پروفایل خود را تکمیل کنید."
             >
               <Button
                 onClick={() => {
@@ -54,14 +55,14 @@ const Page = () => {
         );
       } else if (profile.isProfileCompleted)
         return (
-          <Flex
-            align="center"
-            gap={10}
-            style={{ cursor: "pointer" }}
+          <div
+            className="flex items-center space-x-3 cursor-pointer w-full"
             onClick={() => router.push("/profile/edit")}
           >
-            <Avatar image={profile.avatar} />
-            <Stack gap={0}>
+            <div className="shrink-0">
+              <Avatar image={profile.avatar} size="lg" />
+            </div>
+            <div className="grow">
               <h2 className="space-x-2 m-0">
                 <span>{profile.displayName}</span>
                 {profile.isPunished ? (
@@ -74,8 +75,13 @@ const Page = () => {
                 ) : null}
               </h2>
               <p>{profile.email}</p>
-            </Stack>
-          </Flex>
+            </div>
+            <div className="shrink-0 flex items-center">
+              <IconButton variant="naked">
+                <ChevronLeft />
+              </IconButton>
+            </div>
+          </div>
         );
     }
   };
@@ -84,37 +90,39 @@ const Page = () => {
     <PageLayout
       initialTitle="پروفایل"
       isError={isError}
-      isLoading={isLoading}
+      isLoading={isLoading && !isFetched}
       retry={() => {
         void refetch();
       }}
     >
-      <div className="space-y-4">
-        {renderProfileHeader()}
-        <Divider className="-mr-4 w-[calc(100%+2rem)]" variant="thick" />
-        <div className="space-y-6 py-4">
-          <ProfileItem
-            onClick={() => {
-              router.push("/user/settings");
-            }}
-            renderIcon={<Gear />}
-          >
-            تنظیمات
-          </ProfileItem>
-          <ProfileItem
-            onClick={() => {
-              router.push("/tac");
-            }}
-            renderIcon={<FactCheck />}
-          >
-            قوانین و شرایط
-          </ProfileItem>
-          <ProfileLogoutRowItem
-            isPending={isPending}
-            logoutMutationAsync={logout}
-          />
+      <PageLayout.Content>
+        <div className="space-y-4">
+          {renderProfileHeader()}
+          <Divider className="-mr-4 w-[calc(100%+2rem)]" variant="thick" />
+          <div className="space-y-6 py-4">
+            <ProfileItem
+              onClick={() => {
+                router.push("/user/settings");
+              }}
+              renderIcon={<Gear />}
+            >
+              تنظیمات
+            </ProfileItem>
+            <ProfileItem
+              onClick={() => {
+                router.push("/tac");
+              }}
+              renderIcon={<FactCheck />}
+            >
+              قوانین و شرایط
+            </ProfileItem>
+            <ProfileLogoutRowItem
+              isPending={isPending}
+              logoutMutationAsync={logout}
+            />
+          </div>
         </div>
-      </div>
+      </PageLayout.Content>
     </PageLayout>
   );
 };

@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUp } from "@tapsioss/react-icons";
 import clsx from "clsx";
 import {
   CSSProperties,
+  memo,
   ReactNode,
   UIEventHandler,
   useCallback,
@@ -13,14 +14,14 @@ import {
   useState,
 } from "react";
 
-import Spinner from "@/common/Spinner/Spinner";
-import ErrorSection from "@/components/ErrorSection";
-import NotFound from "@/components/NotFound";
 import { useStableHeightObserver } from "@/hooks/useStableHeightObserver";
 
+import { Overlay } from "@mantine/core";
 import styles from "./PageLayout.module.scss";
 import { PageLayoutContext } from "./PageLayoutContext";
 import { usePWA } from "./PWAProvider";
+import PageLayoutContent from "./PageLayoutContent";
+import Typography from "@/common/Typography/Typography";
 
 type PageLayoutProps = {
   showBackButton?: boolean;
@@ -30,23 +31,25 @@ type PageLayoutProps = {
   goToTopEnabled?: boolean;
   children: ReactNode;
   isLoading?: boolean;
+  isInitialLoading?: boolean;
   isError?: boolean;
   noContent?: boolean;
   retry?: () => void;
 };
 
-export function PageLayout({
+const PageLayout = ({
   showBackButton = false,
   onBackClick,
   initialTitle,
   initialActions,
   goToTopEnabled = false,
   isLoading = false,
+  isInitialLoading = false,
   isError = false,
   noContent = false,
   retry,
   children,
-}: PageLayoutProps) {
+}: PageLayoutProps) => {
   const { safeAreaInsets, hasBottomNavigation } = usePWA();
   const [title, setTitle] = useState(initialTitle);
   const [actions, setActions] = useState(initialActions);
@@ -173,37 +176,6 @@ export function PageLayout({
     scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const hasContentToShow = () => {
-    if (!isLoading && !isError) {
-      return true;
-    }
-    return false;
-  };
-
-  const renderAlternativeContent = () => {
-    if (isError) {
-      return (
-        <div className="h-full flex items-center">
-          <ErrorSection refetch={retry} />
-        </div>
-      );
-    }
-    if (isLoading) {
-      return <Spinner />;
-    }
-  };
-  const renderContent = () => {
-    if (noContent) {
-      return (
-        <div className="h-full flex items-center">
-          <NotFound />
-        </div>
-      );
-    }
-
-    return children;
-  };
-
   const paddingBottom = useMemo(() => {
     if (hasBottomNavigation) {
       return safeAreaInsets.bottom > 0 ? "5.5rem" : "4.5rem";
@@ -211,13 +183,19 @@ export function PageLayout({
     return "1rem";
   }, [safeAreaInsets, hasBottomNavigation]);
 
-  if (!hasContentToShow()) {
-    return renderAlternativeContent();
-  }
-
   return (
     <PageLayoutContext.Provider
-      value={{ setTitle, resetTitle, setActions, resetActions }}
+      value={{
+        setTitle,
+        resetTitle,
+        setActions,
+        resetActions,
+        isInitialLoading,
+        isLoading,
+        isError,
+        retry,
+        noContent,
+      }}
     >
       <div
         className={clsx(
@@ -245,13 +223,19 @@ export function PageLayout({
             </div>
           )}
           {title && (
-            <h2 className="grow text-ellipsis whitespace-nowrap overflow-hidden max-h-full min-w-0 !leading-[40px]">
+            <Typography.Headline
+              size="sm"
+              className="grow text-ellipsis whitespace-nowrap overflow-hidden max-h-full min-w-0 !leading-[40px] !font-medium"
+            >
               {title}
-            </h2>
+            </Typography.Headline>
           )}
           {!!actions && (
-            <div className="flex items-center gap-2 shrink-0 max-h-full">
+            <div className="flex items-center gap-2 shrink-0 max-h-full relative">
               {actions}
+              {isLoading || isError ? (
+                <Overlay color="#fff" backgroundOpacity={0.85} blur={10} />
+              ) : null}
             </div>
           )}
         </header>
@@ -259,11 +243,11 @@ export function PageLayout({
         <main
           ref={scrollRef}
           className={clsx(
-            "flex-1 overflow-y-auto -mx-4 px-4 pb-4 overscroll-none",
+            "flex-1 overflow-y-auto -mx-4 px-4 pb-4 overscroll-none h-full",
           )}
           onScroll={handleScroll}
         >
-          {renderContent()}
+          {children}
         </main>
 
         {/* Sticky Button */}
@@ -281,4 +265,11 @@ export function PageLayout({
       </div>
     </PageLayoutContext.Provider>
   );
-}
+};
+PageLayout.Content = PageLayoutContent;
+
+const PageLayoutComponent = PageLayout as React.FC<PageLayoutProps> & {
+  Content: typeof PageLayoutContent;
+};
+// PageLayout.Content = PageLayoutContent;
+export { PageLayoutComponent as PageLayout };

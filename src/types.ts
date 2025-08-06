@@ -1,3 +1,5 @@
+import { BookDB } from "./schema/books";
+
 export type Author = {
   id: string;
   name: string;
@@ -102,11 +104,19 @@ export type Borrow = {
   };
 };
 
-export type ListFetchingParams = {
+export type AuthorListFetchingParams = {
   search?: string;
   page?: number;
   perPage?: number;
-  filters?: string[];
+};
+
+export type BookListFetchingParams = {
+  search?: string;
+  page?: number;
+  perPage?: number;
+  categories?: string[];
+  status?: BookDB["status"] | null;
+  language?: BookDB["language"][];
 };
 
 export enum RuleEventTypeEnum {

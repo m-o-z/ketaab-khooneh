@@ -12,21 +12,25 @@ const Page = () => {
   const { browser, platform, pwaMode, isMobile, hasPlatform, hasBrowser } =
     useDeviceInfo();
 
-  const { data: profile, isLoading, isError, isSuccess } = useGetProfile();
+  const {
+    data: profile,
+    isLoading,
+    isFetched,
+    isError,
+    isSuccess,
+  } = useGetProfile();
 
   const { state, unsubscribe, subscribe } = usePushNotification();
 
   const router = useRouter();
 
   const shouldShowNotification = useMemo(() => {
-    console.log({ isMobile, browser, platform });
     if (isMobile) {
       return platform === "android" && pwaMode === "standalone";
     } else {
       const isChromeVariationOrFirefox =
         !hasBrowser("ie") &&
         hasPlatform("android", "macos", "chromeos", "linux", "windows");
-      console.log({ isChromeVariationOrFirefox });
       return isChromeVariationOrFirefox;
     }
   }, [pwaMode, browser, platform]);
@@ -64,13 +68,13 @@ const Page = () => {
       onBackClick={() => {
         router.back();
       }}
-      isLoading={isLoading || !state.init}
+      isLoading={(isLoading || !state.init) && !isFetched}
       isError={isError}
       noContent={!profile && isSuccess}
     >
-      <div className="h-full w-full flex">
+      <PageLayout.Content>
         {isNotificationGroupVisible ? renderNotificationSettingItem() : null}
-      </div>
+      </PageLayout.Content>
     </PageLayout>
   );
 };

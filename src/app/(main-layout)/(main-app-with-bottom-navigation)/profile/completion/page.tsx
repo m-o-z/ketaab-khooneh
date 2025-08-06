@@ -1,4 +1,5 @@
 "use client";
+import ProfileCompletionForm from "@/components/ProfileCompletion/ProfileCompletionForm";
 import { PageLayout } from "@/providers/PageLayout";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -13,9 +14,7 @@ const Page = () => {
       }}
       initialTitle="تکمیل پروفایل"
     >
-      <div className="h-full w-full flex items-center justify-center">
-        Profile Completion
-      </div>
+      <ProfileCompletionForm />
     </PageLayout>
   );
 };

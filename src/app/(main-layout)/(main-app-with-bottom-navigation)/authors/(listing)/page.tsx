@@ -1,13 +1,13 @@
 "use client";
 import { Stack } from "@mantine/core";
-import { useState } from "react";
+import { PropsWithChildren, useCallback, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 import ListToolbar from "@/common/components/ListToolbar";
 import AuthorPreview from "@/components/author/AuthorPreview";
 import { useAuthorsGetAllApi } from "@/hooks/authors";
 import { PageLayout } from "@/providers/PageLayout";
-import type { Author } from "@/types";
+import { AuthorDTO } from "@/schema/authors";
 
 export default function Home() {
   // TODO: refactor
@@ -15,6 +15,7 @@ export default function Home() {
   const [debouncedSearch] = useDebounce(searchString, 300);
   const {
     isLoading,
+    isFetched,
     isError,
     isSuccess,
     refetch,
@@ -26,7 +27,7 @@ export default function Home() {
   const renderAuthorsListSection = () => {
     return (
       <Stack>
-        {authors?.map((author: Author) => (
+        {authors?.map((author: AuthorDTO) => (
           <AuthorPreview.List key={author.id} author={author} />
         ))}
       </Stack>
@@ -49,15 +50,18 @@ export default function Home() {
       goToTopEnabled
       initialTitle="نویسندگان"
       isError={isError}
+      isInitialLoading={isLoading && !isFetched}
       isLoading={isLoading}
       noContent={hasNoContent}
       retry={() => {
         void refetch();
       }}
     >
-      <div className="space-y-8">
-        {renderToolbar()}
-        {renderAuthorsListSection()}
+      <div className="space-y-8 flex flex-col h-full">
+        <div className="shrink-0">{renderToolbar()}</div>
+        <PageLayout.Content>
+          <div>{renderAuthorsListSection()}</div>
+        </PageLayout.Content>
       </div>
     </PageLayout>
   );

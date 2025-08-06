@@ -6,9 +6,10 @@ import ConfirmationModal from "../../ConfirmationModal";
 
 type Props = {
   id: string;
+  disabled: boolean;
 };
 
-const BorrowExtendBottom = ({ id }: Props) => {
+const BorrowExtendBottom = ({ id, disabled = false }: Props) => {
   const queryClient = useQueryClient();
   const { mutateAsync: extendBookMutateAsync, isPending } =
     useExtendBookMutation();
@@ -20,9 +21,15 @@ const BorrowExtendBottom = ({ id }: Props) => {
         message: "کتاب مورد نظر با موفقیت تمدید شد",
         color: "green",
       });
-    } catch (err) {
+    } catch (err: unknown) {
+      let message =
+        typeof err === "object" && err && "message" in err
+          ? (err.message as string)
+          : "";
+
       notifications.show({
-        message: "خطا در تمدید کتاب",
+        title: "خطا در تمدید کتاب",
+        message: message,
         color: "red",
       });
     } finally {
@@ -67,7 +74,7 @@ const BorrowExtendBottom = ({ id }: Props) => {
       onConfirm={onHandleReturn}
     >
       {({ show }) => (
-        <Button variant="ghost" onClick={show}>
+        <Button variant="ghost" onClick={show} disabled={disabled}>
           تمدید
         </Button>
       )}

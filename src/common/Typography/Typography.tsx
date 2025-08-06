@@ -2,6 +2,7 @@ import { TokenColorPath } from "@/utils/types/color-path";
 import { getTokenValueFromPath } from "@/utils/types/colors";
 import tokens from "@tapsioss/theme/tokens";
 import clsx from "clsx";
+import s from "./Typography.module.scss";
 import React, { CSSProperties, PropsWithChildren } from "react";
 
 type TypographyKeys = Exclude<keyof typeof tokens.typography, "font-family">;
@@ -33,18 +34,18 @@ const createTypographyComponent = <K extends TypographyKeys>(type: K) => {
 
     const resolvedColor = color ? getTokenValueFromPath(color) : undefined;
 
-    const styles: CSSProperties = {
-      fontFamily: variant.font,
-      fontSize: variant.size,
-      fontWeight: variant.weight,
-      fontStyle: "normal",
-      lineHeight: variant.height,
-      ...(resolvedColor && { color: resolvedColor }),
+    const styles = {
+      "--font-family": variant.font,
+      "--font-size": variant.size,
+      "--font-weight": variant.weight,
+      "--font-style": "normal",
+      "--line-height": variant.height,
+      ...(resolvedColor && { "--color": resolvedColor }),
       ...(style && typeof style === "object" && style),
-    };
+    } as CSSProperties;
 
     return (
-      <div className={clsx("", className)} style={styles} id={id}>
+      <div className={clsx(s.body, className)} style={styles} id={id}>
         {children}
       </div>
     );

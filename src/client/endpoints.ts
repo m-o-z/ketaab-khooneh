@@ -9,40 +9,30 @@ import { BookDTO } from "@/schema/books";
 import { BorrowBriefDTO, BorrowDTO } from "@/schema/borrows";
 import { ApiPagedResponse, ApiResponse } from "@/utils/response";
 
-import { UserDTO } from "@/schema/users";
-import { Author, BookCategory, ResponseWrap, UserInfo } from "./../types";
-import { api } from "./api";
+import { CategoryDTO } from "@/schema/categories";
 import { SubscriptionDTO } from "@/schema/subscription";
-
-// ===== Types =====
+import { UserDTO } from "@/schema/users";
+import { ResponseWrap } from "./../types";
+import { api } from "./api";
 
 // User types
 export const users = {
   me: api.query<ResponseWrap<UserDTO>>("users/me"),
-  // Get all users
-  // getAll: api.query<User[]>("users"),
-  // // Get user by ID
-  // getById: api.query<User, { id: number }>((params) => `users/${params.id}`, {
-  //   queryKey: (params) => ["users", params.id] as const,
-  // }),
-  // // Get users with filters
-  // getFiltered: api.query<User[], UserFilters>("users", {
-  //   queryKey: (params) => ["users", "filtered", params] as const,
-  // }),
-  // // Create a user
-  // create: api.mutation<User, Omit<User, "id">>("users"),
-  // // Update a user
-  // update: api.mutation<User, Partial<User> & { id: number }>(
-  //   (params) => `users/${params.id}`,
-  //   {
-  //     method: "PUT",
-  //     transformVariables: ({ id, ...data }) => data,
-  //   },
-  // ),
-  // // Delete a user
-  // delete: api.mutation<void, { id: number }>((params) => `users/${params.id}`, {
-  //   method: "DELETE",
-  // }),
+
+  editProfile: api.mutation<UserDTO, FormData>("/users/profile", {
+    isFormData: true,
+    method: "PATCH",
+    headers: {
+      "Content-Type": "",
+    },
+  }),
+  completeProfile: api.mutation<UserDTO, FormData>("/users/profile/complete", {
+    isFormData: true,
+    method: "POST",
+    headers: {
+      "Content-Type": "",
+    },
+  }),
 };
 
 // ===== Books API =====
@@ -51,7 +41,11 @@ export const books = {
   getAll: api.query<ApiPagedResponse<BookDTO>, BookListingRequestPayload>(
     "books",
     {
-      queryKey: (params) => ["books", "filtered", params],
+      queryKey: (params) => [
+        "books",
+        "filtered",
+        Object.values(params).toString(),
+      ],
     },
   ),
 
@@ -66,7 +60,7 @@ export const books = {
 
 export const authors = {
   // Get all books
-  getAll: api.query<ResponseWrap<Author[]>, AuthorsListingRequestPayload>(
+  getAll: api.query<ResponseWrap<AuthorDTO[]>, AuthorsListingRequestPayload>(
     "authors",
     {
       queryKey: (params) => ["authors", "filtered", params],
@@ -110,7 +104,7 @@ export const auth = {
   }),
 
   verify: api.mutation<
-    { token: string; record: UserInfo },
+    { token: string; record: UserDTO },
     VerifyOTPRequestPayload
   >("auth/verify", {
     method: "POST",
@@ -153,5 +147,5 @@ export const borrows = {
 };
 // ===== Categories API =====
 export const categories = {
-  getAll: api.query<ResponseWrap<BookCategory[]>>("categories"),
+  getAll: api.query<ResponseWrap<CategoryDTO[]>>("categories"),
 };

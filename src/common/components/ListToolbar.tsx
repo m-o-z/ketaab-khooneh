@@ -1,51 +1,64 @@
 "use client";
-import { Flex } from "@mantine/core";
-import { IconButton, Skeleton, Switch, TextField } from "@tapsioss/react-components";
-import BaseBottomSheet from "../BaseBottomSheet/BaseBottomSheet";
-import { LineThreeHorizontalDecrease } from "@tapsioss/react-icons";
+import {
+  IconButton,
+  Spinner,
+  TextField,
+  TextFieldElement,
+  TextFieldSlots,
+} from "@tapsioss/react-components";
+import { Cross } from "@tapsioss/react-icons";
+import { memo } from "react";
 
 type Props = {
+  isLoading?: boolean;
   searchString: string;
   setSearchString: (s: string) => void;
-  filters?: string[];
   selectedFilters?: string[];
-  setSelectedFilters?: (f: string[]) => void;
+  label: string;
+  placeholder?: string;
 };
 
 const ListToolbar = ({
   searchString,
   setSearchString,
-  selectedFilters = [],
-  setSelectedFilters,
-  filters,
+  label,
+  placeholder = "جستجو ...",
+  isLoading = false,
 }: Props) => {
-  // TODO: handle in URL
-  const handleSelectFilter = (filter: string) => {
-    if (selectedFilters?.includes(filter)) {
-      setSelectedFilters?.(selectedFilters?.filter((f) => f !== filter));
-    } else {
-      setSelectedFilters?.([...selectedFilters, filter]);
-    }
+  const handleOnChange = (e: Event) => {
+    const target = e.target as TextFieldElement;
+    setSearchString(target.value);
   };
   return (
     <TextField
       className="w-full"
-        hideLabel
-        label="جستجو..."
-        placeholder="جستجو..."
-        style={{ flex: 1 }}
-        value={searchString}
-        onChange={(e) => setSearchString(e.target.value)}
-      />      
+      hideLabel
+      label={label}
+      placeholder={placeholder}
+      style={{ flex: 1 }}
+      value={searchString}
+      onChange={handleOnChange}
+    >
+      {isLoading ? (
+        <div className="-translate-x-1" slot={TextFieldSlots.TRAILING}>
+          <Spinner size={28} />
+        </div>
+      ) : null}
+      {!isLoading && searchString && searchString.length > 0 ? (
+        <div className="-ml-2" slot={TextFieldSlots.TRAILING}>
+          <IconButton
+            variant="naked"
+            size="sm"
+            onClick={() => {
+              setSearchString("");
+            }}
+          >
+            <Cross />
+          </IconButton>
+        </div>
+      ) : null}
+    </TextField>
   );
 };
 
-ListToolbar.Loading = function Loading() {
-  return (
-    <Skeleton height="52px" variant="rectangular" width="100">
-      <TextField hideLabel label="جستجو" style={{ flex: 1 }} />
-    </Skeleton>
-  );
-};
-
-export default ListToolbar;
+export default memo(ListToolbar);

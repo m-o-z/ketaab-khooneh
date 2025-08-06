@@ -4,8 +4,6 @@ import { useRouter } from "next/navigation";
 
 import { auth } from "@/client";
 
-import { queryClient } from "./../queryClient";
-
 type RequestPayload = {
   email: string;
   password: string;
@@ -46,27 +44,11 @@ export const useVerifyApi = () => {
       });
     },
     onSuccess: (response) => {
-      const {
-        avatar,
-        created,
-        email,
-        id,
-        verified,
-        firstName,
-        lastName,
-        isPunished,
-      } = response.record;
-      const userData = {
-        avatar,
-        created,
-        email,
-        id,
-        firstName,
-        lastName,
-        isPunished,
-        verified,
-      };
-      localStorage.setItem("_user_info", JSON.stringify(userData));
+      const { isProfileCompleted } = response.record;
+      if (!isProfileCompleted) {
+        router.push("/profile");
+        return;
+      }
       router.push(
         new URLSearchParams(window.location.search).get("next") || "/books",
       );

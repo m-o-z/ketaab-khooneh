@@ -29,6 +29,7 @@ const Page = () => {
     data: userProfile,
     isLoading: isProfileLoading,
     isError: isProfileError,
+    isFetched: isProfileFetched,
     refetch: profileRefetch,
   } = useGetProfile();
   const { mutateAsync: borrowBookMutateAsync, isPending } =
@@ -46,6 +47,7 @@ const Page = () => {
 
   const {
     isLoading,
+    isFetched,
     data: book,
     isSuccess,
     isError,
@@ -191,16 +193,6 @@ const Page = () => {
     );
   };
 
-  const renderBookDetail = () => {
-    return (
-      <div className="space-y-8">
-        <div>{renderBookTitle(book!.title)}</div>
-        <BookSummary book={book!} />
-        <div>{renderActionArea()}</div>
-      </div>
-    );
-  };
-
   const onBackClick = () => {
     router.back();
   };
@@ -210,7 +202,9 @@ const Page = () => {
       showBackButton
       initialTitle="جزئیات کتاب"
       isError={isError || isProfileError}
-      isLoading={isLoading || isProfileLoading}
+      isInitialLoading={
+        (isLoading || isProfileLoading) && !isFetched && !isProfileFetched
+      }
       noContent={!book && isSuccess}
       retry={() => {
         void profileRefetch();
@@ -218,7 +212,15 @@ const Page = () => {
       }}
       onBackClick={onBackClick}
     >
-      {book ? renderBookDetail() : null}
+      <PageLayout.Content>
+        {book && (
+          <div className="space-y-8">
+            <div>{renderBookTitle(book!.title)}</div>
+            <BookSummary book={book!} />
+            <div>{renderActionArea()}</div>
+          </div>
+        )}
+      </PageLayout.Content>
     </PageLayout>
   );
 };
