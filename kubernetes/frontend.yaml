@@ -50,6 +50,13 @@ spec:
               port: 3000
             initialDelaySeconds: 15 # Wait 15s before first probe
             periodSeconds: 10 # Probe every 10s
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
 
           # --- Environment Variables ---
           # It's best practice to manage configuration with ConfigMaps and Secrets.
