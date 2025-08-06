@@ -1,33 +1,3 @@
-# kubernetes/backend.yaml
-# This file contains all necessary resources for the stateful backend application.
-
-# ==============================================================================
-#   PersistentVolume (PV): Defines available storage in the cluster.
-# ==============================================================================
-# NOTE: In a managed cloud environment (GKE, EKS, AKS), you would typically use a
-# StorageClass, and the cloud provider would create the PV for you automatically
-# when the PVC is created. This manifest is for demonstration or for environments
-# without dynamic provisioning.
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: backend-pv
-  labels:
-    type: local
-spec:
-  storageClassName: csi-cinder-sc-delete # This name must match the PVC's storageClassName
-  capacity:
-    storage: 5Gi # The total size of the storage volume
-  accessModes:
-    # ReadWriteOnce means the volume can be mounted as read-write by a single Node.
-    # This is required for SQLite.
-    - ReadWriteOnce
-  hostPath:
-    # For local testing (like Minikube/Docker Desktop). In production, this would
-    # be a cloud disk like an AWS EBS volume or a GCE Persistent Disk.
-    path: "/mnt/data/backend"
-
----
 # ==============================================================================
 #   PersistentVolumeClaim (PVC): Requests storage for the application.
 # ==============================================================================

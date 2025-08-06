@@ -186,7 +186,6 @@ jobs:
       - name: ⌚ Wait for rollout to complete
         run: |
           export KUBECONFIG=kubeconfig.yaml
-          NAMESPACE=staging # TODO: Fill in your namespace
           kubectl rollout status deployment/$FRONTEND_DEPLOYMENT -n $NAMESPACE --timeout=5m
           kubectl rollout status deployment/$BACKEND_DEPLOYMENT -n $NAMESPACE --timeout=5m
 
@@ -207,11 +206,6 @@ jobs:
           echo "${{ secrets.K8S_PROD_KUBECONFIG }}" > kubeconfig.yaml
           export KUBECONFIG=kubeconfig.yaml
 
-          # TODO: Fill in your actual deployment names and namespace
-          FRONTEND_DEPLOYMENT=my-frontend-deployment
-          BACKEND_DEPLOYMENT=my-backend-deployment
-          NAMESPACE=production
-
           echo "Deploying frontend image: ${{ needs.build-frontend.outputs.image_name }}"
           kubectl set image deployment/$FRONTEND_DEPLOYMENT "$FRONTEND_DEPLOYMENT=${{ needs.build-frontend.outputs.image_name }}" -n $NAMESPACE --record=true
 
@@ -221,6 +215,5 @@ jobs:
       - name: ⌚ Wait for rollout to complete
         run: |
           export KUBECONFIG=kubeconfig.yaml
-          NAMESPACE=production # TODO: Fill in your namespace
           kubectl rollout status deployment/$FRONTEND_DEPLOYMENT -n $NAMESPACE --timeout=5m
           kubectl rollout status deployment/$BACKEND_DEPLOYMENT -n $NAMESPACE --timeout=5m
