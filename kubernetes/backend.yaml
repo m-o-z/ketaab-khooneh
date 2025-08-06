@@ -37,6 +37,8 @@ spec:
       labels:
         app: backend
     spec:
+      imagePullSecrets:
+        - name: ghcr-credentials
       containers:
         - name: backend-deployment # Must match the deployment name for `kubectl set image`
           image: ghcr.io/m-o-z/ketaab-khooneh:backend-development-12345
