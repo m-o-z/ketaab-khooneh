@@ -31,11 +31,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      app: ghafaseh-backend
   template:
     metadata:
       labels:
-        app: backend
+        app: ghafaseh-backend
     spec:
       imagePullSecrets:
         - name: ghcr-credentials
