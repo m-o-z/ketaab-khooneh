@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"ghafaseh-backend/config"
 	"ghafaseh-backend/models"
 
 	"github.com/pocketbase/pocketbase/core"
@@ -27,7 +28,7 @@ func NotifyBookRelease(c *core.RequestEvent) error {
 		return c.BadRequestError("Missing required fields", nil)
 	}
 
-	domain := os.Getenv("APP_DOMAIN")
+	domain := os.Getenv(config.APP_FRONTEND_URL)
 	if domain == "" {
 		domain = "https://ketab.echa.ir"
 	}

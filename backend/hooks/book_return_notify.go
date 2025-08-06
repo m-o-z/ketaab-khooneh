@@ -1,16 +1,13 @@
 package hooks
 
 import (
+	"ghafaseh-backend/config"
 	"net/mail"
 	"os"
 
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tools/mailer"
 	"github.com/pocketbase/pocketbase/tools/template"
-)
-
-const (
-	APP_FRONTEND_URL = "APP_FRONTEND_URL"
 )
 
 type SendEmailPayload struct {
@@ -24,7 +21,7 @@ func SendEmailOfSuccessNotificationOfBook(re *core.RecordEvent, payload SendEmai
 	logger := re.App.Logger()
 	logger.Info("starting to send email", "email", payload.UserEmail)
 
-	domain := os.Getenv(APP_FRONTEND_URL)
+	domain := os.Getenv(config.APP_FRONTEND_URL)
 	appName := re.App.Settings().Meta.AppName
 
 	html, err := payload.TemplateRenderer.Render(map[string]any{

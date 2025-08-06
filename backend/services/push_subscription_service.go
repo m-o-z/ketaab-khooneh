@@ -3,6 +3,7 @@ package services
 import (
 	"encoding/json"
 	"fmt"
+	"ghafaseh-backend/config"
 	"ghafaseh-backend/util"
 	"log"
 	"net/http"
@@ -11,11 +12,6 @@ import (
 
 	"github.com/SherClockHolmes/webpush-go"
 	"github.com/pocketbase/pocketbase/core"
-)
-
-const (
-	VAPID_PUBLIC_KEY_PATH  = "VAPID_PUBLIC_KEY"
-	VAPID_PRIVATE_KEY_PATH = "VAPID_PRIVATE_KEY"
 )
 
 // PushSubscription represents the structure of a record in the 'push_subscriptions' collection.
@@ -60,8 +56,8 @@ func GetInstance(app core.App) *PushSubscriptionService {
 
 // configureWebPush initializes the web-push library with VAPID keys.
 func (s *PushSubscriptionService) configureWebPush() {
-	vapidPublicKey := os.Getenv(VAPID_PUBLIC_KEY_PATH)
-	vapidPrivateKey := os.Getenv(VAPID_PRIVATE_KEY_PATH)
+	vapidPublicKey := os.Getenv(config.VAPID_PUBLIC_KEY_PATH)
+	vapidPrivateKey := os.Getenv(config.VAPID_PRIVATE_KEY_PATH)
 
 	if vapidPublicKey == "" || vapidPrivateKey == "" {
 		log.Println("WARNING: VAPID keys are not configured. Push notifications are disabled.")
@@ -162,8 +158,8 @@ func (s *PushSubscriptionService) SendBatchPushNotification(userIds []string, pa
 
 // sendNotificationsToRecords is a helper to send notifications and handle expired ones.
 func (s *PushSubscriptionService) sendNotificationsToRecords(records []*core.Record, payload NotificationPayload) error {
-	vapidPrivateKey := os.Getenv(VAPID_PRIVATE_KEY_PATH)
-	vapidPublicKey := os.Getenv(VAPID_PUBLIC_KEY_PATH)
+	vapidPrivateKey := os.Getenv(config.VAPID_PRIVATE_KEY_PATH)
+	vapidPublicKey := os.Getenv(config.VAPID_PUBLIC_KEY_PATH)
 	log.Println("HERE 002", records)
 
 	for _, record := range records {
