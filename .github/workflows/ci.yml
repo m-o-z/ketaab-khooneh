@@ -90,7 +90,6 @@ jobs:
           TAG="frontend-${{ github.ref_name }}-${{ github.run_id }}"
           IMAGE_NAME="ghcr.io/${{ github.repository }}:${TAG}"
           echo "image_name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
-          env
 
       - name: 🏗️ Build and push frontend image
         uses: docker/build-push-action@v5
@@ -112,8 +111,6 @@ jobs:
             POCKETBASE_ADMIN_PASSWORD=${{ secrets.POCKETBASE_ADMIN_PASSWORD }}
             VAPID_PUBLIC_KEY=${{ vars.VAPID_PUBLIC_KEY }}
             VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
-            echo "VARS"
-            echo ${{ vars }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -182,8 +179,6 @@ jobs:
     steps:
       - name: 🛠️ Configure kubectl and Deploy
         run: |
-          echo "SECRETS"
-          echo ${{ secrets.K8S_STAGING_KUBECONFIG }}
           echo "${{ secrets.K8S_STAGING_KUBECONFIG }}" > kubeconfig.yaml
           export KUBECONFIG=kubeconfig.yaml
 
@@ -213,7 +208,6 @@ jobs:
     steps:
       - name: 🛠️ Configure kubectl and Deploy
         run: |
-          echo env
           echo "${{ secrets.K8S_PROD_KUBECONFIG }}" > kubeconfig.yaml
           export KUBECONFIG=kubeconfig.yaml
 
