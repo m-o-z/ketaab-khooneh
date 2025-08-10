@@ -5,20 +5,6 @@ ARG PACKAGE_IMAGE
 # This stage starts from our pre-built dependency image and builds the Next.js app.
 FROM ${PACKAGE_IMAGE} AS builder
 
-WORKDIR /app
-
-# Copy the rest of the project source code
-COPY . .
-
-# Build the Next.js application.
-# The slow 'apt-get' and 'pnpm install' steps are skipped because they are in the base image.
-RUN pnpm build
-
-
-# ---- Final Stage ----
-# This stage creates a lean, production-ready image.
-FROM builder AS runner
-
 # Pass all run-time environment variables
 ARG NEXT_PUBLIC_POCKETBASE_URL
 ARG NEXT_PUBLIC_DAYS_TO_REFRESH
@@ -44,11 +30,20 @@ ENV VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY
 ENV NODE_ENV=production
 ENV PORT=3000
 
-RUN echo "PUBLIC"
-RUN echo $NEXT_PUBLIC_VAPID_PUBLIC_KEY
+WORKDIR /app
 
-RUN echo "VAPID_PUBLIC_KEY"
-RUN echo $VAPID_PUBLIC_KEY
+# Copy the rest of the project source code
+COPY . .
+
+# Build the Next.js application.
+# The slow 'apt-get' and 'pnpm install' steps are skipped because they are in the base image.
+RUN pnpm build
+
+
+# ---- Final Stage ----
+# This stage creates a lean, production-ready image.
+FROM builder AS runner
+
 
 WORKDIR /app
 
