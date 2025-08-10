@@ -26,7 +26,7 @@ const Page = () => {
 
   const shouldShowNotification = useMemo(() => {
     if (isMobile) {
-      return hasPlatform("android", "ios") && pwaMode === "standalone";
+      return platform === "android" && pwaMode === "standalone";
     } else {
       const isChromeVariationOrFirefox =
         !hasBrowser("ie") &&
