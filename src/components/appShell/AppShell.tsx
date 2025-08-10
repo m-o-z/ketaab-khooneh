@@ -71,7 +71,7 @@ const AppShell = ({ children }: Props) => {
 
   const shouldAskForNotification = useMemo(() => {
     if (isMobile) {
-      return platform === "android" && pwaMode === "standalone";
+      return hasPlatform("android", "ios") && pwaMode === "standalone";
     } else {
       const isChromeVariationOrFirefox =
         !hasBrowser("ie") &&

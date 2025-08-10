@@ -26,7 +26,7 @@ const Page = () => {
 
   const shouldShowNotification = useMemo(() => {
     if (isMobile) {
-      return platform === "android" && pwaMode === "standalone";
+      return hasPlatform("android", "ios") && pwaMode === "standalone";
     } else {
       const isChromeVariationOrFirefox =
         !hasBrowser("ie") &&
@@ -46,7 +46,6 @@ const Page = () => {
             label="اعلان‌ها"
             isActive={state.init && state.isSubscribed}
             onChange={(value) => {
-              console.log({ value, state });
               if (value) {
                 subscribe();
               } else {
