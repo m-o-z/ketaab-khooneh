@@ -55,6 +55,7 @@ RUN useradd -m appuser
 # Copy the built application files from the builder stage
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/package.json ./package.json
 
 # Change ownership of app files to the non-root user
 RUN chown -R appuser:appuser /app
