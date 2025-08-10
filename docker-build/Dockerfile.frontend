@@ -17,7 +17,7 @@ RUN pnpm build
 
 # ---- Final Stage ----
 # This stage creates a lean, production-ready image.
-FROM node:20-slim AS runner
+FROM builder AS runner
 
 # Pass all run-time environment variables
 ARG NEXT_PUBLIC_POCKETBASE_URL
@@ -52,10 +52,13 @@ WORKDIR /app
 RUN useradd -m appuser
 
 
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN pnpm install --prod --frozen-lockfile
+
 # Copy the built application files from the builder stage
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/package.json ./package.json
 
 # Change ownership of app files to the non-root user
 RUN chown -R appuser:appuser /app
