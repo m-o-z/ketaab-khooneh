@@ -182,7 +182,8 @@ jobs:
     steps:
       - name: 🛠️ Configure kubectl and Deploy
         run: |
-          echo env
+          echo "SECRETS"
+          echo ${{ secrets.K8S_STAGING_KUBECONFIG }}
           echo "${{ secrets.K8S_STAGING_KUBECONFIG }}" > kubeconfig.yaml
           export KUBECONFIG=kubeconfig.yaml
 
