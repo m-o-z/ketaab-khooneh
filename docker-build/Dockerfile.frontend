@@ -44,6 +44,8 @@ ENV VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY
 ENV NODE_ENV=production
 ENV PORT=3000
 
+RUN echo "### ENV ###"
+RUN env
 WORKDIR /app
 
 # Create a non-root user for security
