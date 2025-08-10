@@ -112,6 +112,8 @@ jobs:
             POCKETBASE_ADMIN_PASSWORD=${{ secrets.POCKETBASE_ADMIN_PASSWORD }}
             VAPID_PUBLIC_KEY=${{ vars.VAPID_PUBLIC_KEY }}
             VAPID_PRIVATE_KEY=${{ secrets.VAPID_PRIVATE_KEY }}
+            echo "VARS"
+            echo ${{ vars }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
