@@ -49,18 +49,6 @@ WORKDIR /app
 # Create a non-root user for security
 RUN useradd -m appuser
 
-# Install only the RUNTIME OS dependencies for sharp
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libvips curl \
- && rm -rf /var/lib/apt/lists/*
-
-# Install pnpm
-RUN npm install -g pnpm
-
-# Copy package files to install only production dependencies
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN pnpm install --prod --frozen-lockfile
 
 # Copy the built application files from the builder stage
 COPY --from=builder /app/public ./public
@@ -78,4 +66,4 @@ HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:${PORT}/ready || exit 1
 
 # Start the Next.js application
-CMD ["pnpm", "start"]
+CMD ["npm", "start"]
