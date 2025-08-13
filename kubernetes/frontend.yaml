@@ -55,8 +55,8 @@ spec:
               memory: "128Mi"
               cpu: "100m"
             limits:
-              memory: "256Mi"
-              cpu: "250m"
+              memory: "196Mi"
+              cpu: "150m"
 
           # --- Environment Variables ---
           # It's best practice to manage configuration with ConfigMaps and Secrets.

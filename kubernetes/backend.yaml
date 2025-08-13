@@ -49,10 +49,10 @@ spec:
           resources:
             requests:
               memory: "256Mi"
-              cpu: "200m"
+              cpu: "150m"
             limits:
-              memory: "512Mi"
-              cpu: "1000m"
+              memory: "384Mi"
+              cpu: "400m"
           envFrom:
             - configMapRef:
                 name: common-config # A ConfigMap you will create
