@@ -220,5 +220,5 @@ jobs:
       - name: ⌚ Wait for rollout to complete
         run: |
           export KUBECONFIG=kubeconfig.yaml
-          kubectl rollout status deployment/$FRONTEND_DEPLOYMENT -n $NAMESPACE --timeout=5m
-          kubectl rollout status deployment/$BACKEND_DEPLOYMENT -n $NAMESPACE --timeout=5m
+          kubectl rollout status deployment/$FRONTEND_DEPLOYMENT -n $NAMESPACE --timeout=10m; \ 
+          kubectl rollout status deployment/$BACKEND_DEPLOYMENT -n $NAMESPACE --timeout=10m
