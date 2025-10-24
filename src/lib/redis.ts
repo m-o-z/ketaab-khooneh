@@ -6,19 +6,19 @@ declare global {
 
 let redis: Redis; // Changed from `let redis;` to `let redis: Redis;` for type safety
 
+const redisConfig = {
+  host: privateConfig.redis.host || "localhost",
+  port: parseInt(privateConfig.redis.port || "6379", 10),
+  password: privateConfig.redis.password
+}
+
 if (process.env.NODE_ENV === "production") {
-  redis = new Redis({
-    host: privateConfig.redis.host || "localhost",
-    port: parseInt(privateConfig.redis.port || "6379", 10),
-  });
+  redis = new Redis(redisConfig);
 } else {
   // In development, use a global variable to avoid multiple instances
   // across hot-reloads in Next.js
   if (!global.redis) {
-    global.redis = new Redis({
-      host: privateConfig.redis.host || "localhost",
-      port: parseInt(privateConfig.redis.port || "6379", 10),
-    });
+    global.redis = new Redis(redisConfig);
   }
   redis = global.redis;
 }
