@@ -29,6 +29,11 @@ ENV VAPID_PUBLIC_KEY=$VAPID_PUBLIC_KEY
 ENV VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY
 ENV APP_FRONTEND_URL=$APP_FRONTEND_URL
 
+ENV TZ=Asia/Tehran
+RUN apk add --no-cache tzdata \
+ && cp /usr/share/zoneinfo/$TZ /etc/localtime \
+ && echo $TZ > /etc/timezone
+
 WORKDIR /app
 
 # Copy the compiled application binary from the builder stage
